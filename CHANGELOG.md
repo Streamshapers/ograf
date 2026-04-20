@@ -9,6 +9,14 @@ This log lists changes between versions.
 
 ### Non-breaking changes in version 1:
 
+_(Note: Minor changes such as documentation improvements are omitted in this list.)_
+
+* 2026-04-15: [PR 20](https://github.com/ebu/ograf/pull/20): Add `thumbnails` to manifest schema (optional).
+* 2026-04-15: [PR 27](https://github.com/ebu/ograf/pull/27): Add `order` property to manifest schema GDD properties (optional).
+* 2026-04-15: Set repo license to MIT.
+* 2026-04-15: [PR 25](https://github.com/ebu/ograf/pull/25): Add `engine` version to `renderRequirements` in manifest schema (optional).
+* 2026-04-15: [PR 46](https://github.com/ebu/ograf/pull/46): Add `hidden` property to manifest schema GDD properties (optional).
+* 2026-03-05: [PR 43](https://github.com/ebu/ograf/pull/43): Mention of CORS (optional).
 * 2026-02-09: [PR 12](https://github.com/ebu/ograf/pull/12): Publish first draft of the **OGraf Server API**. Note: Breaking changes might be introduced to the Server API while it is a draft.
 * 2026-02-04: [PR 40](https://github.com/ebu/ograf/pull/40): Move over GDD Definitions to OGraf repo.
 * 2026-01-21: [PR 39](https://github.com/ebu/ograf/pull/39): Add optional `skipAnimation` property to `updateAction()` & `customAction()` in specification.md, to align with the other actions / typescript types.
@@ -16,7 +24,7 @@ This log lists changes between versions.
 * 2025-11-07: [PR 17](https://github.com/ebu/ograf/pull/17): Modify the `stepCount` property, to include the value -1 to signify that a Graphic does have steps, but the number of steps is not known on beforehand.
 * 2025-11-07: [PR 19](https://github.com/ebu/ograf/pull/19): Documentation improvements regarding the step model.
 * 2025-11-07: [PR 34](https://github.com/ebu/ograf/pull/34): Clarification of Web Component Interface specification
-
+* 2025-09-17: **Version 1 published and considered stable**
 
 ### Pre-Version 1:
 
