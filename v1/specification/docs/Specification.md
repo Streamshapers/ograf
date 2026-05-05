@@ -89,11 +89,12 @@ In case of a non-real-time Graphic, there are two additional functions that need
 
 #### Step model
 
-A Graphic contains zero or more steps. A step can be defined as a 'paused' state of the Graphic.
-Going from one step to another is done via a transition (with or without animation). The figure below shows three example
-step models. Every model has a start and an end node. The start node represents the start of a Graphic rendering, where
-typically nothing is visible in the rendered output. Similarly, the end node represents the end of the Graphic rendering,
-also typically nothing visible in the rendered output at that moment. The arrows between the nodes represent the transitions.
+A Graphic contains zero or more steps. Steps numbers are 0-based, meaning that the first step is step 0. A step can be
+defined as a 'paused' state of the Graphic. Going from one step to another is done via a transition (with or without
+animation). The figure below shows three example step models. Every model has a start and an end node. The start node
+represents the start of a Graphic rendering, where typically nothing is visible in the rendered output. Similarly, the
+end node represents the end of the Graphic rendering, also typically nothing visible in the rendered output at that
+moment. The arrows between the nodes represent the transitions.
 
 The **first model** represents a Graphic containing zero steps. When `playAction()` is called on this Graphic, it will
 animate the Graphic in and after some predefined time the Graphic will animate out automatically.
@@ -101,16 +102,17 @@ animate the Graphic in and after some predefined time the Graphic will animate o
 <img src="images/step-model1.svg" alt="Step model" style="width:500px; height:auto;">
 
 The **second model** represents a Graphic containing one step. When `playAction()` is called on this Graphic, it will
-animate the Graphic in and will pause at step 1. Pausing here doesn't mean that the Graphic is not moving, it refers to
+animate the Graphic in and will pause at step 0. Pausing here doesn't mean that the Graphic is not moving, it refers to
 the fact that there is an interaction necessary with the Graphic to move to the next step (in this case the end).
 The `stopAction()` function SHOULD be used to go to the end of the Graphic.
 
 <img src="images/step-model2.svg" alt="Step model" style="width:500px; height:auto;">
 
 The **third model** represents a multi-step Graphic containing two steps. It is similar to the one-step model,
-but now the `playAction()` function MUST be used again to transition between different steps, except for the end node, where the `stopAction()`
-function SHOULD be used. The normal flow is to go to step 1, then to step 2 and finally to the end node. However, it is
-possible that you transition to any step or directly to the end node (indicated by the dotted lines in the figure).
+but now the `playAction()` function MUST be used again to transition between different steps, except for the end node,
+where the `stopAction()` function SHOULD be used. The normal flow is to go to step 0, then to step 1 and finally to the
+end node. However, it is possible that you transition to any step or directly to the end node (indicated by the dotted
+lines in the figure).
 
 <img src="images/step-model3.svg" alt="Step model" style="width:500px; height:auto;">
 
@@ -257,11 +259,13 @@ A Promise is returned that MUST resolve when the Graphic completed the necessary
 #### playAction()
 ```
 playAction: (
-  params: {
-    delta: number;
+  params: ({
     goto: number;
     skipAnimation?: boolean;
-  } & VendorExtend
+  } | {
+    delta: number;
+    skipAnimation?: boolean;
+  }) & VendorExtend
 ) => Promise<PlayActionReturnPayload>;
 ```
 The `playAction()` function is called by the Renderer to play a given step.
@@ -271,7 +275,7 @@ When not provided, the `skipAnimation` field defaults to `false`. The Graphic MU
 
 The `delta` and `goto` fields indicate the target step. Steps are zero-based indexed. `delta` is used for relative steps,
 `goto` for an absolute step number. The target step MUST be determined as follows by the Graphic:
-* when `goto` is not equal to `undefined`, the target step is equal to the value provided in the `goto` field;
+* when `goto` is not equal to `undefined` and greater or equal to 0, the target step is equal to the value provided in the `goto` field;
 * when `goto` is `undefined`, the target step is calculated as the sum of the current step and the value provided in the
 `delta` field (which defaults to `1` when not provided). When the current step is undefined (i.e. when the Graphic is
 in the 'start' state), the target step must be calculated as `-1 + delta`.
