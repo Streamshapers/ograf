@@ -1487,6 +1487,10 @@ export interface components {
             type: "boolean" | "string" | "number" | "integer" | "array" | "object";
             gddType?: string;
             gddOptions?: Record<string, never>;
+            /** @description When true, the value of this property SHOULD NOT be included when labelling the graphic in a GUI (e.g. in playout or automation UIs). Default is false. Used to keep labels concise by excluding technical or less meaningful fields. */
+            hidden?: boolean;
+            /** @description For UI ordering, lower values should be displayed first */
+            order?: number;
         } & {
             [key: string]: unknown;
         }) & (components["schemas"]["schema"] & components["schemas"]["gdd-types"] & components["schemas"]["basic-types"]);
@@ -1577,6 +1581,36 @@ export interface components {
                 frameRate?: components["schemas"]["number"];
                 /** @description If set, specifies requirement on whether the renderer has access to the public internet or not. */
                 accessToPublicInternet?: components["schemas"]["boolean"];
+                /** @description Minimum required version(s) of the rendering engine. At least one listed engine requirement should be satisfied by the renderer (e.g. type CEF with version.min 139). */
+                engine?: ({
+                    /** @description Identifier of the rendering engine (e.g. CEF, Gecko). Vendor-specific types are allowed. */
+                    type: string;
+                    /** @description Minimum engine version */
+                    version: {
+                        /** @description Minimum required version. Format is engine-specific (e.g. CEF branch number as string "139", or semver "120.0.5"). */
+                        min: string;
+                    } & {
+                        [key: string]: unknown;
+                    };
+                } & {
+                    [key: string]: unknown;
+                })[];
+            } & {
+                [key: string]: unknown;
+            })[];
+            /** @description Optional list of thumbnail images for the Graphic. Each entry references an image file (PNG, JPG, GIF, or webp) and may specify its resolution so UIs can choose or scale appropriately. */
+            thumbnails?: ({
+                /** @description Path to the image file, relative to the manifest or absolute. Allowed formats: PNG, JPG, GIF, webp. */
+                file: string;
+                /** @description Resolution of the image in pixels. When present, the UI can derive aspect ratio (e.g. width/height) and choose or scale the thumbnail appropriately. */
+                resolution?: {
+                    /** @description Width in pixels. */
+                    width: number;
+                    /** @description Height in pixels. */
+                    height: number;
+                } & {
+                    [key: string]: unknown;
+                };
             } & {
                 [key: string]: unknown;
             })[];

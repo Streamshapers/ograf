@@ -13,7 +13,14 @@ export type HttpsOgrafEbuIoV1SpecificationJsonSchemasGddObjectJson = CoreAndVali
     gddOptions?: {
       [k: string]: unknown;
     };
+    /**
+     * When true, the value of this property SHOULD NOT be included when labelling the graphic in a GUI (e.g. in playout or automation UIs). Default is false. Used to keep labels concise by excluding technical or less meaningful fields.
+     */
     hidden?: boolean;
+    /**
+     * For UI ordering, lower values should be displayed first
+     */
+    order?: number;
     [k: string]: unknown;
   };
 export type CoreAndValidationSpecificationsMetaSchema = CoreVocabularyMetaSchema &
@@ -443,6 +450,14 @@ export type HttpsOgrafEbuIoV1SpecificationJsonSchemasGddObjectJson1 = CoreAndVal
     gddOptions?: {
       [k: string]: unknown;
     };
+    /**
+     * When true, the value of this property SHOULD NOT be included when labelling the graphic in a GUI (e.g. in playout or automation UIs). Default is false. Used to keep labels concise by excluding technical or less meaningful fields.
+     */
+    hidden?: boolean;
+    /**
+     * For UI ordering, lower values should be displayed first
+     */
+    order?: number;
     [k: string]: unknown;
   };
 
@@ -533,11 +548,11 @@ export interface HttpsOgrafEbuIoV1SpecificationJsonSchemasGraphicsSchemaJson {
        */
       type: string;
       /**
-       * Minimum engine version; CEF uses branch number (e.g. 139), other engines use their own scheme.
+       * Minimum engine version
        */
       version: {
         /**
-         * Minimum required version. Format is engine-specific (e.g. CEF branch number as string "139", or semver "120.0.5"). Comparison semantics are defined by the renderer for the given engine type.
+         * Minimum required version. Format is engine-specific (e.g. CEF branch number as string "139", or semver "120.0.5").
          */
         min: string;
         [k: string]: unknown;
