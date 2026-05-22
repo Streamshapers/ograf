@@ -6,6 +6,16 @@
     "main": "graphic.mjs",
     "supportsRealTime": true,
     "supportsNonRealTime": false,
+    "actionDurations": [
+        {
+            "type": "playAction",
+            "duration": 1000
+        },
+        {
+            "type": "stopAction",
+            "duration": 1000
+        }
+    ],
     "author": {
         "name": "Markus Nygård, YLE"
     },

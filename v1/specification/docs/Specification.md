@@ -68,6 +68,7 @@ It consists of the following fields:
 | author              | Author             |          |         | An object providing information about the author of the Graphic. When provided, the object MUST contain a `name` field and MAY contain an `email` and `url` field. |
 | main                | string             |    X     |         | Reference to the Javascript file that exports the Graphic Web Component.                                                                                           |
 | customActions       | Action[]           |          |         | An array of `Action` objects. They correspond to the custom actions that can be invoked on the Graphic. See below for details about the fields inside an `Action`.    |
+| actionDurations     | ActionDuration[]   |          |         | An array of `ActionDuration` objects. They describe the static animation durations of actions, expressed in milliseconds.      |
 | supportsRealTime    | boolean            |    X     |         | Indicates whether the Graphic supports real-time rendering.                                                                                                        |
 | supportsNonRealTime | boolean            |    X     |         | Indicates whether the Graphic supports non-real-time rendering. If true, the Graphic MUST implement the non-real-time functions `goToTime()` and `setActionsSchedule()`.                 |
 | schema              | object             |          |         | The JSON schema definition for the `data` argument to the `load()` and `updateAction()` methods. This schema can be seen as the (public) state model of the Graphic. Properties in this schema MAY include an optional `hidden` (boolean) attribute; when `hidden` is true, the property's value SHOULD NOT be included when building a display name or label for the Graphic in a GUI (e.g. in playout or automation UIs).                   |
@@ -124,6 +125,30 @@ In the Graphic Manifest, the `stepCount` property is used to describe the step m
 |  `>1`            | The Graphic has (a known number of) multiple steps (This is the **third model** above) | Yes |
 
 *Note: "step controls" are controls that allow a user to navigate between steps, such as "next step", "previous step", "go to step X", etc.
+
+#### Action durations
+
+Action durations are optional metadata that allows predicting how long action animations
+take. Durations are expressed as integer milliseconds. A duration of `0` means that there is no animation duration, and
+a duration of `-1` indicates that the duration is dynamic or unknown. The values describe the normal animated execution
+of an action, not the behavior when `skipAnimation` is set to `true`.
+
+The `ActionDuration` object contains the following fields:
+
+| Field          | Type                 | Required | Default | Description                                               |
+|----------------|----------------------|:--------:|:-------:|-----------------------------------------------------------|
+| type           | string               |    X     |         | The action type. MUST be one of `playAction`, `updateAction`, `stopAction` or `customAction`. |
+| duration       | integer              |    X     |         | The animation duration in milliseconds. A value of `-1` indicates a dynamic or unknown duration. |
+| customActionId | string               |          |         | Required when `type` is `customAction`. MUST refer to the `id` of an Action in `customActions`. |
+| steps          | ActionStepDuration[] |          |         | Optional step-specific durations for `playAction`. |
+
+For non-custom actions, there MUST be at most one `ActionDuration` object per `type`. For custom actions, there MUST be
+at most one `ActionDuration` object per `customActionId`.
+
+For `playAction`, the `steps` field MAY be used when different target steps have different animation durations. The
+`step` field is zero-based, matching the `goto` field of `playAction()`. A step duration without a `step` field is the
+fallback for target steps not explicitly listed. When determining the duration of a `playAction`, the matching order is:
+an exact `step` match, then a fallback step duration without `step`, then the action-level `duration`.
 
 #### Custom actions
 
