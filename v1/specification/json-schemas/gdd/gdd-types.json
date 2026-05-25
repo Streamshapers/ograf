@@ -195,6 +195,161 @@
     },
     {
       "if": {
+        "properties": { "gddType": { "const": "select-multiple" } },
+        "required": ["gddType"]
+      },
+      "then": {
+        "properties": {
+          "type": {
+            "const": "array"
+          },
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": ["string", "number", "integer"]
+              },
+              "enum": {
+                "type": "array"
+              }
+            },
+            "required": ["type", "enum"]
+          },
+          "gddOptions": {
+            "type": "object",
+            "properties": {},
+            "required": ["labels"]
+          }
+        },
+        "required": ["gddOptions", "items"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "gddType": { "const": "select-multiple" },
+          "items": {
+            "properties": {
+              "type": { "const": "string" }
+            },
+            "required": ["type"]
+          }
+        },
+        "required": ["gddType", "items"]
+      },
+      "then": {
+        "properties": {
+          "items": {
+            "type": "object",
+            "properties": {
+              "enum": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "gddOptions": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "gddType": { "const": "select-multiple" },
+          "items": {
+            "properties": {
+              "type": { "const": "integer" }
+            },
+            "required": ["type"]
+          }
+        },
+        "required": ["gddType", "items"]
+      },
+      "then": {
+        "properties": {
+          "items": {
+            "type": "object",
+            "properties": {
+              "enum": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "gddOptions": {
+            "type": "object",
+            "properties": {
+              "labels": {
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^[0-9]+$"
+                },
+                "patternProperties": {
+                  ".": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "gddType": { "const": "select-multiple" },
+          "items": {
+            "properties": {
+              "type": { "const": "number" }
+            },
+            "required": ["type"]
+          }
+        },
+        "required": ["gddType", "items"]
+      },
+      "then": {
+        "properties": {
+          "items": {
+            "type": "object",
+            "properties": {
+              "enum": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "gddOptions": {
+            "type": "object",
+            "properties": {
+              "labels": {
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^[0-9,.]+$"
+                },
+                "patternProperties": {
+                  ".": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
         "properties": { "gddType": { "const": "color-rrggbb" } },
         "required": ["gddType"]
       },
