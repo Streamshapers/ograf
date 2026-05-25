@@ -1204,14 +1204,14 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
-        ShallowGDDObjectSchema: components["schemas"]["object-2"] & ({
+        ShallowGDDObjectSchema: components["schemas"]["object"] & ({
             /** @enum {string} */
             type: "boolean" | "integer" | "number" | "string";
         } & {
             [key: string]: unknown;
         });
         /**
-         * @description Schema of the RenderTarget. This is a GDD/JSON-object schema that describes the structure of the RenderTarget identifier. See https://superflytv.github.io/GraphicsDataDefinition
+         * @description Schema of the RenderTarget. This is a GDD/JSON-object schema that describes the structure of the RenderTarget identifier. See https://github.com/ebu/ograf/tree/main/v1/specification/json-schemas/gdd
          * @example { "type": "object", "properties": { "bank": { "type": "integer" }, "layer": { "type": "integer" } }, "required": [ "bank", "layer" ] }
          */
         RenderTargetSchema: components["schemas"]["ShallowGDDObjectSchema"] | ({
@@ -1617,16 +1617,6 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
-        "gdd-types-2": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
-        "basic-types-2": unknown & unknown & unknown & unknown & unknown & unknown;
-        "object-2": ({
-            /** @enum {string} */
-            type: "boolean" | "string" | "number" | "integer" | "array" | "object";
-            gddType?: string;
-            gddOptions?: Record<string, never>;
-        } & {
-            [key: string]: unknown;
-        }) & (components["schemas"]["schema"] & components["schemas"]["gdd-types-2"] & components["schemas"]["basic-types-2"]);
     };
     responses: never;
     parameters: never;
