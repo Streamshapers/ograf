@@ -13,4 +13,5 @@ export { ServerApi }
 // Also export the GraphicsManifest types using simplified names
 export type GraphicsManifest = GeneratedGraphicsManifest.HttpsOgrafEbuIoV1SpecificationJsonSchemasGraphicsSchemaJson
 export type GraphicsManifestCustomAction = GeneratedGraphicsManifest.HttpsOgrafEbuIoV1SpecificationJsonSchemasLibActionJson
+export type GraphicsManifestActionDuration = NonNullable<GraphicsManifest["actionDurations"]>[number]
 

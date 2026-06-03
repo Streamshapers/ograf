@@ -1557,6 +1557,46 @@ export interface components {
             };
             /** @description Custom Actions that can be invoked on the Graphic. */
             customActions?: components["schemas"]["action"][];
+            /** @description Static animation durations for actions, expressed in milliseconds. */
+            actionDurations?: (({
+                /** @constant */
+                type: "playAction";
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+                steps?: ({
+                    /** @description The zero-based target step number. When omitted, this duration applies to target steps not explicitly listed. */
+                    step?: number;
+                    /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                    duration: number;
+                } & {
+                    [key: string]: unknown;
+                })[];
+            } & {
+                [key: string]: unknown;
+            }) | ({
+                /** @constant */
+                type: "updateAction";
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+            } & {
+                [key: string]: unknown;
+            }) | ({
+                /** @constant */
+                type: "stopAction";
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+            } & {
+                [key: string]: unknown;
+            }) | ({
+                /** @constant */
+                type: "customAction";
+                /** @description The id of the custom action as defined in customActions. */
+                customActionId: string;
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+            } & {
+                [key: string]: unknown;
+            }))[];
             /** @description Indicates if the Graphic supports real-time rendering */
             supportsRealTime: boolean;
             /** @description Indicates if the Graphic supports non-real-time rendering. Note: If true, the Graphic must implement the 'goToTime()' and the 'setActionsSchedule()' methods. */

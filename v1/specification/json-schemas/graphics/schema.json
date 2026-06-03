@@ -60,6 +60,130 @@
                 "$ref": "https://ograf.ebu.io/v1/specification/json-schemas/lib/action.json"
             }
         },
+        "actionDurations": {
+            "type": "array",
+            "description": "Static animation durations for actions, expressed in milliseconds.",
+            "items": {
+                "description": "Static animation duration metadata for an action.",
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "const": "playAction"
+                            },
+                            "duration": {
+                                "type": "integer",
+                                "description": "The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.",
+                                "minimum": -1
+                            },
+                            "steps": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "description": "A step-specific playAction animation duration.",
+                                    "properties": {
+                                        "step": {
+                                            "type": "integer",
+                                            "description": "The zero-based target step number. When omitted, this duration applies to target steps not explicitly listed.",
+                                            "minimum": 0
+                                        },
+                                        "duration": {
+                                            "type": "integer",
+                                            "description": "The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.",
+                                            "minimum": -1
+                                        }
+                                    },
+                                    "required": [
+                                        "duration"
+                                    ],
+                                    "patternProperties": {
+                                        "^v_.*": {}
+                                    },
+                                    "additionalProperties": false
+                                }
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "duration"
+                        ],
+                        "patternProperties": {
+                            "^v_.*": {}
+                        },
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "const": "updateAction"
+                            },
+                            "duration": {
+                                "type": "integer",
+                                "description": "The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.",
+                                "minimum": -1
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "duration"
+                        ],
+                        "patternProperties": {
+                            "^v_.*": {}
+                        },
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "const": "stopAction"
+                            },
+                            "duration": {
+                                "type": "integer",
+                                "description": "The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.",
+                                "minimum": -1
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "duration"
+                        ],
+                        "patternProperties": {
+                            "^v_.*": {}
+                        },
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "const": "customAction"
+                            },
+                            "customActionId": {
+                                "type": "string",
+                                "description": "The id of the custom action as defined in customActions."
+                            },
+                            "duration": {
+                                "type": "integer",
+                                "description": "The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.",
+                                "minimum": -1
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "customActionId",
+                            "duration"
+                        ],
+                        "patternProperties": {
+                            "^v_.*": {}
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
         "supportsRealTime": {
             "type": "boolean",
             "description": "Indicates if the Graphic supports real-time rendering"
