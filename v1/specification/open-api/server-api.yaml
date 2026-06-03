@@ -913,7 +913,7 @@ components:
         - graphicInstances
     ShallowGDDObjectSchema:
       allOf:
-        - $ref: https://superflytv.github.io/GraphicsDataDefinition/gdd-meta-schema/v1/lib/object.json
+        - $ref: https://ograf.ebu.io/v1/specification/json-schemas/gdd/object.json
         - type: object
           properties:
             type:
@@ -929,11 +929,11 @@ components:
             - type
 
     RenderTargetSchema:
-      description: "Schema of the RenderTarget. This is a GDD/JSON-object schema that describes the structure of the RenderTarget identifier. See https://superflytv.github.io/GraphicsDataDefinition"
+      description: "Schema of the RenderTarget. This is a GDD/JSON-object schema that describes the structure of the RenderTarget identifier. See https://github.com/ebu/ograf/tree/main/v1/specification/json-schemas/gdd"
       type: object
-      x-$ref: "https://superflytv.github.io/GraphicsDataDefinition/gdd-meta-schema/v1/lib/object.json"
+      x-$ref: "https://ograf.ebu.io/v1/specification/json-schemas/gdd/object.json"
       externalDocs:
-        url: https://superflytv.github.io/GraphicsDataDefinition/gdd-meta-schema/v1/lib/object.json
+        url: https://ograf.ebu.io/v1/specification/json-schemas/gdd/object.json
       example: '{ "type": "object", "properties": { "bank": { "type": "integer" }, "layer": { "type": "integer" } }, "required": [ "bank", "layer" ] }'
       oneOf:
         - $ref: "#/components/schemas/ShallowGDDObjectSchema"
