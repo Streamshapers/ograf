@@ -1480,7 +1480,7 @@ export interface components {
         } & {
             [key: string]: unknown;
         }) & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] &  components["schemas"]["content"])) | (boolean & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] & components["schemas"]["format-annotation"] & components["schemas"]["content"]))) & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] & components["schemas"]["format-annotation"] & components["schemas"]["content"]);
-        "gdd-types": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
+        "gdd-types": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
         "basic-types": unknown & unknown & unknown & unknown & unknown & unknown;
         object: ({
             /** @enum {string} */
