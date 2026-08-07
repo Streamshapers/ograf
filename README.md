@@ -16,7 +16,7 @@
 
   Breaking changes may be introduced to the Server API during the draft period.
 
-EBU members as well as the general industry is invited to join the [HTML Graphics Working Group](https://tech.ebu.ch/groups/html_graphics) to participate in discussions and development of the OGraf specification.
+EBU members as well as the general industry is invited to join the [HTML Graphics Working Group](https://tech.ebu.ch/groups/html-graphics) to participate in discussions and development of the OGraf specification.
 
 Feedback can also be submitted using [GitHub Issues](https://github.com/ebu/ograf/issues).
 
