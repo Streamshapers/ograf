@@ -297,6 +297,60 @@ Please note that the `type` for this can be either of `"string"`, `"integer"` or
 
 Example data: `"one"`, `1` or `1.2`
 
+### Select multiple
+
+Lets the user select multiple options from a limited number of options.
+
+Please note that the `items.type` for this can be either of `"string"`, `"integer"` or `"number"`.
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "string",
+    "enum": ["one", "two", "three"]
+  },
+  "gddType": "select-multiple",
+  "gddOptions": {
+    "labels": {
+      "one": "Label for one",
+      "two": "Label for two",
+      "three": "Label for three"
+    }
+  }
+}
+```
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "integer",
+    "enum": [1, 2, 3]
+  },
+  "gddType": "select-multiple",
+  "gddOptions": {
+    "labels": { "1": "Small", "2": "Medium", "3": "Large" }
+  }
+}
+```
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "number",
+    "enum": [1.2, 3.5, 9.0]
+  },
+  "gddType": "select-multiple",
+  "gddOptions": {
+    "labels": { "1.2": "Small", "3.5": "Medium", "9.0": "Large" }
+  }
+}
+```
+
+Example data: `["one", "three"]`, `[1, 3]` or `[1.2, 9.0]`
+
 ### Color - RRGGBB
 
 Let's the user pick a color.

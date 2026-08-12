@@ -1297,14 +1297,14 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
-        ShallowGDDObjectSchema: components["schemas"]["object-2"] & ({
+        ShallowGDDObjectSchema: components["schemas"]["object"] & ({
             /** @enum {string} */
             type: "boolean" | "integer" | "number" | "string";
         } & {
             [key: string]: unknown;
         });
         /**
-         * @description Schema of the RenderTarget. This is a GDD/JSON-object schema that describes the structure of the RenderTarget identifier. See https://superflytv.github.io/GraphicsDataDefinition
+         * @description Schema of the RenderTarget. This is a GDD/JSON-object schema that describes the structure of the RenderTarget identifier. See https://github.com/ebu/ograf/tree/main/v1/specification/json-schemas/gdd
          * @example { "type": "object", "properties": { "bank": { "type": "integer" }, "layer": { "type": "integer" } }, "required": [ "bank", "layer" ] }
          */
         RenderTargetSchema: components["schemas"]["ShallowGDDObjectSchema"] | ({
@@ -1573,7 +1573,7 @@ export interface components {
         } & {
             [key: string]: unknown;
         }) & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] &  components["schemas"]["content"])) | (boolean & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] & components["schemas"]["format-annotation"] & components["schemas"]["content"]))) & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] & components["schemas"]["format-annotation"] & components["schemas"]["content"]);
-        "gdd-types": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
+        "gdd-types": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
         "basic-types": unknown & unknown & unknown & unknown & unknown & unknown;
         object: ({
             /** @enum {string} */
@@ -1650,6 +1650,46 @@ export interface components {
             };
             /** @description Custom Actions that can be invoked on the Graphic. */
             customActions?: components["schemas"]["action"][];
+            /** @description Static animation durations for actions, expressed in milliseconds. */
+            actionDurations?: (({
+                /** @constant */
+                type: "playAction";
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+                steps?: ({
+                    /** @description The zero-based target step number. When omitted, this duration applies to target steps not explicitly listed. */
+                    step?: number;
+                    /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                    duration: number;
+                } & {
+                    [key: string]: unknown;
+                })[];
+            } & {
+                [key: string]: unknown;
+            }) | ({
+                /** @constant */
+                type: "updateAction";
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+            } & {
+                [key: string]: unknown;
+            }) | ({
+                /** @constant */
+                type: "stopAction";
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+            } & {
+                [key: string]: unknown;
+            }) | ({
+                /** @constant */
+                type: "customAction";
+                /** @description The id of the custom action as defined in customActions. */
+                customActionId: string;
+                /** @description The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown. */
+                duration: number;
+            } & {
+                [key: string]: unknown;
+            }))[];
             /** @description Indicates if the Graphic supports real-time rendering */
             supportsRealTime: boolean;
             /** @description Indicates if the Graphic supports non-real-time rendering. Note: If true, the Graphic must implement the 'goToTime()' and the 'setActionsSchedule()' methods. */
@@ -1710,16 +1750,6 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
-        "gdd-types-2": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
-        "basic-types-2": unknown & unknown & unknown & unknown & unknown & unknown;
-        "object-2": ({
-            /** @enum {string} */
-            type: "boolean" | "string" | "number" | "integer" | "array" | "object";
-            gddType?: string;
-            gddOptions?: Record<string, never>;
-        } & {
-            [key: string]: unknown;
-        }) & (components["schemas"]["schema"] & components["schemas"]["gdd-types-2"] & components["schemas"]["basic-types-2"]);
     };
     responses: never;
     parameters: never;

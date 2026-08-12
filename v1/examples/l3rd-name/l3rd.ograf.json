@@ -16,6 +16,25 @@
             "schema": null
         }
     ],
+    "actionDurations": [
+        {
+            "type": "playAction",
+            "duration": 1500
+        },
+        {
+            "type": "updateAction",
+            "duration": 400
+        },
+        {
+            "type": "stopAction",
+            "duration": 1100
+        },
+        {
+            "type": "customAction",
+            "customActionId": "highlight",
+            "duration": 2800
+        }
+    ],
     "supportsRealTime": true,
     "supportsNonRealTime": true,
     "schema": {

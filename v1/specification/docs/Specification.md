@@ -68,6 +68,7 @@ It consists of the following fields:
 | author              | Author             |          |         | An object providing information about the author of the Graphic. When provided, the object MUST contain a `name` field and MAY contain an `email` and `url` field. |
 | main                | string             |    X     |         | Reference to the Javascript file that exports the Graphic Web Component.                                                                                           |
 | customActions       | Action[]           |          |         | An array of `Action` objects. They correspond to the custom actions that can be invoked on the Graphic. See below for details about the fields inside an `Action`.    |
+| actionDurations     | ActionDuration[]   |          |         | An array of `ActionDuration` objects. They describe the static animation durations of actions, expressed in milliseconds.      |
 | supportsRealTime    | boolean            |    X     |         | Indicates whether the Graphic supports real-time rendering.                                                                                                        |
 | supportsNonRealTime | boolean            |    X     |         | Indicates whether the Graphic supports non-real-time rendering. If true, the Graphic MUST implement the non-real-time functions `goToTime()` and `setActionsSchedule()`.                 |
 | schema              | object             |          |         | The JSON schema definition for the `data` argument to the `load()` and `updateAction()` methods. This schema can be seen as the (public) state model of the Graphic. Properties in this schema MAY include an optional `hidden` (boolean) attribute; when `hidden` is true, the property's value SHOULD NOT be included when building a display name or label for the Graphic in a GUI (e.g. in playout or automation UIs).                   |
@@ -89,11 +90,12 @@ In case of a non-real-time Graphic, there are two additional functions that need
 
 #### Step model
 
-A Graphic contains zero or more steps. A step can be defined as a 'paused' state of the Graphic.
-Going from one step to another is done via a transition (with or without animation). The figure below shows three example
-step models. Every model has a start and an end node. The start node represents the start of a Graphic rendering, where
-typically nothing is visible in the rendered output. Similarly, the end node represents the end of the Graphic rendering,
-also typically nothing visible in the rendered output at that moment. The arrows between the nodes represent the transitions.
+A Graphic contains zero or more steps. Steps numbers are 0-based, meaning that the first step is step 0. A step can be
+defined as a 'paused' state of the Graphic. Going from one step to another is done via a transition (with or without
+animation). The figure below shows three example step models. Every model has a start and an end node. The start node
+represents the start of a Graphic rendering, where typically nothing is visible in the rendered output. Similarly, the
+end node represents the end of the Graphic rendering, also typically nothing visible in the rendered output at that
+moment. The arrows between the nodes represent the transitions.
 
 The **first model** represents a Graphic containing zero steps. When `playAction()` is called on this Graphic, it will
 animate the Graphic in and after some predefined time the Graphic will animate out automatically.
@@ -101,16 +103,17 @@ animate the Graphic in and after some predefined time the Graphic will animate o
 <img src="images/step-model1.svg" alt="Step model" style="width:500px; height:auto;">
 
 The **second model** represents a Graphic containing one step. When `playAction()` is called on this Graphic, it will
-animate the Graphic in and will pause at step 1. Pausing here doesn't mean that the Graphic is not moving, it refers to
+animate the Graphic in and will pause at step 0. Pausing here doesn't mean that the Graphic is not moving, it refers to
 the fact that there is an interaction necessary with the Graphic to move to the next step (in this case the end).
 The `stopAction()` function SHOULD be used to go to the end of the Graphic.
 
 <img src="images/step-model2.svg" alt="Step model" style="width:500px; height:auto;">
 
 The **third model** represents a multi-step Graphic containing two steps. It is similar to the one-step model,
-but now the `playAction()` function MUST be used again to transition between different steps, except for the end node, where the `stopAction()`
-function SHOULD be used. The normal flow is to go to step 1, then to step 2 and finally to the end node. However, it is
-possible that you transition to any step or directly to the end node (indicated by the dotted lines in the figure).
+but now the `playAction()` function MUST be used again to transition between different steps, except for the end node,
+where the `stopAction()` function SHOULD be used. The normal flow is to go to step 0, then to step 1 and finally to the
+end node. However, it is possible that you transition to any step or directly to the end node (indicated by the dotted
+lines in the figure).
 
 <img src="images/step-model3.svg" alt="Step model" style="width:500px; height:auto;">
 
@@ -124,6 +127,30 @@ In the Graphic Manifest, the `stepCount` property is used to describe the step m
 |  `>1`            | The Graphic has (a known number of) multiple steps (This is the **third model** above) | Yes |
 
 *Note: "step controls" are controls that allow a user to navigate between steps, such as "next step", "previous step", "go to step X", etc.
+
+#### Action durations
+
+Action durations are optional metadata that allows predicting how long action animations
+take. Durations are expressed as integer milliseconds. A duration of `0` means that there is no animation duration, and
+a duration of `-1` indicates that the duration is dynamic or unknown. The values describe the normal animated execution
+of an action, not the behavior when `skipAnimation` is set to `true`.
+
+The `ActionDuration` object contains the following fields:
+
+| Field          | Type                 | Required | Default | Description                                               |
+|----------------|----------------------|:--------:|:-------:|-----------------------------------------------------------|
+| type           | string               |    X     |         | The action type. MUST be one of `playAction`, `updateAction`, `stopAction` or `customAction`. |
+| duration       | integer              |    X     |         | The animation duration in milliseconds. A value of `-1` indicates a dynamic or unknown duration. |
+| customActionId | string               |          |         | Required when `type` is `customAction`. MUST refer to the `id` of an Action in `customActions`. |
+| steps          | ActionStepDuration[] |          |         | Optional step-specific durations for `playAction`. |
+
+For non-custom actions, there MUST be at most one `ActionDuration` object per `type`. For custom actions, there MUST be
+at most one `ActionDuration` object per `customActionId`.
+
+For `playAction`, the `steps` field MAY be used when different target steps have different animation durations. The
+`step` field is zero-based, matching the `goto` field of `playAction()`. A step duration without a `step` field is the
+fallback for target steps not explicitly listed. When determining the duration of a `playAction`, the matching order is:
+an exact `step` match, then a fallback step duration without `step`, then the action-level `duration`.
 
 #### Custom actions
 
@@ -257,11 +284,13 @@ A Promise is returned that MUST resolve when the Graphic completed the necessary
 #### playAction()
 ```
 playAction: (
-  params: {
-    delta: number;
+  params: ({
     goto: number;
     skipAnimation?: boolean;
-  } & VendorExtend
+  } | {
+    delta: number;
+    skipAnimation?: boolean;
+  }) & VendorExtend
 ) => Promise<PlayActionReturnPayload>;
 ```
 The `playAction()` function is called by the Renderer to play a given step.
@@ -271,7 +300,7 @@ When not provided, the `skipAnimation` field defaults to `false`. The Graphic MU
 
 The `delta` and `goto` fields indicate the target step. Steps are zero-based indexed. `delta` is used for relative steps,
 `goto` for an absolute step number. The target step MUST be determined as follows by the Graphic:
-* when `goto` is not equal to `undefined`, the target step is equal to the value provided in the `goto` field;
+* when `goto` is not equal to `undefined` and greater or equal to 0, the target step is equal to the value provided in the `goto` field;
 * when `goto` is `undefined`, the target step is calculated as the sum of the current step and the value provided in the
 `delta` field (which defaults to `1` when not provided). When the current step is undefined (i.e. when the Graphic is
 in the 'start' state), the target step must be calculated as `-1 + delta`.

@@ -513,6 +513,78 @@ export interface HttpsOgrafEbuIoV1SpecificationJsonSchemasGraphicsSchemaJson {
    */
   customActions?: HttpsOgrafEbuIoV1SpecificationJsonSchemasLibActionJson[];
   /**
+   * Static animation durations for actions, expressed in milliseconds.
+   */
+  actionDurations?: (
+    | {
+        type: "playAction";
+        /**
+         * The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.
+         */
+        duration: number;
+        steps?: {
+          /**
+           * The zero-based target step number. When omitted, this duration applies to target steps not explicitly listed.
+           */
+          step?: number;
+          /**
+           * The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.
+           */
+          duration: number;
+          /**
+           * This interface was referenced by `undefined`'s JSON-Schema definition
+           * via the `patternProperty` "^v_.*".
+           */
+          [k: `v_${string}`]: unknown;
+        }[];
+        /**
+         * This interface was referenced by `undefined`'s JSON-Schema definition
+         * via the `patternProperty` "^v_.*".
+         */
+        [k: `v_${string}`]: unknown;
+      }
+    | {
+        type: "updateAction";
+        /**
+         * The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.
+         */
+        duration: number;
+        /**
+         * This interface was referenced by `undefined`'s JSON-Schema definition
+         * via the `patternProperty` "^v_.*".
+         */
+        [k: `v_${string}`]: unknown;
+      }
+    | {
+        type: "stopAction";
+        /**
+         * The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.
+         */
+        duration: number;
+        /**
+         * This interface was referenced by `undefined`'s JSON-Schema definition
+         * via the `patternProperty` "^v_.*".
+         */
+        [k: `v_${string}`]: unknown;
+      }
+    | {
+        type: "customAction";
+        /**
+         * The id of the custom action as defined in customActions.
+         */
+        customActionId: string;
+        /**
+         * The animation duration in milliseconds. A value of -1 indicates that the duration is dynamic or unknown.
+         */
+        duration: number;
+        /**
+         * This interface was referenced by `undefined`'s JSON-Schema definition
+         * via the `patternProperty` "^v_.*".
+         */
+        [k: `v_${string}`]: unknown;
+      }
+  )[];
+  /**
    * Indicates if the Graphic supports real-time rendering
    */
   supportsRealTime: boolean;

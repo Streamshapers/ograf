@@ -36,5 +36,29 @@
                 }
             }
         }
+    ],
+    "actionDurations": [
+        {
+            "type": "playAction",
+            "duration": 0
+        },
+        {
+            "type": "updateAction",
+            "duration": 0
+        },
+        {
+            "type": "stopAction",
+            "duration": 0
+        },
+        {
+            "type": "customAction",
+            "customActionId": "highlight",
+            "duration": 0
+        },
+        {
+            "type": "customAction",
+            "customActionId": "setColor",
+            "duration": 0
+        }
     ]
 }

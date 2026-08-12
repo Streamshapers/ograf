@@ -20,6 +20,15 @@ The OGraf Server API is defined as an [OpenAPI](https://www.openapis.org/) defin
 
 ## Additional notes
 
+### Base URL and path prefixes
+
+A Server MAY expose the OGraf Server API under any base URL and path prefix.
+All paths defined in the OpenAPI document are relative to that base URL.
+
+For example, if the base URL is `https://example.com/my/prefix/ograf/v1`, the OpenAPI path `/graphics` is available at `https://example.com/my/prefix/ograf/v1/graphics`.
+
+The `/ograf/v1` path prefix used in examples is allowed, but not required.
+
 ### Security (optional)
 
 * The current version of the Server API doesn't specify any security measures.
