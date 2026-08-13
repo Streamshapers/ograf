@@ -224,6 +224,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/graphics/{graphicId}/thumbnail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve a thumbnail image for a graphic */
+        get: {
+            parameters: {
+                query: {
+                    /** @description URL-encoded thumbnail file reference, matching a `thumbnails[].file` value from the Graphic manifest. Relative paths are resolved relative to the Graphic manifest or package. */
+                    file: string;
+                };
+                header?: never;
+                path: {
+                    /** @description ID of the graphic to retrieve the thumbnail from */
+                    graphicId: components["schemas"]["GraphicId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Returns the requested thumbnail image */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "image/png": string;
+                        "image/jpeg": string;
+                        "image/gif": string;
+                        "image/webp": string;
+                    };
+                };
+                /** @description Missing or invalid thumbnail file reference */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No Graphic or thumbnail found with the given ID and file reference */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/renderers": {
         parameters: {
             query?: never;
@@ -1109,6 +1181,25 @@ export interface components {
          */
         GraphicInstanceId: string;
         /**
+         * GraphicThumbnail
+         * @description Thumbnail image for a Graphic. This matches entries in the Graphic manifest `thumbnails` property.
+         */
+        GraphicThumbnail: {
+            /** @description Path to the image file, relative to the manifest or absolute. Allowed formats: PNG, JPG, GIF, webp. */
+            file: string;
+            /** @description Resolution of the image in pixels. When present, the UI can derive aspect ratio (e.g. width/height) and choose or scale the thumbnail appropriately. */
+            resolution?: {
+                /** @description Width in pixels. */
+                width: number;
+                /** @description Height in pixels. */
+                height: number;
+            } & {
+                [key: string]: unknown;
+            };
+        } & {
+            [key: string]: unknown;
+        };
+        /**
          * GraphicListInfo
          * @description Minimal information about an OGraf Graphic
          */
@@ -1124,6 +1215,8 @@ export interface components {
              * @example A simple lower third for the Main news show
              */
             description?: string;
+            /** @description Optional list of thumbnail images for the Graphic. Each entry references an image file (PNG, JPG, GIF, or webp) and may specify its resolution so UIs can choose or scale appropriately. */
+            thumbnails?: components["schemas"]["GraphicThumbnail"][];
         } & {
             [key: string]: unknown;
         };
@@ -1480,7 +1573,7 @@ export interface components {
         } & {
             [key: string]: unknown;
         }) & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] &  components["schemas"]["content"])) | (boolean & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] & components["schemas"]["format-annotation"] & components["schemas"]["content"]))) & (components["schemas"]["core"] & components["schemas"]["applicator"] & components["schemas"]["unevaluated"] & components["schemas"]["validation"] & components["schemas"]["meta-data"] & components["schemas"]["format-annotation"] & components["schemas"]["content"]);
-        "gdd-types": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
+        "gdd-types": unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown & unknown;
         "basic-types": unknown & unknown & unknown & unknown & unknown & unknown;
         object: ({
             /** @enum {string} */
