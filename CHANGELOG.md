@@ -11,19 +11,24 @@ This log lists changes between versions.
 
 _(Note: Minor changes such as documentation improvements are omitted in this list.)_
 
-* 2026-04-15: [PR 20](https://github.com/ebu/ograf/pull/20): Add `thumbnails` to manifest schema (optional).
-* 2026-04-15: [PR 27](https://github.com/ebu/ograf/pull/27): Add `order` property to manifest schema GDD properties (optional).
+* 2026-08-13: **Server API added to version 1 and considered stable**
+* 2026-06-03: [PR 72](https://github.com/ebu/ograf/pull/72): Update internal GDD json-schema references.
+* 2026-06-03: [Issue 37](https://github.com/ebu/ograf/issues/37), [PR 70](https://github.com/ebu/ograf/pull/70): Add GDD Type: `select-multiple`
+* 2026-06-03: [Issue 26](https://github.com/ebu/ograf/issues/26), [PR 67](https://github.com/ebu/ograf/pull/67): Add `actionDurations` to manifest (optional).
+* 2026-06-03: [PR 66](https://github.com/ebu/ograf/pull/66): Documentation clarification: numbering of steps for use in `playAction`
+* 2026-04-15: [Issue 27](https://github.com/ebu/ograf/issues/27), [PR 59](https://github.com/ebu/ograf/pull/59): Add `order` property to manifest schema GDD properties (optional).
+* 2026-04-15: [Issue 25](https://github.com/ebu/ograf/issues/25), [PR 58](https://github.com/ebu/ograf/pull/58): Add `engine` version to `renderRequirements` in manifest schema (optional).
+* 2026-04-15: [Issue 20](https://github.com/ebu/ograf/issues/20), [PR 57](https://github.com/ebu/ograf/pull/57): Add `thumbnails` to manifest schema (optional).
+* 2026-04-15: [Issue 46](https://github.com/ebu/ograf/issues/46), [PR 56](https://github.com/ebu/ograf/pull/56): Add `hidden` property to manifest schema GDD properties (optional).
 * 2026-04-15: Set repo license to MIT.
-* 2026-04-15: [PR 25](https://github.com/ebu/ograf/pull/25): Add `engine` version to `renderRequirements` in manifest schema (optional).
-* 2026-04-15: [PR 46](https://github.com/ebu/ograf/pull/46): Add `hidden` property to manifest schema GDD properties (optional).
 * 2026-03-05: [PR 43](https://github.com/ebu/ograf/pull/43): Mention of CORS (optional).
-* 2026-02-09: [PR 12](https://github.com/ebu/ograf/pull/12): Publish first draft of the **OGraf Server API**. Note: Breaking changes might be introduced to the Server API while it is a draft.
-* 2026-02-04: [PR 40](https://github.com/ebu/ograf/pull/40): Move over GDD Definitions to OGraf repo.
+* 2026-02-09: [PR 12](https://github.com/ebu/ograf/pull/12): Publish first draft of the **Server API**. Note: Breaking changes might be introduced to the Server API while it is a draft.
+* 2026-02-04: [Issue 24](https://github.com/ebu/ograf/issues/24), [PR 40](https://github.com/ebu/ograf/pull/40): Move over GDD Definitions to OGraf repo.
 * 2026-01-21: [PR 39](https://github.com/ebu/ograf/pull/39): Add optional `skipAnimation` property to `updateAction()` & `customAction()` in specification.md, to align with the other actions / typescript types.
 * 2026-01-21: [PR 38](https://github.com/ebu/ograf/pull/38): Add definitions of the returned Promise for `updateAction()` and `customAction()`, to align with the preexisting actions.
 * 2025-11-07: [PR 17](https://github.com/ebu/ograf/pull/17): Modify the `stepCount` property, to include the value -1 to signify that a Graphic does have steps, but the number of steps is not known on beforehand.
 * 2025-11-07: [PR 19](https://github.com/ebu/ograf/pull/19): Documentation improvements regarding the step model.
-* 2025-11-07: [PR 34](https://github.com/ebu/ograf/pull/34): Clarification of Web Component Interface specification
+* 2025-11-07: [Issue 29](https://github.com/ebu/ograf/pull/29), [PR 34](https://github.com/ebu/ograf/pull/34): Clarification of Web Component Interface specification
 * 2025-09-17: **Version 1 published and considered stable**
 
 ### Pre-Version 1:

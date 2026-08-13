@@ -9,33 +9,25 @@
 
 ## Project status
 
-* **The OGraf Graphics specification** (version 1) is production ready and considered stable.
+**Version 1** includes the **The OGraf Graphics specification** (published 2025-09-17) as well as the **The OGraf Server API specification** (published 2026-08-13).
+The OGraf versions are considered stable and production ready. Future changes and additions to the specification will be backwards-compatible and/or optional.
 
-  Additional features and non-breaking changes will be added continously.
-* **The OGraf Control API specification** is published as a draft, expected to be finalized Mid 2026.
-
-  Breaking changes may be introduced to the Server API during the draft period.
-
-EBU members as well as the general industry is invited to join the [HTML Graphics Working Group](https://tech.ebu.ch/groups/html-graphics) to participate in discussions and development of the OGraf specification.
+EBU members as well as the general industry is invited to join the [HTML Graphics Working Group](https://tech.ebu.ch/groups/html-graphics) to participate in discussions and continued development of the OGraf specification.
 
 Feedback can also be submitted using [GitHub Issues](https://github.com/ebu/ograf/issues).
 
 Graphics and Render system developers are encouraged to follow changes in the [Changelog](./CHANGELOG.md).
 
-### Time plan
+### Version History
 
-- **Done:**
-  - Version 1 of **Graphics definition** (2025-09-17).
-  - First draft of **Server API** published (2026-02-09).
-- Q1+Q2 2026:
-  - Feedback from the industry on the **Server API**
-- Mid 2026:
-  - **Server API** definitions to be added to Version 1.
-  - Continued work on improving the **OGraf Graphics specification**
+- 2025-09-17: Version 1 of **Graphics definition** published
+- 2026-08-13: Version 1 of **Server API** published.
+
+A detailed changelog can be found here: _[CHANGELOG.md](./CHANGELOG.md)_
 
 ## Introduction
 
-The OGraf specification defines a way to create HTML based graphics as well as an (upcoming) Control API.
+The OGraf specification defines a way to create HTML based graphics as well as an Server API for controlling OGraf-compatible renderers.
 It allows for vendor interoperability between Graphics, Rendering systems and Control systems.
 
 ## Getting Started
