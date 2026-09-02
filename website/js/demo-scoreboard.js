@@ -9,6 +9,7 @@
   const btnUpdate = document.getElementById('sb-update');
   const btnStop  = document.getElementById('sb-stop');
   const statusEl = document.getElementById('sb-status');
+  const aspectButtons = [...document.querySelectorAll('.demo-card--scoreboard .demo-aspect-btn')];
 
   const liveButtons = [btnNext, btnGHome, btnGAway, btnUpdate, btnStop];
   let isReady = false, isPlaying = false;
@@ -49,9 +50,9 @@
 
   // -- Aspect ratio switcher --
 
-  document.querySelectorAll('.demo-aspect-btn').forEach(btn => {
+  aspectButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.demo-aspect-btn').forEach(b => b.classList.remove('is-active'));
+      aspectButtons.forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
       const ratio = btn.dataset.ratio;
       currentRes = RESOLUTIONS[ratio];

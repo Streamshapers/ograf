@@ -46,7 +46,7 @@
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=8">
+    <link rel="stylesheet" href="website/css/style.css?v=9">
     <link rel="stylesheet" href="website/css/hero-ticker.css">
 </head>
 <body>
@@ -692,14 +692,16 @@
                                 </div>
                             </div>
 
-                            <div class="demo-player demo-player--sb" id="sb-player">
-                                <iframe
-                                        id="sb-iframe"
-                                        class="demo-player__iframe"
-                                        src="website/demos/scoreboard/index.html"
-                                        title="OGraf Live Scoreboard Demo"
-                                        sandbox="allow-scripts allow-same-origin"
-                                ></iframe>
+                            <div class="demo-player-stage">
+                                <div class="demo-player demo-player--sb" id="sb-player" data-ratio="16/9">
+                                    <iframe
+                                            id="sb-iframe"
+                                            class="demo-player__iframe"
+                                            src="website/demos/scoreboard/index.html"
+                                            title="OGraf Live Scoreboard Demo"
+                                            sandbox="allow-scripts allow-same-origin"
+                                    ></iframe>
+                                </div>
                             </div>
 
                             <div class="demo-controls">
@@ -771,14 +773,16 @@
                                 </div>
                             </div>
 
-                            <div class="demo-player" data-demo-player>
-                                <iframe
-                                        class="demo-player__iframe"
-                                        data-demo-iframe
-                                        src="website/demos/lower-third/index.html"
-                                        title="OGraf News Lower Third Demo"
-                                        sandbox="allow-scripts allow-same-origin"
-                                ></iframe>
+                            <div class="demo-player-stage">
+                                <div class="demo-player" data-demo-player>
+                                    <iframe
+                                            class="demo-player__iframe"
+                                            data-demo-iframe
+                                            src="website/demos/lower-third/index.html"
+                                            title="OGraf News Lower Third Demo"
+                                            sandbox="allow-scripts allow-same-origin"
+                                    ></iframe>
+                                </div>
                             </div>
 
                             <div class="demo-controls">
@@ -842,24 +846,47 @@
                                 <span class="demo-aspect-bar__label">Format</span>
                                 <div class="demo-aspect-bar__options">
                                     <button class="demo-aspect-btn is-active" type="button" data-ratio="16/9"
-                                            title="Landscape 16:9" disabled>
+                                            title="Landscape 16:9">
                                         <svg width="20" height="14" viewBox="0 0 20 14">
                                             <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
                                         <span>16:9</span>
                                     </button>
+                                    <button class="demo-aspect-btn" type="button" data-ratio="4/3" title="Classic 4:3">
+                                        <svg width="16" height="14" viewBox="0 0 16 14">
+                                            <rect x="0.5" y="0.5" width="15" height="13" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>4:3</span>
+                                    </button>
+                                    <button class="demo-aspect-btn" type="button" data-ratio="1/1" title="Square 1:1">
+                                        <svg width="14" height="14" viewBox="0 0 14 14">
+                                            <rect x="0.5" y="0.5" width="13" height="13" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>1:1</span>
+                                    </button>
+                                    <button class="demo-aspect-btn" type="button" data-ratio="9/16" title="Portrait 9:16">
+                                        <svg width="10" height="16" viewBox="0 0 10 16">
+                                            <rect x="0.5" y="0.5" width="9" height="15" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>9:16</span>
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="demo-player" data-demo-player>
-                                <iframe
-                                        class="demo-player__iframe"
-                                        data-demo-iframe
-                                        src="website/demos/lower-third-stage/index.html"
-                                        title="OGraf Responsive Lower Third Demo"
-                                        sandbox="allow-scripts allow-same-origin"
-                                ></iframe>
+                            <div class="demo-player-stage">
+                                <div class="demo-player" data-demo-player data-ratio="16/9">
+                                    <iframe
+                                            class="demo-player__iframe"
+                                            data-demo-iframe
+                                            src="website/demos/lower-third-stage/index.html?v=9"
+                                            title="OGraf Responsive Lower Third Demo"
+                                            sandbox="allow-scripts allow-same-origin"
+                                    ></iframe>
+                                </div>
                             </div>
 
                             <div class="demo-controls">
@@ -1482,10 +1509,10 @@
 <script src="website/js/animations.js?v=6"></script>
 
 <!-- Demo control panel -->
-<script src="website/js/demo-lower-third.js?v=8"></script>
+<script src="website/js/demo-lower-third.js?v=9"></script>
 
 <!-- Demo 2: Scoreboard control panel -->
-<script src="website/js/demo-scoreboard.js"></script>
+<script src="website/js/demo-scoreboard.js?v=9"></script>
 
 <!-- Demo carousel -->
 <script src="website/js/demo-carousel.js?v=8"></script>

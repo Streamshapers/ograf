@@ -2825,13 +2825,30 @@ a:hover {
 
 /* ---- Preview player ---- */
 
-.demo-player {
+.demo-player-stage {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #0a0e1a;
   overflow: hidden;
 }
+
+.demo-player {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0a0e1a;
+  overflow: hidden;
+}
+
+.demo-player[data-ratio="4/3"]  { width: 75%; }
+.demo-player[data-ratio="1/1"]  { width: 56.25%; }
+.demo-player[data-ratio="9/16"] { width: 31.640625%; }
 
 .demo-live-badge {
   position: absolute;
@@ -3014,7 +3031,8 @@ a:hover {
 
 .demo-carousel {
   --demo-carousel-gap: var(--space-6);
-  --demo-carousel-peek: 72px;
+  --demo-carousel-peek: 160px;
+  --demo-carousel-fade: 64px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto;
@@ -3023,7 +3041,7 @@ a:hover {
     "dots";
   row-gap: var(--space-5);
   width: 100%;
-  max-width: var(--max-width);
+  max-width: 1440px;
   margin-inline: auto;
   padding-inline: var(--container-padding);
 }
@@ -3033,6 +3051,20 @@ a:hover {
   overflow: hidden;
   min-width: 0;
   border-radius: var(--radius-lg);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--demo-carousel-fade),
+    #000 calc(100% - var(--demo-carousel-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--demo-carousel-fade),
+    #000 calc(100% - var(--demo-carousel-fade)),
+    transparent 100%
+  );
 }
 
 .demo-carousel__track {
@@ -3045,7 +3077,7 @@ a:hover {
 .demo-carousel__slide {
   flex: 0 0 100%;
   min-width: 0;
-  opacity: 0.42;
+  opacity: 0.58;
   pointer-events: none;
   transition: opacity 0.4s;
 }
@@ -3125,11 +3157,26 @@ a:hover {
   border-radius: 4px;
 }
 
+@media (min-width: 901px) and (max-width: 1199px) {
+  .demo-carousel {
+    --demo-carousel-peek: 112px;
+    --demo-carousel-fade: 48px;
+  }
+}
+
+@media (max-width: 900px) {
+  .demo-carousel {
+    --demo-carousel-peek: 96px;
+    --demo-carousel-fade: 40px;
+  }
+}
+
 /* Mobile: 3-column grid - prev | dots | next */
 @media (max-width: 640px) {
   .demo-carousel {
     --demo-carousel-gap: var(--space-3);
-    --demo-carousel-peek: 28px;
+    --demo-carousel-peek: 42px;
+    --demo-carousel-fade: 18px;
     grid-template-columns: auto 1fr auto;
     grid-template-areas:
       "track track track"
@@ -3232,7 +3279,7 @@ a:hover {
     grid-area: aspect;
   }
 
-  .demo-player {
+  .demo-player-stage {
     grid-area: player;
   }
 
@@ -3291,8 +3338,9 @@ a:hover {
   }
 
   .demo-carousel {
-    max-width: 960px;
-    --demo-carousel-peek: 60px;
+    max-width: 1120px;
+    --demo-carousel-peek: 128px;
+    --demo-carousel-fade: 56px;
   }
 
   .demo-card__header {
@@ -3314,17 +3362,11 @@ a:hover {
   }
 }
 
-/* ---- Scoreboard player (fixed-resolution iframe, scaled to fit) ---- */
+/* ---- Fixed-height format stage ---- */
 
 .demo-player--sb {
-  aspect-ratio: 16 / 9;
   width: 100%;
 }
-
-/* For non-widescreen ratios, cap the width so the player doesn't grow too tall */
-.demo-player--sb[data-ratio="4/3"]  { max-width: 693px; margin: 0 auto; }
-.demo-player--sb[data-ratio="1/1"]  { max-width: 520px; margin: 0 auto; }
-.demo-player--sb[data-ratio="9/16"] { max-width: 293px; margin: 0 auto; }
 
 @media (max-width: 640px) {
   .demo-controls {
@@ -3365,7 +3407,7 @@ a:hover {
     margin-bottom: var(--space-6);
   }
 
-  .demo-player {
+  .demo-player-stage {
     width: min(100%, calc((100svh - 96px) * 16 / 9));
     margin-inline: auto;
   }

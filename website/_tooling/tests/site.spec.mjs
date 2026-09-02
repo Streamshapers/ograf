@@ -113,6 +113,7 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
     const activeSlide = page.locator('.demo-carousel__slide.is-active');
     const player = activeSlide.locator('.demo-player');
     const controls = activeSlide.locator('.demo-controls');
+    const viewportSize = page.viewportSize();
 
     await page.locator('#demos').scrollIntoViewIfNeeded();
     await expect(carouselViewport).toBeVisible();
@@ -127,23 +128,31 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
     const viewportBox = await carouselViewport.boundingBox();
     const firstSlideBox = await page.locator('.demo-carousel__slide').nth(0).boundingBox();
     const secondSlideBox = await page.locator('.demo-carousel__slide').nth(1).boundingBox();
+    const minimumVisibleNeighbour = viewportSize.width <= 640
+        ? 24
+        : viewportSize.width <= 900 ? 60 : 80;
     expect(viewportBox).not.toBeNull();
     expect(firstSlideBox.x).toBeGreaterThan(viewportBox.x);
-    expect(secondSlideBox.x).toBeLessThan(viewportBox.x + viewportBox.width);
+    expect(viewportBox.x + viewportBox.width - secondSlideBox.x)
+        .toBeGreaterThanOrEqual(minimumVisibleNeighbour);
+    expect(await carouselViewport.evaluate(element => getComputedStyle(element).maskImage))
+        .toContain('linear-gradient');
+    await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveCSS('opacity', '0.58');
 
     await page.locator('.demo-carousel__dot').nth(1).click();
     await expect.poll(async () => {
         const previousBox = await page.locator('.demo-carousel__slide').nth(0).boundingBox();
         const nextBox = await page.locator('.demo-carousel__slide').nth(2).boundingBox();
-        return previousBox.x + previousBox.width > viewportBox.x
-            && nextBox.x < viewportBox.x + viewportBox.width;
-    }).toBeTruthy();
+        const previousVisibleWidth = previousBox.x + previousBox.width - viewportBox.x;
+        const nextVisibleWidth = viewportBox.x + viewportBox.width - nextBox.x;
+
+        return Math.min(previousVisibleWidth, nextVisibleWidth);
+    }).toBeGreaterThanOrEqual(minimumVisibleNeighbour);
 
     await page.locator('.demo-carousel__dot').nth(0).click();
     await expect(activeSlide).toHaveAttribute('aria-hidden', 'false');
     await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveAttribute('aria-hidden', 'true');
 
-    const viewportSize = page.viewportSize();
     const playerBox = await player.boundingBox();
     const controlsBox = await controls.boundingBox();
     const cardBox = await activeSlide.locator('.demo-card').boundingBox();
@@ -179,6 +188,48 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
         expect(response.headers()['content-type']).toContain('application/zip');
         expect((await response.body()).subarray(0, 4).toString('hex')).toBe('504b0304');
     }
+
+    await expectCleanPage(monitor);
+});
+
+test('scoreboard and responsive lower third keep a stable player height', async ({ page }) => {
+    const monitor = await openLandingPage(page);
+    const formats = [
+        { ratio: '16/9', width: '1920px', height: '1080px' },
+        { ratio: '4/3', width: '1440px', height: '1080px' },
+        { ratio: '1/1', width: '1080px', height: '1080px' },
+        { ratio: '9/16', width: '1080px', height: '1920px' }
+    ];
+
+    async function expectStableHeight(card) {
+        const stage = card.locator('.demo-player-stage');
+        const player = card.locator('.demo-player');
+        const iframe = card.locator('.demo-player__iframe');
+        const initialStageBox = await stage.boundingBox();
+
+        for (const format of formats) {
+            await card.locator(`.demo-aspect-btn[data-ratio="${format.ratio}"]`).click();
+            await expect(player).toHaveAttribute('data-ratio', format.ratio);
+            await expect(iframe).toHaveCSS('width', format.width);
+            await expect(iframe).toHaveCSS('height', format.height);
+
+            const stageBox = await stage.boundingBox();
+            const playerBox = await player.boundingBox();
+            expect(Math.abs(stageBox.height - initialStageBox.height)).toBeLessThan(1);
+            expect(Math.abs(playerBox.height - initialStageBox.height)).toBeLessThan(1);
+        }
+    }
+
+    await page.locator('#demos').scrollIntoViewIfNeeded();
+    await expectStableHeight(page.locator('.demo-card--scoreboard'));
+
+    await page.locator('.demo-carousel__dot').nth(2).click();
+    const responsiveLowerThird = page.locator('[data-demo-controller="responsive-lower-third"]');
+    await expect(responsiveLowerThird.locator('[data-demo-action="play"]')).toBeEnabled();
+    await expectStableHeight(responsiveLowerThird);
+    await expect(
+        responsiveLowerThird.locator('.demo-player__iframe').contentFrame().locator('#graphic')
+    ).toHaveAttribute('layout', 'phone');
 
     await expectCleanPage(monitor);
 });

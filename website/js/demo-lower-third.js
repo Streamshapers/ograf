@@ -1,5 +1,11 @@
 (function () {
     const MESSAGE_ORIGIN = window.location.origin;
+    const FORMATS = {
+        '16/9': { width: 1920, height: 1080, layout: null, focusX: 0.5 },
+        '4/3': { width: 1440, height: 1080, layout: null, focusX: 0.54 },
+        '1/1': { width: 1080, height: 1080, layout: 'tablet', focusX: 0.58 },
+        '9/16': { width: 1080, height: 1920, layout: 'phone', focusX: 0.6 }
+    };
 
     function initialiseController(controller) {
         const iframe = controller.querySelector('[data-demo-iframe]');
@@ -8,12 +14,14 @@
         const btnUpdate = controller.querySelector('[data-demo-action="update"]');
         const btnStop = controller.querySelector('[data-demo-action="stop"]');
         const statusEl = controller.querySelector('[data-demo-status]');
+        const aspectButtons = [...controller.querySelectorAll('.demo-aspect-btn')];
         const fields = Object.fromEntries(
             [...controller.querySelectorAll('[data-demo-field]')]
                 .map(field => [field.dataset.demoField, field])
         );
 
         let isReady = false;
+        let currentFormat = FORMATS[player.dataset.ratio || '16/9'];
 
         function send(action, data) {
             iframe.contentWindow.postMessage({ action, data }, MESSAGE_ORIGIN);
@@ -31,11 +39,39 @@
         }
 
         function scaleIframe() {
-            const scale = player.clientWidth / 1920;
+            const scale = player.clientWidth / currentFormat.width;
+            iframe.style.setProperty('width', `${currentFormat.width}px`, 'important');
+            iframe.style.setProperty('height', `${currentFormat.height}px`, 'important');
             iframe.style.transform = `scale(${scale})`;
         }
 
-        iframe.addEventListener('load', () => send('ping'));
+        function sendCurrentFormat() {
+            if (aspectButtons.length < 2) return;
+            send('format', {
+                layout: currentFormat.layout,
+                focusX: currentFormat.focusX
+            });
+        }
+
+        function setFormat(ratio) {
+            currentFormat = FORMATS[ratio];
+            player.dataset.ratio = ratio;
+            aspectButtons.forEach(button => {
+                button.classList.toggle('is-active', button.dataset.ratio === ratio);
+            });
+            scaleIframe();
+            sendCurrentFormat();
+        }
+
+        iframe.addEventListener('load', () => {
+            send('ping');
+            sendCurrentFormat();
+        });
+        aspectButtons.forEach(button => {
+            if (!button.disabled) {
+                button.addEventListener('click', () => setFormat(button.dataset.ratio));
+            }
+        });
         scaleIframe();
         window.addEventListener('resize', scaleIframe);
         if (window.ResizeObserver) {

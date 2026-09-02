@@ -8,8 +8,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      width: 1920px;
-      height: 1080px;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       background-color: #0a0e1a;
       position: relative;
@@ -22,6 +22,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: calc(var(--focus-x, 0.5) * 100%) center;
       z-index: 0;
       pointer-events: none;
     }
@@ -35,12 +36,20 @@
       z-index: 1;
     }
 
-    ograf-lower-third {
-      display: block;
+    .graphic-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 1920px;
       height: 1080px;
-      position: relative;
+      transform-origin: top left;
       z-index: 2;
+    }
+
+    ograf-lower-third {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
@@ -53,7 +62,9 @@
     <source src="../../assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
   </video>
 
-  <ograf-lower-third id="graphic"></ograf-lower-third>
+  <div class="graphic-canvas" id="graphic-canvas">
+    <ograf-lower-third id="graphic"></ograf-lower-third>
+  </div>
 
   <script type="module">
     /* graphic.mjs self-registers <ograf-lower-third> on import — we
@@ -61,18 +72,57 @@
     import './graphic.mjs';
 
     const el = document.getElementById('graphic');
+    const canvas = document.getElementById('graphic-canvas');
     const messageOrigin = window.location.origin;
+    const canvasSize = { width: 1920, height: 1080 };
+    let focusX = 0.5;
 
     const notifyParent = message => parent.postMessage(message, messageOrigin);
+
+    function fitCanvas() {
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = document.documentElement.clientHeight;
+      const scale = Math.max(
+        viewportWidth / canvasSize.width,
+        viewportHeight / canvasSize.height
+      );
+      if (!(scale > 0) || !Number.isFinite(scale)) return;
+
+      const left = Math.round(viewportWidth / 2 - focusX * canvasSize.width * scale);
+      const top = Math.round(viewportHeight / 2 - canvasSize.height * scale / 2);
+      canvas.style.left = `${left}px`;
+      canvas.style.top = `${top}px`;
+      canvas.style.transform = `scale(${scale})`;
+
+      const visibleWidth = viewportWidth / scale;
+      const visibleLeft = Math.max(
+        0,
+        Math.min(canvasSize.width - visibleWidth, -left / scale)
+      );
+      el.style.setProperty('--visible-left', `${visibleLeft}px`);
+      el.style.setProperty('--visible-width', `${visibleWidth}px`);
+    }
+
+    function applyFormat({ layout, focusX: nextFocusX } = {}) {
+      if (layout) {
+        el.setAttribute('layout', layout);
+      } else {
+        el.removeAttribute('layout');
+      }
+      focusX = Number.isFinite(Number(nextFocusX)) ? Number(nextFocusX) : 0.5;
+      document.documentElement.style.setProperty('--focus-x', focusX);
+      fitCanvas();
+    }
 
     // Read viewing-context hints from the URL so the LT can adapt its
     // layout when this demo is embedded inside a non-16:9 viewport
     // (e.g. the phone slot in the multi-device stage section).
     const params = new URLSearchParams(location.search);
-    const layout = params.get('layout');
-    const focusX = parseFloat(params.get('focusX'));
-    if (layout) el.setAttribute('layout', layout);
-    if (Number.isFinite(focusX)) el.style.setProperty('--focus-x', focusX);
+    applyFormat({
+      layout: params.get('layout'),
+      focusX: parseFloat(params.get('focusX'))
+    });
+    window.addEventListener('resize', fitCanvas);
 
     // Listen for control messages from the parent page
     window.addEventListener('message', async ({ data, origin, source }) => {
@@ -101,6 +151,10 @@
 
         case 'update':
           await el.updateAction(payload ?? {});
+          break;
+
+        case 'format':
+          applyFormat(payload);
           break;
       }
     });
