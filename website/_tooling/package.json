@@ -1,0 +1,21 @@
+{
+  "name": "ograf-website-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "update-manifests": "node scripts/update-manifests.mjs",
+    "vendor-assets": "node scripts/vendor-assets.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/caveat": "5.3.0",
+    "@fontsource/plus-jakarta-sans": "5.3.0",
+    "@fontsource/space-mono": "5.3.0",
+    "gsap": "3.12.5",
+    "lucide": "1.39.0"
+  }
+}
