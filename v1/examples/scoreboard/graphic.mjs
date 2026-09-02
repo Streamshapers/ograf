@@ -12,7 +12,7 @@
 
 const STEPS = ['pre-match', 'live', 'half-time', 'second-half', 'full-time'];
 const IS_REPOSITORY_DEMO = new URL(import.meta.url).pathname.endsWith(
-  '/website/demos/scoreboard/graphic.mjs'
+  '/v1/examples/scoreboard/graphic.mjs'
 );
 const OGRAF_LOGO_PATH = IS_REPOSITORY_DEMO
   ? '../../../docs/logo/ograf-logo-colour.svg'
@@ -374,15 +374,15 @@ export default class OGrafScoreboard extends HTMLElement {
 
   // ─── OGraf Lifecycle Methods ────────────────────────────────
 
-  async load(data = {}, renderType, renderCharacteristics) {
+  async load({ data = {} } = {}) {
     this._state = { ...DEFAULT_STATE, ...data };
     this._buildDOM();
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
-  async playAction(delta, goto, skipAnimation) {
+  async playAction({ skipAnimation = false } = {}) {
     const el = this._shadow.querySelector('.sb');
-    if (!el) return { status: 0 };
+    if (!el) return { statusCode: 200, currentStep: this._currentStep() };
 
     el.classList.remove('is-exiting');
     el.classList.add('is-visible');
@@ -396,12 +396,12 @@ export default class OGrafScoreboard extends HTMLElement {
     }
 
     this._startClock();
-    return { status: 0 };
+    return { statusCode: 200, currentStep: this._currentStep() };
   }
 
-  async stopAction(skipAnimation) {
+  async stopAction({ skipAnimation = false } = {}) {
     const el = this._shadow.querySelector('.sb');
-    if (!el) return { status: 0 };
+    if (!el) return { statusCode: 200 };
 
     this._stopClock();
 
@@ -410,7 +410,7 @@ export default class OGrafScoreboard extends HTMLElement {
       el.style.opacity = '0';
       this._animState = 'hidden';
       this._resetState();
-      return { status: 0 };
+      return { statusCode: 200 };
     }
 
     el.classList.remove('is-entering');
@@ -424,10 +424,10 @@ export default class OGrafScoreboard extends HTMLElement {
 
     el.classList.remove('is-visible', 'is-exiting');
     this._resetState();
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
-  async updateAction(data = {}, skipAnimation) {
+  async updateAction({ data = {}, skipAnimation = false } = {}) {
     const oldScore = { home: this._state.homeScore, away: this._state.awayScore };
     const oldStep  = this._state.step;
     this._state = { ...this._state, ...data };
@@ -440,7 +440,7 @@ export default class OGrafScoreboard extends HTMLElement {
       if (this._state.step !== oldStep) this._animateStepChange();
     }
 
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
   /**
@@ -449,7 +449,7 @@ export default class OGrafScoreboard extends HTMLElement {
    * id='goal-home': increment home score
    * id='goal-away': increment away score
    */
-  async customAction(id, payload, skipAnimation) {
+  async customAction({ id, skipAnimation = false } = {}) {
     switch (id) {
       case 'next-step': {
         const idx = STEPS.indexOf(this._state.step);
@@ -476,13 +476,17 @@ export default class OGrafScoreboard extends HTMLElement {
         if (!skipAnimation) this._flashScore('away');
         break;
     }
-    return { status: 0 };
+    return { statusCode: 200, result: this.getState() };
   }
 
   async dispose() {
     this._stopClock();
     this._shadow.innerHTML = '';
-    return { status: 0 };
+    return { statusCode: 200 };
+  }
+
+  _currentStep() {
+    return Math.max(0, STEPS.indexOf(this._state.step));
   }
 
   /** Public read-only accessor for current state (used by host page). */

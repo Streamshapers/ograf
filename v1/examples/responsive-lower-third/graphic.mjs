@@ -348,10 +348,10 @@ export default class OGrafLowerThird extends HTMLElement {
    * load() — Called by the control system before any actions.
    * Initialises the graphic with data and renders it (hidden).
    */
-  async load(data = {}, renderType, renderCharacteristics) {
+  async load({ data = {} } = {}) {
     this._state = { ...DEFAULT_STATE, ...data };
     this._buildDOM();
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
   /**
@@ -359,9 +359,9 @@ export default class OGrafLowerThird extends HTMLElement {
    * Returns a Promise that resolves when the graphic is ready
    * for the next action (resolves immediately for broadcast use).
    */
-  async playAction(delta, goto, skipAnimation) {
+  async playAction({ skipAnimation = false } = {}) {
     const el = this._shadow.querySelector('.l3rd');
-    if (!el) return { status: 0 };
+    if (!el) return { statusCode: 200, currentStep: 0 };
 
     // Hard-reset: cancel any leftover WAAPI animations from prior
     // play/stop cycles. Without this, a previous slide-out's
@@ -389,7 +389,7 @@ export default class OGrafLowerThird extends HTMLElement {
         .catch(() => { /* canceled by a subsequent stop/play — nothing to do */ });
     }
 
-    return { status: 0 };
+    return { statusCode: 200, currentStep: 0 };
   }
 
   /**
@@ -397,9 +397,9 @@ export default class OGrafLowerThird extends HTMLElement {
    * Phase 1: text elements fade up and out.
    * Phase 2: container slides off to the left.
    */
-  async stopAction(skipAnimation) {
+  async stopAction({ skipAnimation = false } = {}) {
     const el = this._shadow.querySelector('.l3rd');
-    if (!el) return { status: 0 };
+    if (!el) return { statusCode: 200 };
 
     if (skipAnimation) {
       el.getAnimations().forEach(a => a.cancel());
@@ -407,7 +407,7 @@ export default class OGrafLowerThird extends HTMLElement {
       el.style.transform = 'translateX(-150%)';
       el.classList.remove('is-animating');
       this._animState = 'hidden';
-      return { status: 0 };
+      return { statusCode: 200 };
     }
 
     // Hard-reset prior WAAPI animations (mirrors playAction). Without
@@ -437,7 +437,7 @@ export default class OGrafLowerThird extends HTMLElement {
     } catch (_) {
       // slideOut was canceled — a new play/stop has taken over. Don't
       // touch transform here; whoever's running now is in charge.
-      return { status: 0 };
+      return { statusCode: 200 };
     }
     // Lock the offscreen position with inline style AND release the
     // animation's forward-fill effect — otherwise the fill keeps
@@ -445,19 +445,19 @@ export default class OGrafLowerThird extends HTMLElement {
     // lifecycle and snaps it back the moment that animation ends.
     el.style.transform = 'translateX(-150%)';
     slideOut.cancel();
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
   /**
    * updateAction() — Update graphic data without reloading.
    * Animates text out, swaps content, animates back in.
    */
-  async updateAction(data = {}, skipAnimation) {
+  async updateAction({ data = {}, skipAnimation = false } = {}) {
     this._state = { ...this._state, ...data };
 
     if (skipAnimation) {
       this._updateDOM();
-      return { status: 0 };
+      return { statusCode: 200 };
     }
 
     const textEls = [...this._shadow.querySelectorAll('.l3rd__name, .l3rd__tag, .l3rd__title, .l3rd__channel')];
@@ -473,14 +473,14 @@ export default class OGrafLowerThird extends HTMLElement {
     textEls.forEach(el => { el.classList.remove('is-out'); el.classList.add('is-in'); });
     setTimeout(() => textEls.forEach(el => el.classList.remove('is-in')), 350);
 
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
   /**
    * customAction() — Handle vendor-specific actions (none defined).
    */
-  async customAction(id, payload, skipAnimation) {
-    return { status: 0 };
+  async customAction() {
+    return { statusCode: 400, statusMessage: 'No custom actions supported' };
   }
 
   /**
@@ -488,7 +488,7 @@ export default class OGrafLowerThird extends HTMLElement {
    */
   async dispose() {
     this._shadow.innerHTML = '';
-    return { status: 0 };
+    return { statusCode: 200 };
   }
 
   // ─── DOM Helpers ────────────────────────────────────────────
@@ -544,14 +544,4 @@ export default class OGrafLowerThird extends HTMLElement {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
   }
-}
-
-/* Self-register on first import (idempotent — guarded so the iframe-
- * scoped registry and the parent-document registry can both import the
- * module without colliding, and re-imports in the same context are
- * a no-op). Lets host pages just `<script type="module" src="…/graphic.mjs">`
- * and use the element straight away — no explicit define() needed. */
-if (typeof customElements !== 'undefined' &&
-    !customElements.get('ograf-lower-third')) {
-  customElements.define('ograf-lower-third', OGrafLowerThird);
 }

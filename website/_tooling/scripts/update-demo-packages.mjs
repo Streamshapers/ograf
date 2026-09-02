@@ -23,8 +23,11 @@ const DEMO_PACKAGES = [
                 source: '../docs/logo/ograf-logo-colour.svg',
                 archive: 'assets/ograf-logo-colour.svg'
             },
-            { source: 'demos/scoreboard/graphic.mjs', archive: 'graphic.mjs' },
-            { source: 'demos/scoreboard/graphic.ograf.json', archive: 'graphic.ograf.json' }
+            { source: '../v1/examples/scoreboard/graphic.mjs', archive: 'graphic.mjs' },
+            {
+                source: '../v1/examples/scoreboard/scoreboard.ograf.json',
+                archive: 'scoreboard.ograf.json'
+            }
         ]
     },
     {
@@ -37,8 +40,14 @@ const DEMO_PACKAGES = [
     {
         output: 'demos/lower-third-stage/ograf-demo-responsive-lower-third.zip',
         files: [
-            { source: 'demos/lower-third-stage/graphic.mjs', archive: 'graphic.mjs' },
-            { source: 'demos/lower-third-stage/graphic.ograf.json', archive: 'graphic.ograf.json' }
+            {
+                source: '../v1/examples/responsive-lower-third/graphic.mjs',
+                archive: 'graphic.mjs'
+            },
+            {
+                source: '../v1/examples/responsive-lower-third/responsive-lower-third.ograf.json',
+                archive: 'responsive-lower-third.ograf.json'
+            }
         ]
     }
 ];

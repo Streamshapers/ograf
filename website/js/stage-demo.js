@@ -155,7 +155,11 @@
   // internal DOM into a hidden initial state - so the very first
   // play() animates instantly without a "first build" stutter.
   customElements.whenDefined('ograf-lower-third').then(async () => {
-    await Promise.all(lts.map(el => el.load(ltData())));
+    await Promise.all(lts.map(el => el.load({
+      data: ltData(),
+      renderType: 'realtime',
+      renderCharacteristics: { resolution: { width: CANVAS.w, height: CANVAS.h } }
+    })));
     if (btnToggle) btnToggle.disabled = false;
     setSync('ready', 'Ready');
   });
@@ -167,16 +171,22 @@
         // Optimistic UI update - animation runs after.
         setToggleState(false);
         setSync('ready', 'Ready');
-        await Promise.all(lts.map(el => el.stopAction(false)));
+        await Promise.all(lts.map(el => el.stopAction({ skipAnimation: false })));
       } else {
         const data = ltData();
         // Apply latest input data silently before the in-animation,
         // so the LT slides in showing the current form values rather
         // than whatever was loaded last.
-        await Promise.all(lts.map(el => el.updateAction(data, true)));
+        await Promise.all(lts.map(el => el.updateAction({
+          data,
+          skipAnimation: true
+        })));
         setToggleState(true);
         setSync('live', 'On Air');
-        await Promise.all(lts.map(el => el.playAction(null, null, false)));
+        await Promise.all(lts.map(el => el.playAction({
+          goto: 0,
+          skipAnimation: false
+        })));
       }
     });
   }
@@ -188,7 +198,7 @@
   [nameIn, titleIn, channelIn].forEach(input => {
     input.addEventListener('input', () => {
       const data = ltData();
-      lts.forEach(el => el.updateAction(data));
+      lts.forEach(el => el.updateAction({ data }));
     });
   });
 
@@ -237,10 +247,13 @@
         return;
       }
       const data = ltData();
-      await Promise.all(lts.map(el => el.updateAction(data, true)));
+      await Promise.all(lts.map(el => el.updateAction({
+        data,
+        skipAnimation: true
+      })));
       setToggleState(true);
       setSync('live', 'On Air');
-      lts.forEach(el => el.playAction(null, null, false));
+      lts.forEach(el => el.playAction({ goto: 0, skipAnimation: false }));
     };
 
     const observeForAutoPlay = () => {
@@ -261,7 +274,7 @@
         if (autoPlayed && isPlaying && !userInteracted) {
           setToggleState(false);
           setSync('ready', 'Ready');
-          await Promise.all(lts.map(el => el.stopAction(true)));
+          await Promise.all(lts.map(el => el.stopAction({ skipAnimation: true })));
         }
       } else {
         observeForAutoPlay();

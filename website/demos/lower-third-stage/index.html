@@ -67,9 +67,10 @@
   </div>
 
   <script type="module">
-    /* graphic.mjs self-registers <ograf-lower-third> on import — we
-       just need the side-effect, no need to grab the class. */
-    import './graphic.mjs';
+    import ResponsiveLowerThird from
+      '../../../v1/examples/responsive-lower-third/graphic.mjs';
+
+    customElements.define('ograf-lower-third', ResponsiveLowerThird);
 
     const el = document.getElementById('graphic');
     const canvas = document.getElementById('graphic-canvas');
@@ -158,19 +159,19 @@
         case 'play':
           // Apply any data update silently before playing
           if (payload && Object.keys(payload).length) {
-            await el.updateAction(payload, true); // skipAnimation=true
+            await el.updateAction({ data: payload, skipAnimation: true });
           }
-          await el.playAction(null, null, false);
+          await el.playAction({ goto: 0, skipAnimation: false });
           notifyParent({ event: 'playing' });
           break;
 
         case 'stop':
-          await el.stopAction(false);
+          await el.stopAction({ skipAnimation: false });
           notifyParent({ event: 'stopped' });
           break;
 
         case 'update':
-          await el.updateAction(payload ?? {});
+          await el.updateAction({ data: payload ?? {} });
           break;
 
         case 'format':
@@ -180,7 +181,11 @@
     });
 
     // Auto-load with defaults on startup
-    await el.load({});
+    await el.load({
+      data: {},
+      renderType: 'realtime',
+      renderCharacteristics: { resolution: canvasSize }
+    });
     notifyParent({ event: 'ready' });
   </script>
 

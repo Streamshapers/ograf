@@ -138,7 +138,9 @@ test('navigation, manifests, and runtime requests work', async ({ page }) => {
         await expect(page.locator('#site-nav')).toBeVisible();
     }
 
-    const moduleResponse = await page.request.get('./website/demos/lower-third-stage/graphic.mjs');
+    const moduleResponse = await page.request.get(
+        './v1/examples/responsive-lower-third/graphic.mjs'
+    );
     expect(moduleResponse.ok()).toBeTruthy();
     expect(moduleResponse.headers()['content-type']).toContain('text/javascript');
     await expectCleanPage(monitor);

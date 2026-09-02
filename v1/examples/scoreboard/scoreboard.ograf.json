@@ -1,6 +1,6 @@
 {
   "$schema": "https://ograf.ebu.io/v1/specification/json-schemas/graphics/schema.json",
-  "id": "ograf-demo-scoreboard",
+  "id": "scoreboard",
   "name": "Live Scoreboard",
   "main": "graphic.mjs",
   "supportsRealTime": true,

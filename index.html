@@ -1571,7 +1571,12 @@
      Module is `defer` by nature of `type="module"`, so it doesn't block
      the page render. The element auto-defines on import (graphic.mjs is
      idempotent - works for both this page and any iframe instance). -->
-<script type="module" src="website/demos/lower-third-stage/graphic.mjs"></script>
+<script type="module">
+    import ResponsiveLowerThird from
+        './v1/examples/responsive-lower-third/graphic.mjs';
+
+    customElements.define('ograf-lower-third', ResponsiveLowerThird);
+</script>
 
 <script src="website/js/stage-demo.js?v=2"></script>
 

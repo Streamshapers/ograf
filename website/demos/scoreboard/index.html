@@ -41,7 +41,7 @@
   <ograf-scoreboard id="graphic"></ograf-scoreboard>
 
   <script type="module">
-    import OGrafScoreboard from './graphic.mjs';
+    import OGrafScoreboard from '../../../v1/examples/scoreboard/graphic.mjs';
 
     customElements.define('ograf-scoreboard', OGrafScoreboard);
 
@@ -62,29 +62,42 @@
 
         case 'play':
           if (payload && Object.keys(payload).length) {
-            await el.updateAction(payload, true);
+            await el.updateAction({ data: payload, skipAnimation: true });
           }
-          await el.playAction(null, null, false);
+          await el.playAction({ goto: 0, skipAnimation: false });
           notifyParent({ event: 'playing' });
           break;
 
         case 'stop':
-          await el.stopAction(false);
+          await el.stopAction({ skipAnimation: false });
           notifyParent({ event: 'stopped' });
           break;
 
         case 'update':
-          await el.updateAction(payload ?? {});
+          await el.updateAction({ data: payload ?? {} });
           break;
 
         case 'custom':
-          await el.customAction(payload?.id, payload, false);
-          notifyParent({ event: 'state', state: el.getState() });
+          const result = await el.customAction({
+            id: payload?.id,
+            payload,
+            skipAnimation: false
+          });
+          notifyParent({ event: 'state', state: result?.result });
           break;
       }
     });
 
-    await el.load({});
+    await el.load({
+      data: {},
+      renderType: 'realtime',
+      renderCharacteristics: {
+        resolution: {
+          width: document.documentElement.clientWidth,
+          height: document.documentElement.clientHeight
+        }
+      }
+    });
     notifyParent({ event: 'ready' });
   </script>
 
