@@ -30,7 +30,8 @@ const CONTENT_TYPES = {
     '.webp': 'image/webp',
     '.woff2': 'font/woff2',
     '.yaml': 'application/yaml; charset=utf-8',
-    '.yml': 'application/yaml; charset=utf-8'
+    '.yml': 'application/yaml; charset=utf-8',
+    '.zip': 'application/zip'
 };
 
 function stripPreviewPrefix(pathname) {

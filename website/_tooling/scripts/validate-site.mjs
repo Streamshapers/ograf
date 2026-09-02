@@ -167,7 +167,9 @@ async function validateRepositoryContract() {
         'CHANGELOG.md',
         'website/assets/vendor/gsap/gsap.min.js',
         'website/assets/vendor/gsap/ScrollTrigger.min.js',
-        'website/assets/vendor/lucide/lucide.min.js'
+        'website/assets/vendor/lucide/lucide.min.js',
+        'website/demos/scoreboard/ograf-demo-scoreboard.zip',
+        'website/demos/lower-third/ograf-demo-lower-third.zip'
     ];
 
     for (const requiredPath of requiredPaths) {
@@ -183,6 +185,15 @@ async function validateRepositoryContract() {
     );
     if (manifestCheck.status !== 0) {
         report(manifestCheck.stderr.trim() || manifestCheck.stdout.trim());
+    }
+
+    const demoPackageCheck = spawnSync(
+        process.execPath,
+        [resolve(SCRIPT_DIRECTORY, 'update-demo-packages.mjs'), '--check'],
+        { encoding: 'utf8' }
+    );
+    if (demoPackageCheck.status !== 0) {
+        report(demoPackageCheck.stderr.trim() || demoPackageCheck.stdout.trim());
     }
 }
 
