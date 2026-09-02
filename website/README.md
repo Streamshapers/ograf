@@ -56,8 +56,9 @@ Complete these tasks on the integration branch before requesting final publicati
        retain the sections in the current draft.
 5. [x] Add automated Firefox and WebKit coverage.
 6. [x] Extend keyboard, reduced-motion, and baseline accessibility tests.
-7. [ ] Add automated guards against `placeholder`, obsolete draft wording, and
-       accidental removal of `noindex`.
+7. [x] Do not add a temporary automated content guard. Cover obsolete wording,
+       placeholder content, and the intended indexing state in the final release review
+       under item 10 instead.
 8. [ ] Profile performance and optimize images and videos.
 9. [ ] Prepare the social metadata integration without requiring the final image yet.
 10. [ ] Add a concrete release checklist and a draft pull-request description to the
@@ -77,6 +78,10 @@ The integration is technically testable but is not approved for production publi
 - [ ] Create and approve the social-preview image and final page metadata.
 - [ ] Complete accessibility, keyboard, reduced-motion, responsive, performance, and supported-browser reviews.
 - [ ] Confirm the canonical domain, GitHub Pages source, `CNAME`, and all `/v1/...` compatibility checks immediately before merge.
-- [ ] Remove `noindex,nofollow` only after content approval; then decide whether a `robots.txt` and sitemap are required.
+- [ ] Review the production-equivalent build for obsolete draft wording and unresolved
+      placeholder content immediately before merge.
+- [ ] Decide whether the site should be indexable at merge time. If so, remove
+      `noindex,nofollow` in the release change and verify the final robots metadata;
+      then decide whether a `robots.txt` and sitemap are required.
 
 Preview-only files such as `.nojekyll` and preview branch assembly must never be added to the integration branch.
