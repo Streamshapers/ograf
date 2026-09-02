@@ -35,6 +35,26 @@ npm --prefix website/_tooling test
 
 The landing page and all standalone demo documents intentionally declare `noindex,nofollow`. Do not remove that protection until the Working Group has completed the production checklist.
 
+## Pre-release engineering TODO
+
+Complete these tasks on the integration branch before requesting final publication approval:
+
+1. [ ] Update every Server API reference to `v1 stable, published 2026-08-13` and
+       remove the obsolete `Mid-2026` roadmap item.
+2. [ ] Remove all placeholder testimonials.
+3. [ ] Neutralize unverified marketing claims such as `adopted`, `trusted by`, and
+       `used in production`.
+4. [ ] Temporarily hide the vendor and broadcaster sections until logo and adopter
+       publication rights are approved; keep the source assets in the repository.
+5. [ ] Add automated Firefox and WebKit coverage.
+6. [ ] Extend keyboard, reduced-motion, and baseline accessibility tests.
+7. [ ] Add automated guards against `placeholder`, obsolete draft wording, and
+       accidental removal of `noindex`.
+8. [ ] Profile performance and optimize images and videos.
+9. [ ] Prepare the social metadata integration without requiring the final image yet.
+10. [ ] Add a concrete release checklist and a draft pull-request description to the
+        repository.
+
 ## Production checklist
 
 The integration is technically testable but is not approved for production publication until each item below has an explicit owner and approval:
