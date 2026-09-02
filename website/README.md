@@ -37,6 +37,8 @@ value so GitHub Pages cannot serve incompatible HTML and cached runtime files to
 ## Repository layout
 
 - `/index.html`, `/favicon.svg`, and `/site.webmanifest` are public entry files.
+- `/docs/logo/ograf-logo-colour.svg` is the shared canonical OGraf logo used by the
+  specification repository and the landing page.
 - `/website/css`, `/website/js`, `/website/assets`, and `/website/demos` are public runtime files.
 - `/website/_tooling` is excluded from the Jekyll output and contains the Node.js toolchain.
 - `/v1` and the existing specification documentation retain their current public URLs.

@@ -6,6 +6,7 @@ import { chromium } from 'playwright';
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const TOOLING_ROOT = resolve(SCRIPT_DIRECTORY, '..');
 const WEBSITE_ROOT = resolve(TOOLING_ROOT, '..');
+const REPOSITORY_ROOT = resolve(WEBSITE_ROOT, '..');
 const SOCIAL_PREVIEW_PATH = resolve(
     WEBSITE_ROOT,
     'assets/img/ograf-social-preview.png'
@@ -203,7 +204,7 @@ function buildSocialPreviewHtml({ logoUrl, sansFontUrl, monoFontUrl }) {
 
 async function renderSocialPreview() {
     const [logoUrl, sansFontUrl, monoFontUrl] = await Promise.all([
-        readDataUrl(resolve(WEBSITE_ROOT, 'assets/img/ograf-logo-colour.svg'), 'image/svg+xml'),
+        readDataUrl(resolve(REPOSITORY_ROOT, 'docs/logo/ograf-logo-colour.svg'), 'image/svg+xml'),
         readDataUrl(
             resolve(
                 WEBSITE_ROOT,

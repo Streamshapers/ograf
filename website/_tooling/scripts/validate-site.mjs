@@ -160,6 +160,7 @@ async function validateRepositoryContract() {
         'index.html',
         'favicon.svg',
         'site.webmanifest',
+        'docs/logo/ograf-logo-colour.svg',
         'v1/specification/docs/Specification.md',
         'v1/specification/docs/Specification_Server_API.md',
         'v1/specification/json-schemas/graphics/schema.json',

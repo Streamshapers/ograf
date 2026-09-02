@@ -19,6 +19,10 @@ const DEMO_PACKAGES = [
     {
         output: 'demos/scoreboard/ograf-demo-scoreboard.zip',
         files: [
+            {
+                source: '../docs/logo/ograf-logo-colour.svg',
+                archive: 'assets/ograf-logo-colour.svg'
+            },
             { source: 'demos/scoreboard/graphic.mjs', archive: 'graphic.mjs' },
             { source: 'demos/scoreboard/graphic.ograf.json', archive: 'graphic.ograf.json' }
         ]

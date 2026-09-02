@@ -11,6 +11,13 @@
  */
 
 const STEPS = ['pre-match', 'live', 'half-time', 'second-half', 'full-time'];
+const IS_REPOSITORY_DEMO = new URL(import.meta.url).pathname.endsWith(
+  '/website/demos/scoreboard/graphic.mjs'
+);
+const OGRAF_LOGO_PATH = IS_REPOSITORY_DEMO
+  ? '../../../docs/logo/ograf-logo-colour.svg'
+  : './assets/ograf-logo-colour.svg';
+const OGRAF_LOGO_URL = new URL(OGRAF_LOGO_PATH, import.meta.url).href;
 
 const DEFAULT_STATE = {
   step:      'pre-match',
@@ -525,7 +532,7 @@ export default class OGrafScoreboard extends HTMLElement {
 
           <div class="sb__footer">
             <span class="sb__footer-label">Powered by</span>
-            <img class="sb__footer-logo" src="../../assets/img/ograf-logo-colour.svg" alt="OGraf" aria-hidden="true">
+            <img class="sb__footer-logo" src="${OGRAF_LOGO_URL}" alt="OGraf" aria-hidden="true">
           </div>
         </div>
       </div>
