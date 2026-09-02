@@ -1,5 +1,5 @@
 /**
- * OGraf Demo — News Lower Third
+ * OGraf Example — Responsive Lower Third
  * Compliant with OGraf Graphics Specification v1
  * https://ograf.ebu.io/v1/specification/docs/Specification.html
  */

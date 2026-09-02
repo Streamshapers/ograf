@@ -20,16 +20,17 @@ Useful commands:
 
 ```bash
 npm --prefix website/_tooling run update-manifests
-npm --prefix website/_tooling run update-demo-packages
+npm --prefix website/_tooling run update-demo-catalog
 npm --prefix website/_tooling run validate
 npm --prefix website/_tooling test
 ```
 
 `update-manifests` keeps the curated manifest order and metadata, removes missing files, appends new logo files in deterministic order, and rejects invalid JSON. After adding or updating an npm-managed browser dependency, run `vendor-assets` and commit the generated runtime files together with `package-lock.json`.
 
-`update-demo-packages` creates deterministic ZIP downloads from each demo's
-`graphic.ograf.json` and `graphic.mjs`. Run it after changing either source file and commit
-the generated archive with the demo.
+`update-demo-catalog` scans the curated examples in `/website/demo-catalog.json`, records
+their complete file lists and content hashes, and rejects missing manifest entry points.
+Run it after changing an example. ZIP downloads are generated from those current same-origin
+files in the browser, so no generated archives are committed.
 
 When changing a stylesheet or script referenced by `index.html`, increment its `?v=` query
 value so GitHub Pages cannot serve incompatible HTML and cached runtime files together.

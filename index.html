@@ -662,7 +662,8 @@
                             <div class="demo-card__header-actions">
                                 <span class="demo-card__badge">Responsive</span>
                                 <a class="demo-card__download"
-                                   href="website/demos/scoreboard/ograf-demo-scoreboard.zip" download
+                                   href="https://github.com/ebu/ograf/tree/main/v1/examples/scoreboard"
+                                   data-example-download="scoreboard"
                                    aria-label="Download the Live Scoreboard OGraf package as a ZIP file">
                                     <i data-lucide="download" aria-hidden="true"></i>
                                     <span>Download OGraf (.zip)</span>
@@ -775,7 +776,8 @@
                             <h3 class="demo-card__title">L3rd Name</h3>
                             <div class="demo-card__header-actions">
                                 <a class="demo-card__download"
-                                   href="#" data-example-download="l3rd-name"
+                                   href="https://github.com/ebu/ograf/tree/main/v1/examples/l3rd-name"
+                                   data-example-download="l3rd-name"
                                    aria-label="Download the L3rd Name OGraf package as a ZIP file">
                                     <i data-lucide="download" aria-hidden="true"></i>
                                     <span>Download OGraf (.zip)</span>
@@ -831,6 +833,8 @@
                                 <div class="demo-controls__actions">
                                     <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
                                     <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-custom-action="highlight"
+                                            type="button" disabled>Highlight</button>
                                     <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
                                 </div>
 
@@ -854,7 +858,8 @@
                             <div class="demo-card__header-actions">
                                 <span class="demo-card__badge">Multi-device</span>
                                 <a class="demo-card__download"
-                                   href="website/demos/lower-third-stage/ograf-demo-responsive-lower-third.zip" download
+                                   href="https://github.com/ebu/ograf/tree/main/v1/examples/responsive-lower-third"
+                                   data-example-download="responsive-lower-third"
                                    aria-label="Download the Responsive Lower Third OGraf package as a ZIP file">
                                     <i data-lucide="download" aria-hidden="true"></i>
                                     <span>Download OGraf (.zip)</span>
@@ -1559,6 +1564,9 @@
 
 <!-- Demo carousel -->
 <script src="website/js/demo-carousel.js?v=9"></script>
+
+<!-- Build current example ZIP downloads in the browser. -->
+<script type="module" src="website/js/example-download.js?v=1"></script>
 
 <!-- Multi-device stage demo -->
 <!-- Register the responsive OGraf example for the multi-device stage. -->

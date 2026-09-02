@@ -84,6 +84,8 @@ class MyGraphic extends HTMLElement {
 
     const logo = document.createElement("img");
     logo.src = await this._loadImage(import.meta.resolve("./lib/ograf-logo-app.svg"))
+    logo.alt = '';
+    logo.setAttribute('aria-hidden', 'true');
     logo.style.position = "absolute";
     logo.style.left = `calc(10%)`
     logo.style.bottom = `calc(10% + 10px)`

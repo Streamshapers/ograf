@@ -117,6 +117,32 @@ async function expectCleanPage(monitor) {
     expect(monitor.failedSameOriginRequests, 'same-origin HTTP errors').toEqual([]);
 }
 
+async function readDownload(download) {
+    const stream = await download.createReadStream();
+    const chunks = [];
+    for await (const chunk of stream) chunks.push(chunk);
+
+    return Buffer.concat(chunks);
+}
+
+function listStoredZipFiles(archive) {
+    const files = [];
+    let offset = 0;
+
+    while (offset + 4 <= archive.length && archive.readUInt32LE(offset) === 0x04034b50) {
+        expect(archive.readUInt16LE(offset + 8), 'ZIP compression method').toBe(0);
+        const size = archive.readUInt32LE(offset + 18);
+        const fileNameLength = archive.readUInt16LE(offset + 26);
+        const extraLength = archive.readUInt16LE(offset + 28);
+        const fileNameStart = offset + 30;
+        const contentsStart = fileNameStart + fileNameLength + extraLength;
+        files.push(archive.subarray(fileNameStart, contentsStart).toString('utf8'));
+        offset = contentsStart + size;
+    }
+
+    return files;
+}
+
 test('social metadata uses the approved preview image', async ({ page }) => {
     const monitor = monitorPage(page);
     await page.goto('./');
@@ -181,6 +207,11 @@ test('stage and all carousel example controls run', async ({ page }) => {
         await expect(controller.locator('[data-demo-status]')).toHaveAttribute('data-state', 'playing');
         await controller.locator('[data-demo-field="name"]').fill('Updated Presenter');
         await controller.locator('[data-demo-action="update"]').click();
+        const customAction = controller.locator('[data-demo-custom-action]');
+        if (await customAction.count()) {
+            await expect(customAction).toBeEnabled();
+            await customAction.click();
+        }
         await controller.locator('[data-demo-action="stop"]').click();
         await expect(controller.locator('[data-demo-status]')).toHaveAttribute('data-state', 'ready');
     }
@@ -262,16 +293,52 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
     }));
     expect(pageWidth.scrollWidth).toBe(pageWidth.clientWidth);
 
-    const downloadLinks = page.locator('.demo-card__download');
-    await expect(downloadLinks).toHaveCount(3);
-    for (const link of await downloadLinks.all()) {
-        const href = await link.getAttribute('href');
-        expect(href).toMatch(/\.zip$/);
+    const expectedDownloads = [
+        {
+            name: 'ograf-example-scoreboard.zip',
+            files: [
+                'README.md',
+                'assets/ograf-logo-colour.svg',
+                'graphic.mjs',
+                'scoreboard.ograf.json'
+            ]
+        },
+        {
+            name: 'ograf-example-l3rd-name.zip',
+            files: [
+                'README.md',
+                'graphic.mjs',
+                'l3rd.ograf.json',
+                'lib/CSSPlugin.js',
+                'lib/TextPlugin.js',
+                'lib/gsap-core.js',
+                'lib/gsap.min.js',
+                'lib/ograf-logo-app.svg',
+                'lib/utils/strings.js'
+            ]
+        },
+        {
+            name: 'ograf-example-responsive-lower-third.zip',
+            files: [
+                'README.md',
+                'graphic.mjs',
+                'responsive-lower-third.ograf.json'
+            ]
+        }
+    ];
+    await expect(page.locator('.demo-card__download')).toHaveCount(expectedDownloads.length);
+    for (let index = 0; index < expectedDownloads.length; index += 1) {
+        await page.locator('.demo-carousel__dot').nth(index).click();
+        const link = page.locator('.demo-carousel__slide').nth(index)
+            .locator('.demo-card__download');
+        const downloadPromise = page.waitForEvent('download');
+        await link.click();
+        const download = await downloadPromise;
+        const archive = await readDownload(download);
 
-        const response = await page.request.get(href);
-        expect(response.ok(), href).toBeTruthy();
-        expect(response.headers()['content-type']).toContain('application/zip');
-        expect((await response.body()).subarray(0, 4).toString('hex')).toBe('504b0304');
+        expect(download.suggestedFilename()).toBe(expectedDownloads[index].name);
+        expect(archive.subarray(0, 4).toString('hex')).toBe('504b0304');
+        expect(listStoredZipFiles(archive)).toEqual(expectedDownloads[index].files);
     }
 
     await expectCleanPage(monitor);

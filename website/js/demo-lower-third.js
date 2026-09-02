@@ -15,6 +15,9 @@
         const btnPlay = controller.querySelector('[data-demo-action="play"]');
         const btnUpdate = controller.querySelector('[data-demo-action="update"]');
         const btnStop = controller.querySelector('[data-demo-action="stop"]');
+        const customActionButtons = [
+            ...controller.querySelectorAll('[data-demo-custom-action]')
+        ];
         const statusEl = controller.querySelector('[data-demo-status]');
         const aspectButtons = [...controller.querySelectorAll('.demo-aspect-btn')];
         const aspectGroup = aspectButtons[0]?.closest('[role="radiogroup"]');
@@ -120,12 +123,14 @@
                 btnPlay.disabled = true;
                 btnUpdate.disabled = false;
                 btnStop.disabled = false;
+                customActionButtons.forEach(button => { button.disabled = false; });
             }
             if (event === 'stopped') {
                 setStatus('ready', 'Ready');
                 btnPlay.disabled = false;
                 btnUpdate.disabled = true;
                 btnStop.disabled = true;
+                customActionButtons.forEach(button => { button.disabled = true; });
             }
         });
 
@@ -144,6 +149,11 @@
             if (isReady) send('play', getFieldData());
         });
         btnUpdate.addEventListener('click', () => send('update', getFieldData()));
+        customActionButtons.forEach(button => {
+            button.addEventListener('click', () => send('custom', {
+                id: button.dataset.demoCustomAction
+            }));
+        });
         btnStop.addEventListener('click', () => send('stop'));
     }
 

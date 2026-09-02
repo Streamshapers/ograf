@@ -6,6 +6,12 @@
             "title": "Live Scoreboard",
             "manifest": "v1/examples/scoreboard/scoreboard.ograf.json",
             "archiveName": "ograf-example-scoreboard.zip",
+            "packageExtras": [
+                {
+                    "source": "docs/logo/ograf-logo-colour.svg",
+                    "archive": "assets/ograf-logo-colour.svg"
+                }
+            ],
             "presentation": {
                 "renderer": "viewport",
                 "background": {
@@ -13,7 +19,29 @@
                     "src": "website/assets/img/bg-stadium.jpg",
                     "overlay": "rgba(4, 7, 18, 0.6)"
                 }
-            }
+            },
+            "files": [
+                {
+                    "source": "v1/examples/scoreboard/README.md",
+                    "archive": "README.md",
+                    "sha256": "1519d05253c8245eeaeb50e83d3123166d038adf354b534b78fa0c61f4be3a6e"
+                },
+                {
+                    "source": "docs/logo/ograf-logo-colour.svg",
+                    "archive": "assets/ograf-logo-colour.svg",
+                    "sha256": "4c4d7bcb24e9ad33e8f9396a2d55dd5e0a98a8a938c8a2b1e507345e301ca294"
+                },
+                {
+                    "source": "v1/examples/scoreboard/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "73ac17da9a07b98f1ad04deb4b736dad8d19017c564fa47c037b13417be1123f"
+                },
+                {
+                    "source": "v1/examples/scoreboard/scoreboard.ograf.json",
+                    "archive": "scoreboard.ograf.json",
+                    "sha256": "602cd6ba7a4d87fd1b69ed78a32f692122a7e2861b7028fa803cd6717b888e42"
+                }
+            ]
         },
         {
             "id": "responsive-lower-third",
@@ -40,7 +68,24 @@
                     ],
                     "overlay": "rgba(4, 7, 18, 0.18)"
                 }
-            }
+            },
+            "files": [
+                {
+                    "source": "v1/examples/responsive-lower-third/README.md",
+                    "archive": "README.md",
+                    "sha256": "1474c0bd00ff724cb7c2104a36d45867c4c0cd16c740b0e346f30c5dc3855720"
+                },
+                {
+                    "source": "v1/examples/responsive-lower-third/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "e7f1ff99d30187dd1f77430494f236c70768cddc067f787bcaf2f4c02a0f8dd6"
+                },
+                {
+                    "source": "v1/examples/responsive-lower-third/responsive-lower-third.ograf.json",
+                    "archive": "responsive-lower-third.ograf.json",
+                    "sha256": "d59510d92d628bd97d37011badde26d7c6e2a3054384fd4e05add14d0d5d184c"
+                }
+            ]
         },
         {
             "id": "l3rd-name",
@@ -67,7 +112,54 @@
                     ],
                     "overlay": "rgba(4, 7, 18, 0.18)"
                 }
-            }
+            },
+            "files": [
+                {
+                    "source": "v1/examples/l3rd-name/README.md",
+                    "archive": "README.md",
+                    "sha256": "69079c4c4e0ff52a7d84e866c3a7cf52aec2db91d948b038081624cf75ea825a"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "2b7091c3db659380e90c6a2de388866b6dba08ec1ee3cdd8aacc246e2b61f619"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/l3rd.ograf.json",
+                    "archive": "l3rd.ograf.json",
+                    "sha256": "94982752504f5b082376ee96898ceec70d7479e8edf34e064bf40f2390c45d8b"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/lib/CSSPlugin.js",
+                    "archive": "lib/CSSPlugin.js",
+                    "sha256": "c2f2cff1b79e4cb4fddaff825479a6b0ccc06099c5ae1d0eaefec7f8f4f3a61d"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/lib/TextPlugin.js",
+                    "archive": "lib/TextPlugin.js",
+                    "sha256": "01282229e1ef67338cf36206482e68151cea61c3dba7f405b9f74b70d4ec694c"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/lib/gsap-core.js",
+                    "archive": "lib/gsap-core.js",
+                    "sha256": "7210e5562d6b1d4b438525d33014c8eac6042f8b92cac949e602c5b9c820aaeb"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/lib/gsap.min.js",
+                    "archive": "lib/gsap.min.js",
+                    "sha256": "28033e449a31ebcc396e5be8b13b63152bf03094288fb5867034321927bce087"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/lib/ograf-logo-app.svg",
+                    "archive": "lib/ograf-logo-app.svg",
+                    "sha256": "b100d43774a47c62fc3469e0ec376455b8901a821f1f5fa7de48a7b64b3194dd"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/lib/utils/strings.js",
+                    "archive": "lib/utils/strings.js",
+                    "sha256": "fc284f768f1860ad03c914aa1efef24fe4d8e2aa712700909126f4956647a328"
+                }
+            ]
         }
     ]
 }

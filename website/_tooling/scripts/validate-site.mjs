@@ -168,8 +168,11 @@ async function validateRepositoryContract() {
         'website/assets/vendor/gsap/ScrollTrigger.min.js',
         'website/assets/vendor/lucide/lucide.min.js',
         'website/assets/img/ograf-social-preview.png',
-        'website/demos/scoreboard/ograf-demo-scoreboard.zip',
-        'website/demos/lower-third-stage/ograf-demo-responsive-lower-third.zip'
+        'website/demo-catalog.json',
+        'website/demo-player/index.html',
+        'v1/examples/scoreboard/scoreboard.ograf.json',
+        'v1/examples/responsive-lower-third/responsive-lower-third.ograf.json',
+        'v1/examples/l3rd-name/l3rd.ograf.json'
     ];
 
     for (const requiredPath of requiredPaths) {
@@ -187,13 +190,13 @@ async function validateRepositoryContract() {
         report(manifestCheck.stderr.trim() || manifestCheck.stdout.trim());
     }
 
-    const demoPackageCheck = spawnSync(
+    const demoCatalogCheck = spawnSync(
         process.execPath,
-        [resolve(SCRIPT_DIRECTORY, 'update-demo-packages.mjs'), '--check'],
+        [resolve(SCRIPT_DIRECTORY, 'update-demo-catalog.mjs'), '--check'],
         { encoding: 'utf8' }
     );
-    if (demoPackageCheck.status !== 0) {
-        report(demoPackageCheck.stderr.trim() || demoPackageCheck.stdout.trim());
+    if (demoCatalogCheck.status !== 0) {
+        report(demoCatalogCheck.stderr.trim() || demoCatalogCheck.stdout.trim());
     }
 }
 

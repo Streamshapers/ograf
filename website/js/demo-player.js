@@ -1,5 +1,9 @@
-const CATALOG_URL = new URL('../demo-catalog.json', import.meta.url);
-const SITE_ROOT_URL = new URL('../', CATALOG_URL);
+import {
+    findDemoExample,
+    loadDemoCatalog,
+    resolveSitePath
+} from './demo-catalog.js';
+
 const MESSAGE_ORIGIN = window.location.origin;
 const GRAPHIC_TAG = 'ograf-demo-graphic';
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -12,14 +16,6 @@ let focusX = 0.5;
 
 function notifyParent(message) {
     window.parent.postMessage(message, MESSAGE_ORIGIN);
-}
-
-function resolveSitePath(path) {
-    if (typeof path !== 'string' || !path || path.startsWith('/') || path.includes('..')) {
-        throw new Error(`Unsafe demo catalogue path: ${path}`);
-    }
-
-    return new URL(path, SITE_ROOT_URL);
 }
 
 async function loadJson(url) {
@@ -178,10 +174,9 @@ async function handleMessage({ data, origin, source }) {
 }
 
 async function initialisePlayer() {
-    const catalogue = await loadJson(CATALOG_URL);
+    const catalogue = await loadDemoCatalog();
     const requestedId = new URLSearchParams(window.location.search).get('example');
-    example = catalogue.examples.find(candidate => candidate.id === requestedId);
-    if (!example) throw new Error(`Unknown OGraf example: ${requestedId}`);
+    example = findDemoExample(catalogue, requestedId);
 
     const manifestUrl = resolveSitePath(example.manifest);
     const manifest = await loadJson(manifestUrl);
