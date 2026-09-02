@@ -76,7 +76,7 @@ async function validateHtml() {
     const validator = new HtmlValidate({
         extends: ['html-validate:recommended'],
         rules: {
-            'no-autoplay': 'off'
+            'prefer-native-element': 'off'
         }
     });
 

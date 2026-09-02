@@ -2158,7 +2158,7 @@ a:hover {
   font-family: var(--font-mono), serif;
   font-size: 0.65rem;
   font-weight: var(--fw-regular);
-  opacity: 0.7;
+  opacity: 1;
   letter-spacing: var(--tracking-wide);
   margin-top: var(--space-1);
 }
@@ -2172,13 +2172,13 @@ a:hover {
 
 .pipeline__step--green {
   background-color: rgba(16, 185, 129, 0.1);
-  color: #059669;
+  color: #047857;
   border: 1.5px solid rgba(16, 185, 129, 0.3);
 }
 
 .pipeline__step--amber {
   background-color: rgba(245, 158, 11, 0.1);
-  color: #D97706;
+  color: #92400E;
   border: 1.5px solid rgba(245, 158, 11, 0.3);
 }
 
@@ -2216,7 +2216,6 @@ a:hover {
 }
 
 .pipeline__step--alt {
-  opacity: 0.5;
   border-style: dashed;
 }
 
@@ -2714,7 +2713,7 @@ a:hover {
 }
 
 .compare__col--bad {
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.7);
   background: rgba(255,255,255,0.02);
 }
 
@@ -2764,7 +2763,7 @@ a:hover {
 
 .compare__partial {
   font-size: 0.8125rem;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.7);
   font-style: italic;
 }
 
@@ -3657,7 +3656,7 @@ a:hover {
 .code-block__tab {
   font-family: var(--font-mono), serif;
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.7);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -3886,7 +3885,7 @@ a:hover {
 }
 
 .status-card__date {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.7);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
 }
@@ -4310,7 +4309,7 @@ a:hover {
 
 .footer__ebu {
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.7);
   line-height: var(--leading-relaxed);
 }
 
@@ -4335,7 +4334,7 @@ a:hover {
   font-weight: var(--fw-bold);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: var(--space-4);
 }
 

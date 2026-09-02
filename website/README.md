@@ -55,7 +55,7 @@ Complete these tasks on the integration branch before requesting final publicati
 4. [x] Confirm publication approval for the vendor and broadcaster listings and
        retain the sections in the current draft.
 5. [x] Add automated Firefox and WebKit coverage.
-6. [ ] Extend keyboard, reduced-motion, and baseline accessibility tests.
+6. [x] Extend keyboard, reduced-motion, and baseline accessibility tests.
 7. [ ] Add automated guards against `placeholder`, obsolete draft wording, and
        accidental removal of `noindex`.
 8. [ ] Profile performance and optimize images and videos.
