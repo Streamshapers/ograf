@@ -1,0 +1,53 @@
+# OGraf website
+
+The OGraf landing page is integrated into the specification repository while preserving the existing GitHub Pages source at `main/(root)`. The public entry point is `/`; runtime assets and demonstrations live below `/website/`. The normative `/v1/` paths remain part of the same Jekyll build.
+
+The website was imported from `StreamShapers/OgrafWebsite` at commit `f5ef4fae623e630b723f19ed228fd11344a68f6e`. Only tracked files needed at runtime or for development were migrated. The source repository and its history remain unchanged.
+
+## Local development
+
+Node.js 24 or newer is required. Always use the HTTP development server; opening `index.html` through `file://` does not provide the same URL, module, fetch, or messaging behavior as GitHub Pages.
+
+```bash
+npm --prefix website/_tooling ci
+npm --prefix website/_tooling run vendor-assets
+npm --prefix website/_tooling run dev
+```
+
+Open `http://127.0.0.1:3000/` for the production-domain layout or `http://127.0.0.1:3000/ograf/` for the fork preview layout.
+
+Useful commands:
+
+```bash
+npm --prefix website/_tooling run update-manifests
+npm --prefix website/_tooling run validate
+npm --prefix website/_tooling test
+```
+
+`update-manifests` keeps the curated manifest order and metadata, removes missing files, appends new logo files in deterministic order, and rejects invalid JSON. After adding or updating an npm-managed browser dependency, run `vendor-assets` and commit the generated runtime files together with `package-lock.json`.
+
+## Repository layout
+
+- `/index.html`, `/favicon.svg`, and `/site.webmanifest` are public entry files.
+- `/website/css`, `/website/js`, `/website/assets`, and `/website/demos` are public runtime files.
+- `/website/_tooling` is excluded from the Jekyll output and contains the Node.js toolchain.
+- `/v1` and the existing specification documentation retain their current public URLs.
+
+The landing page and all standalone demo documents intentionally declare `noindex,nofollow`. Do not remove that protection until the Working Group has completed the production checklist.
+
+## Production checklist
+
+The integration is technically testable but is not approved for production publication until each item below has an explicit owner and approval:
+
+- [ ] Verify every marketing, compatibility, adoption, and production-readiness claim.
+- [ ] Approve the published roadmap and Server API status.
+- [ ] Obtain and document permission for testimonials, names, vendor/adopter logos, photographs, background footage, and the embedded video.
+- [ ] Confirm OGraf and EBU brand/logo usage with the responsible rights holders.
+- [ ] Review the GSAP Standard License for the intended production use and retain the decision.
+- [ ] Replace placeholder testimonials or approve them as factual, attributed content.
+- [ ] Create and approve the social-preview image and final page metadata.
+- [ ] Complete accessibility, keyboard, reduced-motion, responsive, performance, and supported-browser reviews.
+- [ ] Confirm the canonical domain, GitHub Pages source, `CNAME`, and all `/v1/...` compatibility checks immediately before merge.
+- [ ] Remove `noindex,nofollow` only after content approval; then decide whether a `robots.txt` and sitemap are required.
+
+Preview-only files such as `.nojekyll` and preview branch assembly must never be added to the integration branch.

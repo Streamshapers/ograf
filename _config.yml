@@ -1,0 +1,6 @@
+exclude:
+  - website/README.md
+  - website/THIRD_PARTY_NOTICES.md
+  - website/_tooling
+
+keep_files: []
