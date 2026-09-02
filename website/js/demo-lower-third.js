@@ -1,5 +1,7 @@
 (function () {
     const MESSAGE_ORIGIN = window.location.origin;
+    const READY_PING_INTERVAL_MS = 250;
+    const READY_PING_TIMEOUT_MS = 10_000;
     const FORMATS = {
         '16/9': { width: 1920, height: 1080, layout: null, focusX: 0.5 },
         '4/3': { width: 1440, height: 1080, layout: null, focusX: 0.54 },
@@ -21,6 +23,7 @@
         );
 
         let isReady = false;
+        let readinessTimer = null;
         let currentFormat = FORMATS[player.dataset.ratio || '16/9'];
 
         function send(action, data) {
@@ -64,7 +67,7 @@
         }
 
         iframe.addEventListener('load', () => {
-            send('ping');
+            requestReady();
             sendCurrentFormat();
         });
         aspectButtons.forEach(button => {
@@ -85,6 +88,7 @@
 
             if (event === 'ready') {
                 isReady = true;
+                window.clearInterval(readinessTimer);
                 setStatus('ready', 'Ready');
                 btnPlay.disabled = false;
             }
@@ -101,6 +105,17 @@
                 btnStop.disabled = true;
             }
         });
+
+        function requestReady() {
+            if (!isReady) send('ping');
+        }
+
+        requestReady();
+        readinessTimer = window.setInterval(requestReady, READY_PING_INTERVAL_MS);
+        window.setTimeout(
+            () => window.clearInterval(readinessTimer),
+            READY_PING_TIMEOUT_MS
+        );
 
         btnPlay.addEventListener('click', () => {
             if (isReady) send('play', getFieldData());

@@ -1,5 +1,7 @@
 (function () {
   const MESSAGE_ORIGIN = window.location.origin;
+  const READY_PING_INTERVAL_MS = 250;
+  const READY_PING_TIMEOUT_MS = 10_000;
   const iframe   = document.getElementById('sb-iframe');
   const player   = document.getElementById('sb-player');
   const btnPlay  = document.getElementById('sb-play');
@@ -13,6 +15,7 @@
 
   const liveButtons = [btnNext, btnGHome, btnGAway, btnUpdate, btnStop];
   let isReady = false, isPlaying = false;
+  let readinessTimer = null;
 
   // Fixed resolutions for each aspect ratio (broadcast-standard sizes)
   const RESOLUTIONS = {
@@ -27,7 +30,11 @@
     iframe.contentWindow.postMessage({ action, data }, MESSAGE_ORIGIN);
   }
 
-  iframe.addEventListener('load', () => send('ping'));
+  function requestReady() {
+    if (!isReady) send('ping');
+  }
+
+  iframe.addEventListener('load', requestReady);
 
   function setStatus(state, text) {
     statusEl.dataset.state = state;
@@ -72,6 +79,7 @@
 
     if (event === 'ready') {
       isReady = true;
+      window.clearInterval(readinessTimer);
       setStatus('ready', 'Ready');
       btnPlay.disabled = false;
     }
@@ -98,6 +106,13 @@
       setStatus('playing', liveSteps.includes(state.step) ? 'Live' : state.step === 'half-time' ? 'Half-Time' : state.step === 'full-time' ? 'Full-Time' : 'On Air');
     }
   });
+
+  requestReady();
+  readinessTimer = window.setInterval(requestReady, READY_PING_INTERVAL_MS);
+  window.setTimeout(
+    () => window.clearInterval(readinessTimer),
+    READY_PING_TIMEOUT_MS,
+  );
 
   // -- Button handlers --
 

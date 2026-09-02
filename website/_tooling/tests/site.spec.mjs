@@ -67,6 +67,7 @@ test('navigation, manifests, and runtime requests work', async ({ page }, testIn
 });
 
 test('stage, scoreboard, and carousel lower-third controls run', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     const monitor = await openLandingPage(page);
 
     const stageButton = page.locator('#stage-toggle');
