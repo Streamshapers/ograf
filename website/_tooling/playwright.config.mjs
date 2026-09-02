@@ -37,6 +37,14 @@ export default defineConfig({
                 ...devices['Pixel 7'],
                 baseURL: `http://127.0.0.1:${PORT}/ograf`
             }
+        },
+        {
+            name: 'tablet-preview',
+            use: {
+                ...devices['Pixel 7'],
+                viewport: { width: 820, height: 1180 },
+                baseURL: `http://127.0.0.1:${PORT}/ograf`
+            }
         }
     ]
 });

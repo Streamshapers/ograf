@@ -553,7 +553,6 @@ a:hover {
   }
 }
 
-
 /* ----------------------------------------------------------------------------------
    BUTTONS
 ---------------------------------------------------------------------------------- */
@@ -2741,12 +2740,13 @@ a:hover {
 
 .section-demos {
   background: var(--color-bg-subtle);
-  padding: var(--section-padding-y) 0;
+  padding: clamp(var(--space-12), 6vw, var(--space-16)) 0;
+  scroll-margin-top: 64px;
 }
 
 .demos__header {
   text-align: center;
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-8);
 }
 
 .demos__intro {
@@ -2770,6 +2770,7 @@ a:hover {
 .demo-card__header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-6);
   border-bottom: 1px solid var(--color-border);
@@ -2788,6 +2789,46 @@ a:hover {
   font-size: var(--text-base);
   font-weight: var(--fw-semibold);
   color: var(--color-text);
+}
+
+.demo-card__header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.demo-card__download {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  padding: 5px 10px;
+  border: 1px solid rgba(35, 82, 195, 0.24);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-brand-blue);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.demo-card__download:hover {
+  border-color: var(--color-brand-blue);
+  background: rgba(35, 82, 195, 0.06);
+}
+
+.demo-card__download:focus-visible {
+  outline: 3px solid rgba(35, 82, 195, 0.22);
+  outline-offset: 2px;
+}
+
+.demo-card__download svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
 /* ---- Preview player ---- */
@@ -2967,7 +3008,6 @@ a:hover {
 /* ---- Demo card badge ---- */
 
 .demo-card__badge {
-  margin-left: auto;
   font-size: var(--text-xs);
   font-weight: var(--fw-semibold);
   color: var(--color-accent-green);
@@ -2980,7 +3020,6 @@ a:hover {
 
 /* ---- Demo Carousel ---- */
 
-/* Desktop: 1-column grid; buttons overlay the track row via grid-area */
 .demo-carousel {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -2989,34 +3028,37 @@ a:hover {
     "track"
     "dots";
   row-gap: var(--space-5);
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+.demo-carousel__viewport {
+  grid-area: track;
   overflow: hidden;
+  min-width: 0;
+  border-radius: var(--radius-lg);
 }
 
 .demo-carousel__track {
-  grid-area: track;
   display: flex;
-  gap: 40px;
-  /* Indent slides to align with the container on wide viewports */
-  padding-inline: max(
-    var(--container-padding),
-    calc((100vw - var(--max-width)) / 2 + var(--container-padding))
-  );
+  gap: var(--space-6);
   transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .demo-carousel__slide {
-  /* Slide fills the container inner width */
-  flex: 0 0 min(
-    calc(var(--max-width) - 2 * var(--container-padding)),
-    calc(100vw - 2 * var(--container-padding))
-  );
+  flex: 0 0 100%;
   min-width: 0;
-  opacity: 0.4;
-  transition: opacity 0.4s;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s, visibility 0s linear 0.45s;
 }
 
 .demo-carousel__slide.is-active {
   opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 /* Desktop: buttons sit in the track grid cell, overlaying it */
@@ -3024,8 +3066,8 @@ a:hover {
   grid-area: track;
   align-self: center;
   z-index: 10;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-full);
   border: 1px solid var(--color-border);
   background: var(--color-bg);
@@ -3038,14 +3080,13 @@ a:hover {
   transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.3s;
 }
 
-/* Position buttons in the viewport margin outside the container */
 .demo-carousel__btn--prev {
   justify-self: start;
-  margin-left: max(8px, calc((100vw - var(--max-width)) / 2 - 64px));
+  margin-left: calc(var(--space-5) * -1);
 }
 .demo-carousel__btn--next {
   justify-self: end;
-  margin-right: max(8px, calc((100vw - var(--max-width)) / 2 - 64px));
+  margin-right: calc(var(--space-5) * -1);
 }
 
 .demo-carousel__btn:disabled {
@@ -3099,15 +3140,6 @@ a:hover {
       "prev  dots  next";
   }
 
-  .demo-carousel__track {
-    padding-inline: var(--container-padding);
-    gap: 24px;
-  }
-
-  .demo-carousel__slide {
-    flex: 0 0 calc(100vw - 2 * var(--container-padding));
-  }
-
   .demo-carousel__btn {
     grid-area: unset;
     align-self: center;
@@ -3123,6 +3155,12 @@ a:hover {
   .demo-carousel__btn:disabled {
     opacity: 0.3;
     pointer-events: none;
+  }
+
+  .demo-card__header-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
   }
 
 }
@@ -3183,6 +3221,102 @@ a:hover {
   flex-shrink: 0;
 }
 
+/* Keep the live output and its controls visible together on wider screens. */
+@media (min-width: 901px) {
+  .demo-card__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 320px);
+    grid-template-areas:
+      "aspect controls"
+      "player controls";
+    align-items: stretch;
+  }
+
+  .demo-aspect-bar {
+    grid-area: aspect;
+  }
+
+  .demo-player {
+    grid-area: player;
+  }
+
+  .demo-controls {
+    grid-area: controls;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: var(--space-4);
+    min-width: 0;
+    padding: var(--space-5);
+    border-top: 0;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .demo-controls__fields {
+    display: grid;
+    flex: 0 0 auto;
+    gap: var(--space-3);
+  }
+
+  .demo-field {
+    min-width: 0;
+  }
+
+  .demo-controls__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .demo-controls__actions .btn {
+    justify-content: center;
+    width: 100%;
+    padding-inline: var(--space-3);
+  }
+
+  .demo-controls__status {
+    margin-top: auto;
+    padding-top: 0;
+  }
+}
+
+/* Compact laptops need a shorter card without compromising the 16:9 player. */
+@media (min-width: 901px) and (max-height: 800px) {
+  .section-demos {
+    padding-block: var(--space-8);
+  }
+
+  .demos__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .demos__intro {
+    margin-top: var(--space-2);
+  }
+
+  .demo-carousel {
+    max-width: 960px;
+  }
+
+  .demo-card__header {
+    padding-block: var(--space-3);
+  }
+
+  .demo-card__body {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+
+  .demo-controls {
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .demo-controls__fields,
+  .demo-controls__actions {
+    gap: var(--space-2);
+  }
+}
+
 /* ---- Scoreboard player (fixed-resolution iframe, scaled to fit) ---- */
 
 .demo-player--sb {
@@ -3221,6 +3355,22 @@ a:hover {
 
   .demo-aspect-bar {
     flex-wrap: wrap;
+  }
+}
+
+/* Preserve a complete 16:9 frame on short landscape phones. */
+@media (max-width: 900px) and (max-height: 600px) and (orientation: landscape) {
+  .section-demos {
+    padding-block: var(--space-8);
+  }
+
+  .demos__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .demo-player {
+    width: min(100%, calc((100svh - 96px) * 16 / 9));
+    margin-inline: auto;
   }
 }
 

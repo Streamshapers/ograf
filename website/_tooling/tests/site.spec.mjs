@@ -31,6 +31,10 @@ async function openLandingPage(page) {
     await expect(page.locator('.status-card').nth(1)).toContainText('Published 2026-08-13');
     await expect(page.locator('.status-card').nth(1))
         .toContainText('Read the Server API specification');
+    await expect(page.locator('link[href^="website/css/style.css"]'))
+        .toHaveAttribute('href', /style\.css\?v=\d+$/);
+    await expect(page.locator('script[src^="website/js/demo-carousel.js"]'))
+        .toHaveAttribute('src', /demo-carousel\.js\?v=\d+$/);
     await expect(page.locator('body')).not.toContainText('Mid-2026');
     await expect(page.locator('body')).not.toContainText('Draft – Published');
     return monitor;
@@ -95,6 +99,74 @@ test('stage, scoreboard, and lower-third controls run', async ({ page }) => {
     await page.locator('#btn-stop').click();
     await expect(page.locator('#demo-status')).toHaveAttribute('data-state', 'ready');
 
+    await expectCleanPage(monitor);
+});
+
+test('demo carousel adapts and offers valid OGraf packages', async ({ page }) => {
+    const monitor = await openLandingPage(page);
+    const carouselViewport = page.locator('.demo-carousel__viewport');
+    const activeSlide = page.locator('.demo-carousel__slide.is-active');
+    const player = activeSlide.locator('.demo-player');
+    const controls = activeSlide.locator('.demo-controls');
+
+    await page.locator('#demos').scrollIntoViewIfNeeded();
+    await expect(carouselViewport).toBeVisible();
+
+    const viewportSize = page.viewportSize();
+    const playerBox = await player.boundingBox();
+    const controlsBox = await controls.boundingBox();
+    const cardBox = await activeSlide.locator('.demo-card').boundingBox();
+
+    expect(viewportSize).not.toBeNull();
+    expect(playerBox).not.toBeNull();
+    expect(controlsBox).not.toBeNull();
+    expect(cardBox).not.toBeNull();
+
+    const hasSideControls = viewportSize.width >= 901;
+    if (hasSideControls) {
+        expect(controlsBox.x).toBeGreaterThanOrEqual(playerBox.x + playerBox.width - 1);
+        expect(cardBox.height).toBeLessThan(viewportSize.height - 64);
+    } else {
+        expect(controlsBox.y).toBeGreaterThanOrEqual(playerBox.y + playerBox.height - 1);
+        expect(playerBox.height).toBeLessThan(viewportSize.height - 64);
+    }
+
+    const pageWidth = await page.evaluate(() => ({
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth
+    }));
+    expect(pageWidth.scrollWidth).toBe(pageWidth.clientWidth);
+
+    const downloadLinks = page.locator('.demo-card__download');
+    await expect(downloadLinks).toHaveCount(2);
+    for (const link of await downloadLinks.all()) {
+        const href = await link.getAttribute('href');
+        expect(href).toMatch(/\.zip$/);
+
+        const response = await page.request.get(href);
+        expect(response.ok(), href).toBeTruthy();
+        expect(response.headers()['content-type']).toContain('application/zip');
+        expect((await response.body()).subarray(0, 4).toString('hex')).toBe('504b0304');
+    }
+
+    await expectCleanPage(monitor);
+});
+
+test('landscape phones retain a complete demo frame', async ({ page }) => {
+    await page.setViewportSize({ width: 844, height: 390 });
+    const monitor = await openLandingPage(page);
+    const player = page.locator('.demo-carousel__slide.is-active .demo-player');
+
+    await page.locator('#demos').scrollIntoViewIfNeeded();
+    const playerBox = await player.boundingBox();
+    expect(playerBox).not.toBeNull();
+    expect(playerBox.height).toBeLessThan(390 - 64);
+
+    const pageWidth = await page.evaluate(() => ({
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth
+    }));
+    expect(pageWidth.scrollWidth).toBe(pageWidth.clientWidth);
     await expectCleanPage(monitor);
 });
 

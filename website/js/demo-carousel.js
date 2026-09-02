@@ -1,6 +1,5 @@
 (function () {
   const track    = document.querySelector('.demo-carousel__track');
-  const overflow = document.querySelector('.demo-carousel__overflow');
   const slides   = [...document.querySelectorAll('.demo-carousel__slide')];
   const btnPrev  = document.querySelector('.demo-carousel__btn--prev');
   const btnNext  = document.querySelector('.demo-carousel__btn--next');
@@ -21,7 +20,12 @@
     const hasPrev = index > 0;
     const hasNext = index < slides.length - 1;
 
-    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === index));
+    slides.forEach((slide, i) => {
+      const isActive = i === index;
+      slide.classList.toggle('is-active', isActive);
+      slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      slide.inert = !isActive;
+    });
     dots.forEach((dot, i) => {
       dot.classList.toggle('is-active', i === index);
       dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
