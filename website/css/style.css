@@ -4399,3 +4399,17 @@ a:hover {
     align-items: flex-start;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body *,
+  body *::before,
+  body *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

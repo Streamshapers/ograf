@@ -5,6 +5,12 @@
 
 gsap.registerPlugin(ScrollTrigger);
 
+const motionMedia = gsap.matchMedia();
+
+motionMedia.add('(prefers-reduced-motion: no-preference)', () => {
+const motionEvents = new AbortController();
+const motionObservers = [];
+
 /* -----------------------------------------
    HELPERS
 ----------------------------------------- */
@@ -24,6 +30,7 @@ const onScroll = (trigger, start = 'top 82%') => ({
 // Split headings into overflow-hidden word spans (skip the logo variant)
 (function () {
   document.querySelectorAll('.hero__heading:not(.hero__heading--logo)').forEach(heading => {
+    if (heading.querySelector('.h-line')) return;
     const lines = heading.innerHTML.split(/<br\s*\/?>/i);
     heading.innerHTML = lines.map(line =>
       `<span class="h-line">${
@@ -65,6 +72,7 @@ heroTl
 // Split each statement into overflow-hidden word spans
 (function () {
   document.querySelectorAll('.intro__statement').forEach(el => {
+    if (el.querySelector('.i-wrap')) return;
     el.innerHTML = el.innerHTML.split(/(<[^>]+>|&[^;]+;|\s+)/).map(token => {
       if (!token.trim() || token.startsWith('<') || token.startsWith('&')) return token;
       return `<span class="i-wrap"><span class="i-word">${token}</span></span>`;
@@ -112,11 +120,11 @@ heroTl
         xTo(fx);
         yTo(fy);
       });
-    });
+    }, { signal: motionEvents.signal });
 
     statement.addEventListener('mouseleave', () => {
       movers.forEach(({ xTo, yTo }) => { xTo(0); yTo(0); });
-    });
+    }, { signal: motionEvents.signal });
   });
 })();
 
@@ -229,10 +237,10 @@ document.querySelectorAll('.benefit-card').forEach(card => {
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
     gsap.to(card, { rotationY: x * 10, rotationX: -y * 10, transformPerspective: 700, duration: 0.3, ease: 'power1.out' });
-  });
+  }, { signal: motionEvents.signal });
   card.addEventListener('mouseleave', () => {
     gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.6, ease: 'power2.out' });
-  });
+  }, { signal: motionEvents.signal });
 });
 
 
@@ -258,6 +266,7 @@ pathsTl
       obs.unobserve(entry.target);
     });
   }, { threshold: 0.2 });
+  motionObservers.push(obs);
   cards.forEach(card => obs.observe(card));
 })();
 
@@ -337,4 +346,10 @@ demosTl
 gsap.from('.footer__brand, .footer__nav-group', {
   opacity: 0, y: 24, duration: 0.6, stagger: 0.1, ease: 'power3.out',
   ...onScroll('.site-footer', 'top 95%'),
+});
+
+return () => {
+  motionEvents.abort();
+  motionObservers.forEach(observer => observer.disconnect());
+};
 });

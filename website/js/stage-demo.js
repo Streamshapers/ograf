@@ -28,7 +28,29 @@
 (function () {
   const screens = [...document.querySelectorAll('.stage-device__screen')];
   const lts     = [...document.querySelectorAll('ograf-lower-third.stage-device__graphic')];
+  const backgroundVideos = [...document.querySelectorAll('.stage-device__bg-video')];
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (!lts.length) return;
+
+  function syncBackgroundVideos() {
+    backgroundVideos.forEach(video => {
+      if (motionQuery.matches) {
+        video.pause();
+        try {
+          video.currentTime = 0;
+        } catch (_) {
+          /* The video has not loaded enough metadata to seek yet. */
+        }
+      } else {
+        video.play().catch(() => {
+          /* Muted video playback can still be blocked by host policy. */
+        });
+      }
+    });
+  }
+
+  syncBackgroundVideos();
+  motionQuery.addEventListener('change', syncBackgroundVideos);
 
   // -- Form / control elements -------------------------------
   const btnToggle = document.getElementById('stage-toggle');
@@ -182,22 +204,38 @@
   //   - we already auto-played once (one-shot per page load)
   const section = document.querySelector('.section-stage');
   if (section && 'IntersectionObserver' in window) {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let autoPlayed     = false;
     let userInteracted = false;
     let io             = null;
+    let autoPlayTimer  = null;
+
+    const stopAutoPlayTracking = () => {
+      if (io) io.disconnect();
+      io = null;
+      window.clearTimeout(autoPlayTimer);
+      autoPlayTimer = null;
+    };
+
     if (btnToggle) {
-      btnToggle.addEventListener('click', () => { userInteracted = true; }, { once: true });
+      btnToggle.addEventListener('click', () => {
+        userInteracted = true;
+        stopAutoPlayTracking();
+      }, { once: true });
     }
 
     const tryAutoPlay = async () => {
-      if (autoPlayed || userInteracted || reduced) return;
+      autoPlayTimer = null;
+      if (autoPlayed || userInteracted || motionQuery.matches) return;
       autoPlayed = true;
-      if (io) io.disconnect();
+      stopAutoPlayTracking();
 
       // Element might not have been defined / loaded yet on slow
       // networks - wait for both before triggering play.
       await customElements.whenDefined('ograf-lower-third');
+      if (userInteracted || motionQuery.matches) {
+        autoPlayed = false;
+        return;
+      }
       const data = ltData();
       await Promise.all(lts.map(el => el.updateAction(data, true)));
       setToggleState(true);
@@ -205,15 +243,31 @@
       lts.forEach(el => el.playAction(null, null, false));
     };
 
-    io = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          // Slight delay so the entrance reads as a response to
-          // scrolling, not a pre-empt.
-          setTimeout(tryAutoPlay, 250);
+    const observeForAutoPlay = () => {
+      if (autoPlayed || userInteracted || motionQuery.matches || io) return;
+      io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && autoPlayTimer === null) {
+            autoPlayTimer = window.setTimeout(tryAutoPlay, 250);
+          }
         }
+      }, { threshold: 0.35 });
+      io.observe(section);
+    };
+
+    motionQuery.addEventListener('change', async () => {
+      if (motionQuery.matches) {
+        stopAutoPlayTracking();
+        if (autoPlayed && isPlaying && !userInteracted) {
+          setToggleState(false);
+          setSync('ready', 'Ready');
+          await Promise.all(lts.map(el => el.stopAction(true)));
+        }
+      } else {
+        observeForAutoPlay();
       }
-    }, { threshold: 0.35 });
-    io.observe(section);
+    });
+
+    observeForAutoPlay();
   }
 })();

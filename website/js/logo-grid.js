@@ -65,13 +65,16 @@
       // empty) with the freshly rendered list.
       grid.innerHTML = list.map(e => renderEntry(e, base)).filter(Boolean).join('');
       if (window.gsap && grid.children.length) {
-        window.gsap.from(grid.children, {
-          opacity: 0,
-          scale: 0.88,
-          duration: 0.4,
-          stagger: 0.05,
-          ease: 'back.out(1.2)',
-          scrollTrigger: { trigger: grid, start: 'top 85%' },
+        const motionMedia = window.gsap.matchMedia();
+        motionMedia.add('(prefers-reduced-motion: no-preference)', () => {
+          window.gsap.from(grid.children, {
+            opacity: 0,
+            scale: 0.88,
+            duration: 0.4,
+            stagger: 0.05,
+            ease: 'back.out(1.2)',
+            scrollTrigger: { trigger: grid, start: 'top 85%' },
+          });
         });
       }
     } catch (_) {

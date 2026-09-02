@@ -89,7 +89,11 @@
 
 /* Respect reduced motion — freeze the rows */
 @media (prefers-reduced-motion: reduce) {
-  .htk-row { animation: none; }
+  .htk-row,
+  .htk-lt__bug i { animation: none; }
+
+  .htk-card,
+  .htk-card__frame { transition: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════

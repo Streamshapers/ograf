@@ -15,7 +15,7 @@
       position: relative;
     }
 
-    /* Background video — autoplay, muted, looped, plays inline. */
+    /* Background video — muted, looped, and controlled by motion preference. */
     .bg-video {
       position: absolute;
       inset: 0;
@@ -46,7 +46,7 @@
 </head>
 <body>
 
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+  <video class="bg-video" muted loop playsinline preload="metadata">
     <!-- WebM (VP9) — preferred by modern Chrome/Firefox/Edge. -->
     <source src="../../assets/video/Background-Interview-Video-720.webm" type="video/webm">
     <!-- MP4 (H.264) — fallback for Safari & older WebViews. -->
@@ -61,9 +61,29 @@
     customElements.define('ograf-lower-third', OGrafLowerThird);
 
     const el = document.getElementById('graphic');
+    const backgroundVideo = document.querySelector('.bg-video');
     const messageOrigin = window.location.origin;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     const notifyParent = message => parent.postMessage(message, messageOrigin);
+
+    function syncBackgroundVideo() {
+      if (motionQuery.matches) {
+        backgroundVideo.pause();
+        try {
+          backgroundVideo.currentTime = 0;
+        } catch (_) {
+          /* The video has not loaded enough metadata to seek yet. */
+        }
+      } else {
+        backgroundVideo.play().catch(() => {
+          /* Muted video playback can still be blocked by host policy. */
+        });
+      }
+    }
+
+    syncBackgroundVideo();
+    motionQuery.addEventListener('change', syncBackgroundVideo);
 
     // Read viewing-context hints from the URL so the LT can adapt its
     // layout when this demo is embedded inside a non-16:9 viewport

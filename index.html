@@ -236,7 +236,7 @@
                 <div class="stage-device stage-device--tv stage-bento__tile stage-bento__tile--tv" aria-hidden="true">
                     <div class="stage-device__frame">
                         <div class="stage-device__screen" data-ratio="16/9" data-focus-x="0.5">
-                            <video class="stage-device__bg-video" autoplay muted loop playsinline preload="auto">
+                            <video class="stage-device__bg-video" muted loop playsinline preload="metadata">
                                 <source src="website/assets/video/Background-Interview-Video-720.webm" type="video/webm">
                                 <source src="website/assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
                             </video>
@@ -261,7 +261,7 @@
                         <div class="stage-device__frame">
                             <span class="stage-device__camera"></span>
                             <div class="stage-device__screen" data-ratio="16/9" data-focus-x="0.55">
-                                <video class="stage-device__bg-video" autoplay muted loop playsinline preload="auto">
+                                <video class="stage-device__bg-video" muted loop playsinline preload="metadata">
                                     <source src="website/assets/video/Background-Interview-Video-720.webm" type="video/webm">
                                     <source src="website/assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
                                 </video>
@@ -282,7 +282,7 @@
                             <span class="stage-device__side-button stage-device__side-button--right-top"></span>
                             <span class="stage-device__side-button stage-device__side-button--right-bot"></span>
                             <div class="stage-device__screen" data-ratio="16/9" data-focus-x="0.6">
-                                <video class="stage-device__bg-video" autoplay muted loop playsinline preload="auto">
+                                <video class="stage-device__bg-video" muted loop playsinline preload="metadata">
                                     <source src="website/assets/video/Background-Interview-Video-720.webm" type="video/webm">
                                     <source src="website/assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
                                 </video>
@@ -794,7 +794,7 @@
                                     <iframe
                                             class="demo-player__iframe"
                                             data-demo-iframe
-                                            src="website/demos/lower-third/index.html"
+                                            src="website/demos/lower-third/index.html?v=2"
                                             title="OGraf News Lower Third Demo"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -909,7 +909,7 @@
                                     <iframe
                                             class="demo-player__iframe"
                                             data-demo-iframe
-                                            src="website/demos/lower-third-stage/index.html?v=9"
+                                            src="website/demos/lower-third-stage/index.html?v=10"
                                             title="OGraf Responsive Lower Third Demo"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -1546,7 +1546,7 @@
 
 <script src="website/js/site.js?v=2"></script>
 
-<script src="website/js/animations.js?v=6"></script>
+<script src="website/js/animations.js?v=7"></script>
 
 <!-- Demo control panel -->
 <script src="website/js/demo-lower-third.js?v=10"></script>
@@ -1564,14 +1564,14 @@
      idempotent - works for both this page and any iframe instance). -->
 <script type="module" src="website/demos/lower-third-stage/graphic.mjs"></script>
 
-<script src="website/js/stage-demo.js"></script>
+<script src="website/js/stage-demo.js?v=2"></script>
 
 <!-- Vendor logo ticker (auto-discovers logos in assets/img/vendor-logos/vendors/) -->
-<script src="website/js/vendor-ticker.js"></script>
+<script src="website/js/vendor-ticker.js?v=2"></script>
 
 <!-- Autopopulates the bottom "Vendors & adopters" logo grids from
      assets/img/vendor-logos/{vendors,organisations}/manifest.json. -->
-<script src="website/js/logo-grid.js"></script>
+<script src="website/js/logo-grid.js?v=2"></script>
 
 <!-- Code block tab switcher -->
 <script src="website/js/code-tabs.js?v=1"></script>
@@ -1583,6 +1583,6 @@
     }
 </script>
 <script src="website/js/video-embed.js?v=2"></script>
-<script src="website/js/hero-ticker.js?v=2"></script>
+<script src="website/js/hero-ticker.js?v=3"></script>
 </body>
 </html>

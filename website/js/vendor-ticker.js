@@ -60,17 +60,27 @@
   };
   ensureWidth();
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduceMotion) {
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let tickerAnimation = null;
+
+  const syncTickerAnimation = () => {
+    tickerAnimation?.cancel();
+    tickerAnimation = null;
+    track.style.transform = '';
+    if (motionQuery.matches) return;
+
     const duration = Math.max(20000, setLen * 4000);
-    track.animate(
+    tickerAnimation = track.animate(
       [
         { transform: 'translateX(0)' },
         { transform: `translateX(${-period}px)` }
       ],
       { duration, iterations: Infinity, easing: 'linear' }
     );
-  }
+  };
+
+  syncTickerAnimation();
+  motionQuery.addEventListener('change', syncTickerAnimation);
 
   let resizeRaf = 0;
   window.addEventListener('resize', () => {

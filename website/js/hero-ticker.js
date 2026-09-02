@@ -250,7 +250,10 @@
       const card = e.target.closest('.htk-card');
       if (!card) return;
       const target = document.getElementById('demos');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (target) {
+        target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      }
     });
 
     // Hover-pause is intentionally disabled - the CSS animations on the
