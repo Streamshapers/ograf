@@ -46,7 +46,7 @@
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=7">
+    <link rel="stylesheet" href="website/css/style.css?v=8">
     <link rel="stylesheet" href="website/css/hero-ticker.css">
 </head>
 <body>
@@ -644,7 +644,6 @@
                     <div class="demo-card demo-card--scoreboard">
 
                         <div class="demo-card__header">
-                            <span class="demo-card__tag mono">graphic.mjs</span>
                             <h3 class="demo-card__title">Live Scoreboard</h3>
                             <div class="demo-card__header-actions">
                                 <span class="demo-card__badge">Responsive</span>
@@ -742,10 +741,9 @@
 
                 <!-- Slide 2: News Lower Third -->
                 <div class="demo-carousel__slide">
-                    <div class="demo-card">
+                    <div class="demo-card" data-demo-controller="news-lower-third">
 
                         <div class="demo-card__header">
-                            <span class="demo-card__tag mono">graphic.mjs</span>
                             <h3 class="demo-card__title">News Lower Third</h3>
                             <div class="demo-card__header-actions">
                                 <a class="demo-card__download"
@@ -773,10 +771,10 @@
                                 </div>
                             </div>
 
-                            <div class="demo-player" id="demo-player">
+                            <div class="demo-player" data-demo-player>
                                 <iframe
-                                        id="demo-iframe"
                                         class="demo-player__iframe"
+                                        data-demo-iframe
                                         src="website/demos/lower-third/index.html"
                                         title="OGraf News Lower Third Demo"
                                         sandbox="allow-scripts allow-same-origin"
@@ -788,32 +786,113 @@
 
                                     <label class="demo-field">
                                         <span class="demo-field__label">Name</span>
-                                        <input class="demo-field__input" id="ctrl-name" type="text"
+                                        <input class="demo-field__input" data-demo-field="name" type="text"
                                                value="Anders Berg" autocomplete="off">
                                     </label>
 
                                     <label class="demo-field">
                                         <span class="demo-field__label">Title</span>
-                                        <input class="demo-field__input" id="ctrl-title" type="text"
+                                        <input class="demo-field__input" data-demo-field="title" type="text"
                                                value="Senior Correspondent" autocomplete="off">
                                     </label>
 
                                     <label class="demo-field">
                                         <span class="demo-field__label">Channel</span>
-                                        <input class="demo-field__input" id="ctrl-channel" type="text"
+                                        <input class="demo-field__input" data-demo-field="channel" type="text"
                                                value="OGraf News" autocomplete="off">
                                     </label>
 
                                 </div>
 
                                 <div class="demo-controls__actions">
-                                    <button class="btn btn--primary demo-btn" id="btn-play" type="button" disabled>Play In</button>
-                                    <button class="btn btn--ghost demo-btn" id="btn-update" type="button" disabled>Update</button>
-                                    <button class="btn btn--ghost demo-btn" id="btn-stop" type="button" disabled>Stop</button>
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
                                 </div>
 
                                 <div class="demo-controls__status">
-                                    <span class="demo-status" id="demo-status" data-state="loading">Loading...</span>
+                                    <span class="demo-status" data-demo-status data-state="loading">Loading...</span>
+                                </div>
+                            </div>
+
+                        </div><!-- /.demo-card__body -->
+                    </div><!-- /.demo-card -->
+                </div><!-- /.demo-carousel__slide -->
+
+                <!-- Slide 3: Responsive Lower Third -->
+                <div class="demo-carousel__slide">
+                    <div class="demo-card" data-demo-controller="responsive-lower-third">
+
+                        <div class="demo-card__header">
+                            <h3 class="demo-card__title">Responsive Lower Third</h3>
+                            <div class="demo-card__header-actions">
+                                <span class="demo-card__badge">Multi-device</span>
+                                <a class="demo-card__download"
+                                   href="website/demos/lower-third-stage/ograf-demo-responsive-lower-third.zip" download
+                                   aria-label="Download the Responsive Lower Third OGraf package as a ZIP file">
+                                    <i data-lucide="download" aria-hidden="true"></i>
+                                    <span>Download OGraf (.zip)</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="demo-card__body">
+
+                            <div class="demo-aspect-bar">
+                                <span class="demo-aspect-bar__label">Format</span>
+                                <div class="demo-aspect-bar__options">
+                                    <button class="demo-aspect-btn is-active" type="button" data-ratio="16/9"
+                                            title="Landscape 16:9" disabled>
+                                        <svg width="20" height="14" viewBox="0 0 20 14">
+                                            <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>16:9</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="demo-player" data-demo-player>
+                                <iframe
+                                        class="demo-player__iframe"
+                                        data-demo-iframe
+                                        src="website/demos/lower-third-stage/index.html"
+                                        title="OGraf Responsive Lower Third Demo"
+                                        sandbox="allow-scripts allow-same-origin"
+                                ></iframe>
+                            </div>
+
+                            <div class="demo-controls">
+                                <div class="demo-controls__fields">
+
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Name</span>
+                                        <input class="demo-field__input" data-demo-field="name" type="text"
+                                               value="Anders Berg" autocomplete="off">
+                                    </label>
+
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Title</span>
+                                        <input class="demo-field__input" data-demo-field="title" type="text"
+                                               value="Senior Correspondent" autocomplete="off">
+                                    </label>
+
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Channel</span>
+                                        <input class="demo-field__input" data-demo-field="channel" type="text"
+                                               value="OGraf News" autocomplete="off">
+                                    </label>
+
+                                </div>
+
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
+                                </div>
+
+                                <div class="demo-controls__status">
+                                    <span class="demo-status" data-demo-status data-state="loading">Loading...</span>
                                 </div>
                             </div>
 
@@ -836,6 +915,8 @@
                         aria-label="Live Scoreboard"></button>
                 <button class="demo-carousel__dot" type="button" role="tab" aria-selected="false" data-index="1"
                         aria-label="News Lower Third"></button>
+                <button class="demo-carousel__dot" type="button" role="tab" aria-selected="false" data-index="2"
+                        aria-label="Responsive Lower Third"></button>
             </div>
 
         </div><!-- /.demo-carousel -->
@@ -1401,13 +1482,13 @@
 <script src="website/js/animations.js?v=6"></script>
 
 <!-- Demo control panel -->
-<script src="website/js/demo-lower-third.js"></script>
+<script src="website/js/demo-lower-third.js?v=8"></script>
 
 <!-- Demo 2: Scoreboard control panel -->
 <script src="website/js/demo-scoreboard.js"></script>
 
 <!-- Demo carousel -->
-<script src="website/js/demo-carousel.js?v=7"></script>
+<script src="website/js/demo-carousel.js?v=8"></script>
 
 <!-- Multi-device stage demo -->
 <!-- Register the OGraf <ograf-lower-third> custom element on this page.

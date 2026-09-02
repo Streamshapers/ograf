@@ -66,7 +66,7 @@ test('navigation, manifests, and runtime requests work', async ({ page }, testIn
     await expectCleanPage(monitor);
 });
 
-test('stage, scoreboard, and lower-third controls run', async ({ page }) => {
+test('stage, scoreboard, and carousel lower-third controls run', async ({ page }) => {
     const monitor = await openLandingPage(page);
 
     const stageButton = page.locator('#stage-toggle');
@@ -86,18 +86,23 @@ test('stage, scoreboard, and lower-third controls run', async ({ page }) => {
     await page.locator('#sb-stop').click();
     await expect(page.locator('#sb-status')).toHaveAttribute('data-state', 'ready');
 
-    await page.locator('.demo-carousel__btn--next').click();
-    await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveClass(/is-active/);
-    const lowerThirdPlayButton = page.locator('#btn-play');
-    await lowerThirdPlayButton.scrollIntoViewIfNeeded();
-    await expect(lowerThirdPlayButton).toBeVisible();
-    await expect(lowerThirdPlayButton).toBeEnabled();
-    await lowerThirdPlayButton.click();
-    await expect(page.locator('#demo-status')).toHaveAttribute('data-state', 'playing');
-    await page.locator('#ctrl-name').fill('Updated Presenter');
-    await page.locator('#btn-update').click();
-    await page.locator('#btn-stop').click();
-    await expect(page.locator('#demo-status')).toHaveAttribute('data-state', 'ready');
+    for (const controllerName of ['news-lower-third', 'responsive-lower-third']) {
+        await page.locator('.demo-carousel__btn--next').click();
+        const controller = page.locator(`[data-demo-controller="${controllerName}"]`);
+        const playButton = controller.locator('[data-demo-action="play"]');
+
+        await expect(controller.locator('xpath=ancestor::*[contains(@class, "demo-carousel__slide")]'))
+            .toHaveClass(/is-active/);
+        await playButton.scrollIntoViewIfNeeded();
+        await expect(playButton).toBeVisible();
+        await expect(playButton).toBeEnabled();
+        await playButton.click();
+        await expect(controller.locator('[data-demo-status]')).toHaveAttribute('data-state', 'playing');
+        await controller.locator('[data-demo-field="name"]').fill('Updated Presenter');
+        await controller.locator('[data-demo-action="update"]').click();
+        await controller.locator('[data-demo-action="stop"]').click();
+        await expect(controller.locator('[data-demo-status]')).toHaveAttribute('data-state', 'ready');
+    }
 
     await expectCleanPage(monitor);
 });
@@ -111,6 +116,32 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
 
     await page.locator('#demos').scrollIntoViewIfNeeded();
     await expect(carouselViewport).toBeVisible();
+    await expect(page.locator('.demo-carousel__slide')).toHaveCount(3);
+    await expect(page.locator('.demo-carousel__dot')).toHaveCount(3);
+    await expect(page.locator('.demo-card__tag')).toHaveCount(0);
+
+    for (const chromePart of ['.demo-card__header', '.demo-aspect-bar']) {
+        await expect(activeSlide.locator(chromePart)).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    }
+
+    const viewportBox = await carouselViewport.boundingBox();
+    const firstSlideBox = await page.locator('.demo-carousel__slide').nth(0).boundingBox();
+    const secondSlideBox = await page.locator('.demo-carousel__slide').nth(1).boundingBox();
+    expect(viewportBox).not.toBeNull();
+    expect(firstSlideBox.x).toBeGreaterThan(viewportBox.x);
+    expect(secondSlideBox.x).toBeLessThan(viewportBox.x + viewportBox.width);
+
+    await page.locator('.demo-carousel__dot').nth(1).click();
+    await expect.poll(async () => {
+        const previousBox = await page.locator('.demo-carousel__slide').nth(0).boundingBox();
+        const nextBox = await page.locator('.demo-carousel__slide').nth(2).boundingBox();
+        return previousBox.x + previousBox.width > viewportBox.x
+            && nextBox.x < viewportBox.x + viewportBox.width;
+    }).toBeTruthy();
+
+    await page.locator('.demo-carousel__dot').nth(0).click();
+    await expect(activeSlide).toHaveAttribute('aria-hidden', 'false');
+    await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveAttribute('aria-hidden', 'true');
 
     const viewportSize = page.viewportSize();
     const playerBox = await player.boundingBox();
@@ -138,7 +169,7 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
     expect(pageWidth.scrollWidth).toBe(pageWidth.clientWidth);
 
     const downloadLinks = page.locator('.demo-card__download');
-    await expect(downloadLinks).toHaveCount(2);
+    await expect(downloadLinks).toHaveCount(3);
     for (const link of await downloadLinks.all()) {
         const href = await link.getAttribute('href');
         expect(href).toMatch(/\.zip$/);

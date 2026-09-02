@@ -1,87 +1,77 @@
 (function () {
-  const MESSAGE_ORIGIN = window.location.origin;
-  const iframe     = document.getElementById('demo-iframe');
-  const player     = document.getElementById('demo-player');
-  const btnPlay    = document.getElementById('btn-play');
-  const btnUpdate  = document.getElementById('btn-update');
-  const btnStop    = document.getElementById('btn-stop');
-  const statusEl   = document.getElementById('demo-status');
+    const MESSAGE_ORIGIN = window.location.origin;
 
-  let isReady   = false;
-  let isPlaying = false;
+    function initialiseController(controller) {
+        const iframe = controller.querySelector('[data-demo-iframe]');
+        const player = controller.querySelector('[data-demo-player]');
+        const btnPlay = controller.querySelector('[data-demo-action="play"]');
+        const btnUpdate = controller.querySelector('[data-demo-action="update"]');
+        const btnStop = controller.querySelector('[data-demo-action="stop"]');
+        const statusEl = controller.querySelector('[data-demo-status]');
+        const fields = Object.fromEntries(
+            [...controller.querySelectorAll('[data-demo-field]')]
+                .map(field => [field.dataset.demoField, field])
+        );
 
-  function send(action, data) {
-    iframe.contentWindow.postMessage({ action, data }, MESSAGE_ORIGIN);
-  }
+        let isReady = false;
 
-  // Handshake: once the iframe finishes loading, ping it.
-  // The iframe replies with 'ready' - this avoids the race where the
-  // iframe fires 'ready' before the parent's message handler is registered.
-  iframe.addEventListener('load', () => send('ping'));
+        function send(action, data) {
+            iframe.contentWindow.postMessage({ action, data }, MESSAGE_ORIGIN);
+        }
 
-  function setStatus(state, text) {
-    statusEl.dataset.state = state;
-    statusEl.textContent   = text;
-  }
+        function getFieldData() {
+            return Object.fromEntries(
+                Object.entries(fields).map(([name, field]) => [name, field.value])
+            );
+        }
 
-  // Scale the 1920-1080 iframe to fit the player container
-  function scaleIframe() {
-    const scale = player.clientWidth / 1920;
-    iframe.style.transform = `scale(${scale})`;
-  }
+        function setStatus(state, text) {
+            statusEl.dataset.state = state;
+            statusEl.textContent = text;
+        }
 
-  scaleIframe();
-  window.addEventListener('resize', scaleIframe);
-  if (window.ResizeObserver) {
-    new ResizeObserver(scaleIframe).observe(player);
-  }
+        function scaleIframe() {
+            const scale = player.clientWidth / 1920;
+            iframe.style.transform = `scale(${scale})`;
+        }
 
-  // Messages from the iframe graphic (filter by source)
-  window.addEventListener('message', ({ data, origin, source }) => {
-    if (source !== iframe.contentWindow || origin !== MESSAGE_ORIGIN) return;
-    const { event } = data ?? {};
-    if (!event) return;
+        iframe.addEventListener('load', () => send('ping'));
+        scaleIframe();
+        window.addEventListener('resize', scaleIframe);
+        if (window.ResizeObserver) {
+            new ResizeObserver(scaleIframe).observe(player);
+        }
 
-    if (event === 'ready') {
-      isReady = true;
-      setStatus('ready', 'Ready');
-      btnPlay.disabled = false;
+        window.addEventListener('message', ({ data, origin, source }) => {
+            if (source !== iframe.contentWindow || origin !== MESSAGE_ORIGIN) return;
+            const { event } = data ?? {};
+            if (!event) return;
+
+            if (event === 'ready') {
+                isReady = true;
+                setStatus('ready', 'Ready');
+                btnPlay.disabled = false;
+            }
+            if (event === 'playing') {
+                setStatus('playing', 'On Air');
+                btnPlay.disabled = true;
+                btnUpdate.disabled = false;
+                btnStop.disabled = false;
+            }
+            if (event === 'stopped') {
+                setStatus('ready', 'Ready');
+                btnPlay.disabled = false;
+                btnUpdate.disabled = true;
+                btnStop.disabled = true;
+            }
+        });
+
+        btnPlay.addEventListener('click', () => {
+            if (isReady) send('play', getFieldData());
+        });
+        btnUpdate.addEventListener('click', () => send('update', getFieldData()));
+        btnStop.addEventListener('click', () => send('stop'));
     }
-    if (event === 'playing') {
-      isPlaying = true;
-      setStatus('playing', 'On Air');
-      btnPlay.disabled = true;
-      btnUpdate.disabled = false;
-      btnStop.disabled = false;
-    }
-    if (event === 'stopped') {
-      isPlaying = false;
-      setStatus('ready', 'Ready');
-      btnPlay.disabled = false;
-      btnUpdate.disabled = true;
-      btnStop.disabled = true;
-    }
-  });
 
-  btnPlay.addEventListener('click', () => {
-    if (!isReady) return;
-    // Send data with play bundled - iframe handles update+play atomically
-    send('play', {
-      name:    document.getElementById('ctrl-name').value,
-      title:   document.getElementById('ctrl-title').value,
-      channel: document.getElementById('ctrl-channel').value,
-    });
-  });
-
-  btnUpdate.addEventListener('click', () => {
-    send('update', {
-      name:    document.getElementById('ctrl-name').value,
-      title:   document.getElementById('ctrl-title').value,
-      channel: document.getElementById('ctrl-channel').value,
-    });
-  });
-
-  btnStop.addEventListener('click', () => {
-    send('stop');
-  });
+    document.querySelectorAll('[data-demo-controller]').forEach(initialiseController);
 })();
