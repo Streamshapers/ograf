@@ -52,8 +52,8 @@ Complete these tasks on the integration branch before requesting final publicati
 2. [ ] Remove all placeholder testimonials.
 3. [x] Review marketing claims such as `adopted`, `trusted by`, and
        `used in production`; retain the current wording for this draft.
-4. [ ] Temporarily hide the vendor and broadcaster sections until logo and adopter
-       publication rights are approved; keep the source assets in the repository.
+4. [x] Confirm publication approval for the vendor and broadcaster listings and
+       retain the sections in the current draft.
 5. [ ] Add automated Firefox and WebKit coverage.
 6. [ ] Extend keyboard, reduced-motion, and baseline accessibility tests.
 7. [ ] Add automated guards against `placeholder`, obsolete draft wording, and
@@ -69,7 +69,8 @@ The integration is technically testable but is not approved for production publi
 
 - [ ] Verify every marketing, compatibility, adoption, and production-readiness claim.
 - [ ] Approve the published roadmap and Server API status.
-- [ ] Obtain and document permission for testimonials, names, vendor/adopter logos, photographs, background footage, and the embedded video.
+- [x] Confirm publication approval for the vendor/adopter listings and logos.
+- [ ] Obtain and document permission for testimonials, names, photographs, background footage, and the embedded video.
 - [ ] Confirm OGraf and EBU brand/logo usage with the responsible rights holders.
 - [ ] Review the GSAP Standard License for the intended production use and retain the decision.
 - [ ] Replace placeholder testimonials or approve them as factual, attributed content.
