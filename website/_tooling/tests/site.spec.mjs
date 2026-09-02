@@ -146,7 +146,7 @@ test('navigation, manifests, and runtime requests work', async ({ page }) => {
     await expectCleanPage(monitor);
 });
 
-test('stage, scoreboard, and carousel lower-third controls run', async ({ page }) => {
+test('stage and all carousel example controls run', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const monitor = await openLandingPage(page);
 
@@ -167,7 +167,7 @@ test('stage, scoreboard, and carousel lower-third controls run', async ({ page }
     await page.locator('#sb-stop').click();
     await expect(page.locator('#sb-status')).toHaveAttribute('data-state', 'ready');
 
-    for (const controllerName of ['news-lower-third', 'responsive-lower-third']) {
+    for (const controllerName of ['l3rd-name', 'responsive-lower-third']) {
         await page.locator('.demo-carousel__btn--next').click();
         const controller = page.locator(`[data-demo-controller="${controllerName}"]`);
         const playButton = controller.locator('[data-demo-action="play"]');

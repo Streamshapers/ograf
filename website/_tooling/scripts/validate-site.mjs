@@ -10,9 +10,7 @@ const REPOSITORY_ROOT = resolve(TOOLING_ROOT, '..', '..');
 const WEBSITE_ROOT = resolve(REPOSITORY_ROOT, 'website');
 const HTML_FILES = [
     resolve(REPOSITORY_ROOT, 'index.html'),
-    resolve(WEBSITE_ROOT, 'demos/scoreboard/index.html'),
-    resolve(WEBSITE_ROOT, 'demos/lower-third/index.html'),
-    resolve(WEBSITE_ROOT, 'demos/lower-third-stage/index.html')
+    resolve(WEBSITE_ROOT, 'demo-player/index.html')
 ];
 const FORBIDDEN_RUNTIME_HOSTS = [
     'fonts.googleapis.com',
@@ -171,7 +169,6 @@ async function validateRepositoryContract() {
         'website/assets/vendor/lucide/lucide.min.js',
         'website/assets/img/ograf-social-preview.png',
         'website/demos/scoreboard/ograf-demo-scoreboard.zip',
-        'website/demos/lower-third/ograf-demo-lower-third.zip',
         'website/demos/lower-third-stage/ograf-demo-responsive-lower-third.zip'
     ];
 

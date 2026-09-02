@@ -31,13 +31,6 @@ const DEMO_PACKAGES = [
         ]
     },
     {
-        output: 'demos/lower-third/ograf-demo-lower-third.zip',
-        files: [
-            { source: 'demos/lower-third/graphic.mjs', archive: 'graphic.mjs' },
-            { source: 'demos/lower-third/graphic.ograf.json', archive: 'graphic.ograf.json' }
-        ]
-    },
-    {
         output: 'demos/lower-third-stage/ograf-demo-responsive-lower-third.zip',
         files: [
             {

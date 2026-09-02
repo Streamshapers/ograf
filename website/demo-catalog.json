@@ -1,0 +1,73 @@
+{
+    "version": 1,
+    "examples": [
+        {
+            "id": "scoreboard",
+            "title": "Live Scoreboard",
+            "manifest": "v1/examples/scoreboard/scoreboard.ograf.json",
+            "archiveName": "ograf-example-scoreboard.zip",
+            "presentation": {
+                "renderer": "viewport",
+                "background": {
+                    "type": "image",
+                    "src": "website/assets/img/bg-stadium.jpg",
+                    "overlay": "rgba(4, 7, 18, 0.6)"
+                }
+            }
+        },
+        {
+            "id": "responsive-lower-third",
+            "title": "Responsive Lower Third",
+            "manifest": "v1/examples/responsive-lower-third/responsive-lower-third.ograf.json",
+            "archiveName": "ograf-example-responsive-lower-third.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                },
+                "background": {
+                    "type": "video",
+                    "sources": [
+                        {
+                            "src": "website/assets/video/Background-Interview-Video-720.webm",
+                            "type": "video/webm"
+                        },
+                        {
+                            "src": "website/assets/video/Background-Interview-Video-720.mp4",
+                            "type": "video/mp4"
+                        }
+                    ],
+                    "overlay": "rgba(4, 7, 18, 0.18)"
+                }
+            }
+        },
+        {
+            "id": "l3rd-name",
+            "title": "L3rd Name",
+            "manifest": "v1/examples/l3rd-name/l3rd.ograf.json",
+            "archiveName": "ograf-example-l3rd-name.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                },
+                "background": {
+                    "type": "video",
+                    "sources": [
+                        {
+                            "src": "website/assets/video/Background-Interview-Video-720.webm",
+                            "type": "video/webm"
+                        },
+                        {
+                            "src": "website/assets/video/Background-Interview-Video-720.mp4",
+                            "type": "video/mp4"
+                        }
+                    ],
+                    "overlay": "rgba(4, 7, 18, 0.18)"
+                }
+            }
+        }
+    ]
+}

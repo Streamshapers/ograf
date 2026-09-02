@@ -720,7 +720,7 @@
                                     <iframe
                                             id="sb-iframe"
                                             class="demo-player__iframe"
-                                            src="website/demos/scoreboard/index.html"
+                                            src="website/demo-player/index.html?example=scoreboard"
                                             title="OGraf Live Scoreboard Demo"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -766,17 +766,17 @@
                     </div><!-- /.demo-card -->
                 </div><!-- /.demo-carousel__slide -->
 
-                <!-- Slide 2: News Lower Third -->
+                <!-- Slide 2: L3rd Name -->
                 <div class="demo-carousel__slide" id="demo-slide-1" role="tabpanel"
                      aria-labelledby="demo-tab-1" aria-hidden="true" inert tabindex="0">
-                    <div class="demo-card" data-demo-controller="news-lower-third">
+                    <div class="demo-card" data-demo-controller="l3rd-name">
 
                         <div class="demo-card__header">
-                            <h3 class="demo-card__title">News Lower Third</h3>
+                            <h3 class="demo-card__title">L3rd Name</h3>
                             <div class="demo-card__header-actions">
                                 <a class="demo-card__download"
-                                   href="website/demos/lower-third/ograf-demo-lower-third.zip" download
-                                   aria-label="Download the News Lower Third OGraf package as a ZIP file">
+                                   href="#" data-example-download="l3rd-name"
+                                   aria-label="Download the L3rd Name OGraf package as a ZIP file">
                                     <i data-lucide="download" aria-hidden="true"></i>
                                     <span>Download OGraf (.zip)</span>
                                 </a>
@@ -803,8 +803,8 @@
                                     <iframe
                                             class="demo-player__iframe"
                                             data-demo-iframe
-                                            src="website/demos/lower-third/index.html?v=2"
-                                            title="OGraf News Lower Third Demo"
+                                            src="website/demo-player/index.html?example=l3rd-name"
+                                            title="OGraf L3rd Name Example"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
                                     ></iframe>
@@ -817,19 +817,13 @@
                                     <label class="demo-field">
                                         <span class="demo-field__label">Name</span>
                                         <input class="demo-field__input" data-demo-field="name" type="text"
-                                               value="Anders Berg" autocomplete="off">
+                                               value="John Doe" autocomplete="off">
                                     </label>
 
                                     <label class="demo-field">
                                         <span class="demo-field__label">Title</span>
                                         <input class="demo-field__input" data-demo-field="title" type="text"
-                                               value="Senior Correspondent" autocomplete="off">
-                                    </label>
-
-                                    <label class="demo-field">
-                                        <span class="demo-field__label">Channel</span>
-                                        <input class="demo-field__input" data-demo-field="channel" type="text"
-                                               value="OGraf News" autocomplete="off">
+                                               value="OGraf expert" autocomplete="off">
                                     </label>
 
                                 </div>
@@ -918,7 +912,7 @@
                                     <iframe
                                             class="demo-player__iframe"
                                             data-demo-iframe
-                                            src="website/demos/lower-third-stage/index.html?v=10"
+                                            src="website/demo-player/index.html?example=responsive-lower-third"
                                             title="OGraf Responsive Lower Third Demo"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -981,7 +975,7 @@
                         aria-label="Live Scoreboard"></button>
                 <button class="demo-carousel__dot" id="demo-tab-1" type="button" role="tab"
                         aria-selected="false" aria-controls="demo-slide-1" tabindex="-1" data-index="1"
-                        aria-label="News Lower Third"></button>
+                        aria-label="L3rd Name"></button>
                 <button class="demo-carousel__dot" id="demo-tab-2" type="button" role="tab"
                         aria-selected="false" aria-controls="demo-slide-2" tabindex="-1" data-index="2"
                         aria-label="Responsive Lower Third"></button>
@@ -1567,10 +1561,7 @@
 <script src="website/js/demo-carousel.js?v=9"></script>
 
 <!-- Multi-device stage demo -->
-<!-- Register the OGraf <ograf-lower-third> custom element on this page.
-     Module is `defer` by nature of `type="module"`, so it doesn't block
-     the page render. The element auto-defines on import (graphic.mjs is
-     idempotent - works for both this page and any iframe instance). -->
+<!-- Register the responsive OGraf example for the multi-device stage. -->
 <script type="module">
     import ResponsiveLowerThird from
         './v1/examples/responsive-lower-third/graphic.mjs';
