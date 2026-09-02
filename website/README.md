@@ -50,8 +50,8 @@ Complete these tasks on the integration branch before requesting final publicati
 1. [x] Update every Server API reference to `v1 stable, published 2026-08-13` and
        remove the obsolete `Mid-2026` roadmap item.
 2. [ ] Remove all placeholder testimonials.
-3. [ ] Neutralize unverified marketing claims such as `adopted`, `trusted by`, and
-       `used in production`.
+3. [x] Review marketing claims such as `adopted`, `trusted by`, and
+       `used in production`; retain the current wording for this draft.
 4. [ ] Temporarily hide the vendor and broadcaster sections until logo and adopter
        publication rights are approved; keep the source assets in the repository.
 5. [ ] Add automated Firefox and WebKit coverage.
