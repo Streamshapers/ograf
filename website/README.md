@@ -60,7 +60,8 @@ Complete these tasks on the integration branch before requesting final publicati
        placeholder content, and the intended indexing state in the final release review
        under item 10 instead.
 8. [ ] Profile performance and optimize images and videos.
-9. [ ] Prepare the social metadata integration without requiring the final image yet.
+9. [x] Prepare canonical, Open Graph, Twitter/X, and structured metadata without
+       referencing an unapproved or missing social-preview image.
 10. [ ] Add a concrete release checklist and a draft pull-request description to the
         repository.
 
@@ -75,7 +76,9 @@ The integration is technically testable but is not approved for production publi
 - [ ] Confirm OGraf and EBU brand/logo usage with the responsible rights holders.
 - [ ] Review the GSAP Standard License for the intended production use and retain the decision.
 - [ ] Replace placeholder testimonials or approve them as factual, attributed content.
-- [ ] Create and approve the social-preview image and final page metadata.
+- [ ] Create and approve one social-preview image for both Open Graph and Twitter/X;
+      add the shared absolute image URL, MIME type, dimensions, and accessible image
+      description to the final page metadata.
 - [ ] Complete accessibility, keyboard, reduced-motion, responsive, performance, and supported-browser reviews.
 - [ ] Confirm the canonical domain, GitHub Pages source, `CNAME`, and all `/v1/...` compatibility checks immediately before merge.
 - [ ] Review the production-equivalent build for obsolete draft wording and unresolved

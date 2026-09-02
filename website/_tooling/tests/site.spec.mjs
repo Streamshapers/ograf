@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+const PRODUCTION_URL = 'https://ograf.ebu.io/';
+const SOCIAL_TITLE = 'OGraf - Open HTML Graphics for Broadcast';
+const SOCIAL_DESCRIPTION = "The EBU's open specification for HTML broadcast graphics. "
+    + 'Build once, run across compatible broadcast, web, and mobile workflows.';
+
 function monitorPage(page) {
     const errors = [];
     const failedSameOriginRequests = [];
@@ -16,6 +21,44 @@ function monitorPage(page) {
     });
 
     return { errors, failedSameOriginRequests };
+}
+
+async function expectPreparedSocialMetadata(page) {
+    await expect(page.locator('link[rel="canonical"]'))
+        .toHaveAttribute('href', PRODUCTION_URL);
+    await expect(page.locator('meta[property="og:type"]'))
+        .toHaveAttribute('content', 'website');
+    await expect(page.locator('meta[property="og:title"]'))
+        .toHaveAttribute('content', SOCIAL_TITLE);
+    await expect(page.locator('meta[property="og:description"]'))
+        .toHaveAttribute('content', SOCIAL_DESCRIPTION);
+    await expect(page.locator('meta[property="og:site_name"]'))
+        .toHaveAttribute('content', 'OGraf');
+    await expect(page.locator('meta[property="og:url"]'))
+        .toHaveAttribute('content', PRODUCTION_URL);
+    await expect(page.locator('meta[name="twitter:card"]'))
+        .toHaveAttribute('content', 'summary_large_image');
+    await expect(page.locator('meta[name="twitter:title"]'))
+        .toHaveAttribute('content', SOCIAL_TITLE);
+    await expect(page.locator('meta[name="twitter:description"]'))
+        .toHaveAttribute('content', SOCIAL_DESCRIPTION);
+
+    await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveCount(0);
+
+    const structuredData = JSON.parse(
+        await page.locator('script[type="application/ld+json"]').textContent()
+    );
+    expect(structuredData).toMatchObject({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'OGraf',
+        url: PRODUCTION_URL,
+        publisher: {
+            '@type': 'Organization',
+            name: 'European Broadcasting Union'
+        }
+    });
 }
 
 async function openLandingPage(page) {
@@ -44,6 +87,13 @@ async function expectCleanPage(monitor) {
     expect(monitor.errors, 'console and page errors').toEqual([]);
     expect(monitor.failedSameOriginRequests, 'same-origin HTTP errors').toEqual([]);
 }
+
+test('social metadata is prepared for the approved preview image', async ({ page }) => {
+    const monitor = monitorPage(page);
+    await page.goto('./');
+    await expectPreparedSocialMetadata(page);
+    await expectCleanPage(monitor);
+});
 
 test('navigation, manifests, and runtime requests work', async ({ page }) => {
     const monitor = await openLandingPage(page);
