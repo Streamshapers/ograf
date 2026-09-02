@@ -29,6 +29,8 @@ async function openLandingPage(page) {
     await expect(page.locator('.hero__badge').nth(1)).toContainText('Server API · Stable');
     await expect(page.locator('.status-card')).toHaveCount(2);
     await expect(page.locator('.status-card').nth(1)).toContainText('Published 2026-08-13');
+    await expect(page.locator('.status-card').nth(1))
+        .toContainText('Read the Server API specification');
     await expect(page.locator('body')).not.toContainText('Mid-2026');
     await expect(page.locator('body')).not.toContainText('Draft – Published');
     return monitor;
