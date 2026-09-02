@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
+    "render-social-preview": "node scripts/render-social-preview.mjs",
     "update-demo-packages": "node scripts/update-demo-packages.mjs",
     "update-manifests": "node scripts/update-manifests.mjs",
     "vendor-assets": "node scripts/vendor-assets.mjs",

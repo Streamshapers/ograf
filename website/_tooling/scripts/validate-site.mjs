@@ -168,6 +168,7 @@ async function validateRepositoryContract() {
         'website/assets/vendor/gsap/gsap.min.js',
         'website/assets/vendor/gsap/ScrollTrigger.min.js',
         'website/assets/vendor/lucide/lucide.min.js',
+        'website/assets/img/ograf-social-preview.png',
         'website/demos/scoreboard/ograf-demo-scoreboard.zip',
         'website/demos/lower-third/ograf-demo-lower-third.zip',
         'website/demos/lower-third-stage/ograf-demo-responsive-lower-third.zip'

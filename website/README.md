@@ -76,7 +76,7 @@ The integration is technically testable but is not approved for production publi
 - [ ] Confirm OGraf and EBU brand/logo usage with the responsible rights holders.
 - [ ] Review the GSAP Standard License for the intended production use and retain the decision.
 - [ ] Replace placeholder testimonials or approve them as factual, attributed content.
-- [ ] Create and approve one social-preview image for both Open Graph and Twitter/X;
+- [x] Create and approve one social-preview image for both Open Graph and Twitter/X;
       add the shared absolute image URL, MIME type, dimensions, and accessible image
       description to the final page metadata.
 - [ ] Complete accessibility, keyboard, reduced-motion, responsive, performance, and supported-browser reviews.

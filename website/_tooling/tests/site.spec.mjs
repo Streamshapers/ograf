@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 
 const PRODUCTION_URL = 'https://ograf.ebu.io/';
+const SOCIAL_IMAGE_PATH = 'website/assets/img/ograf-social-preview.png';
+const SOCIAL_IMAGE_URL = `${PRODUCTION_URL}${SOCIAL_IMAGE_PATH}`;
+const SOCIAL_IMAGE_ALT = 'OGraf logo with the text "The EBU\'s open specification '
+    + 'to liberate broadcast graphics" on a dark blue background.';
 const SOCIAL_TITLE = 'OGraf - Open HTML Graphics for Broadcast';
 const SOCIAL_DESCRIPTION = "The EBU's open specification for HTML broadcast graphics. "
     + 'Build once, run across compatible broadcast, web, and mobile workflows.';
@@ -36,15 +40,40 @@ async function expectPreparedSocialMetadata(page) {
         .toHaveAttribute('content', 'OGraf');
     await expect(page.locator('meta[property="og:url"]'))
         .toHaveAttribute('content', PRODUCTION_URL);
+    await expect(page.locator('meta[property="og:image"]'))
+        .toHaveAttribute('content', SOCIAL_IMAGE_URL);
+    await expect(page.locator('meta[property="og:image:secure_url"]'))
+        .toHaveAttribute('content', SOCIAL_IMAGE_URL);
+    await expect(page.locator('meta[property="og:image:type"]'))
+        .toHaveAttribute('content', 'image/png');
+    await expect(page.locator('meta[property="og:image:width"]'))
+        .toHaveAttribute('content', '1200');
+    await expect(page.locator('meta[property="og:image:height"]'))
+        .toHaveAttribute('content', '630');
+    await expect(page.locator('meta[property="og:image:alt"]'))
+        .toHaveAttribute('content', SOCIAL_IMAGE_ALT);
     await expect(page.locator('meta[name="twitter:card"]'))
         .toHaveAttribute('content', 'summary_large_image');
     await expect(page.locator('meta[name="twitter:title"]'))
         .toHaveAttribute('content', SOCIAL_TITLE);
     await expect(page.locator('meta[name="twitter:description"]'))
         .toHaveAttribute('content', SOCIAL_DESCRIPTION);
+    await expect(page.locator('meta[name="twitter:image"]'))
+        .toHaveAttribute('content', SOCIAL_IMAGE_URL);
+    await expect(page.locator('meta[name="twitter:image:alt"]'))
+        .toHaveAttribute('content', SOCIAL_IMAGE_ALT);
 
-    await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
-    await expect(page.locator('meta[name="twitter:image"]')).toHaveCount(0);
+    const imageResponse = await page.request.get(`./${SOCIAL_IMAGE_PATH}`);
+    expect(imageResponse.ok()).toBeTruthy();
+    expect(imageResponse.headers()['content-type']).toContain('image/png');
+    const imageDimensions = await page.evaluate(async imagePath => {
+        const image = new Image();
+        image.src = `./${imagePath}`;
+        await image.decode();
+
+        return { width: image.naturalWidth, height: image.naturalHeight };
+    }, SOCIAL_IMAGE_PATH);
+    expect(imageDimensions).toEqual({ width: 1200, height: 630 });
 
     const structuredData = JSON.parse(
         await page.locator('script[type="application/ld+json"]').textContent()
@@ -88,7 +117,7 @@ async function expectCleanPage(monitor) {
     expect(monitor.failedSameOriginRequests, 'same-origin HTTP errors').toEqual([]);
 }
 
-test('social metadata is prepared for the approved preview image', async ({ page }) => {
+test('social metadata uses the approved preview image', async ({ page }) => {
     const monitor = monitorPage(page);
     await page.goto('./');
     await expectPreparedSocialMetadata(page);
