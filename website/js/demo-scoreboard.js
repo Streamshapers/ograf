@@ -12,6 +12,7 @@
   const btnStop  = document.getElementById('sb-stop');
   const statusEl = document.getElementById('sb-status');
   const aspectButtons = [...document.querySelectorAll('.demo-card--scoreboard .demo-aspect-btn')];
+  const aspectGroup = aspectButtons[0]?.closest('[role="radiogroup"]');
 
   const liveButtons = [btnNext, btnGHome, btnGAway, btnUpdate, btnStop];
   let isReady = false, isPlaying = false;
@@ -57,16 +58,42 @@
 
   // -- Aspect ratio switcher --
 
-  aspectButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      aspectButtons.forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      const ratio = btn.dataset.ratio;
-      currentRes = RESOLUTIONS[ratio];
-      player.style.setProperty('aspect-ratio', ratio.replace('/', ' / '));
-      player.dataset.ratio = ratio;
-      scaleIframe();
+  function setFormat(button, moveFocus = false) {
+    aspectButtons.forEach(candidate => {
+      const isSelected = candidate === button;
+      candidate.classList.toggle('is-active', isSelected);
+      candidate.setAttribute('aria-checked', String(isSelected));
+      candidate.tabIndex = isSelected ? 0 : -1;
     });
+    const ratio = button.dataset.ratio;
+    currentRes = RESOLUTIONS[ratio];
+    player.style.setProperty('aspect-ratio', ratio.replace('/', ' / '));
+    player.dataset.ratio = ratio;
+    scaleIframe();
+    if (moveFocus) button.focus();
+  }
+
+  aspectButtons.forEach(button => {
+    button.addEventListener('click', () => setFormat(button));
+  });
+
+  aspectGroup?.addEventListener('keydown', event => {
+    const currentIndex = aspectButtons.indexOf(document.activeElement);
+    if (currentIndex < 0) return;
+
+    let nextIndex = null;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = (currentIndex - 1 + aspectButtons.length) % aspectButtons.length;
+    }
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % aspectButtons.length;
+    }
+    if (event.key === 'Home') nextIndex = 0;
+    if (event.key === 'End') nextIndex = aspectButtons.length - 1;
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    setFormat(aspectButtons[nextIndex], true);
   });
 
   // -- Messages from the iframe --

@@ -191,14 +191,14 @@
   // -- Helpers ----------------------------------------------
   function cardHtml(t) {
     return `
-      <a class="htk-card" href="#demos" data-slug="${t.slug}" style="--htk-accent:${t.accent}">
+      <div class="htk-card" data-slug="${t.slug}" style="--htk-accent:${t.accent}">
         <div class="htk-card__head">
           <span class="htk-card__dot"></span>
           <span class="htk-card__tag">${t.label}</span>
           <span class="htk-card__type">graphic.mjs</span>
         </div>
         <div class="htk-card__frame">${t.html}</div>
-      </a>`;
+      </div>`;
   }
 
   // Each row holds COPIES copies of the deck. The keyframes translate by
@@ -249,7 +249,6 @@
     wrap.addEventListener('click', (e) => {
       const card = e.target.closest('.htk-card');
       if (!card) return;
-      e.preventDefault();
       const target = document.getElementById('demos');
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });

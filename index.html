@@ -46,10 +46,12 @@
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=9">
+    <link rel="stylesheet" href="website/css/style.css?v=10">
     <link rel="stylesheet" href="website/css/hero-ticker.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <!-- ---------------------------------------
      NAV
@@ -84,7 +86,7 @@
     </div>
 </header>
 
-<main>
+<main id="main-content" tabindex="-1">
 
     <!-- ---------------------------------------
          HERO BLOCK - hero + vendor ticker share one background
@@ -324,7 +326,8 @@
                         </label>
                     </div>
 
-                    <div class="stage__sync" id="stage-sync" data-state="loading">
+                    <div class="stage__sync" id="stage-sync" data-state="loading"
+                         role="status" aria-live="polite" aria-atomic="true">
                         <span class="stage__sync-dot" aria-hidden="true"></span>
                         <span class="stage__sync-copy">
                             <span class="stage__sync-status">Loading</span>
@@ -566,7 +569,8 @@
                 <h2 class="heading-section">OGraf vs. Proprietary.</h2>
             </div>
 
-            <div class="compare__table-wrap">
+            <div class="compare__table-wrap" tabindex="0" role="region"
+                 aria-label="Comparison of OGraf and proprietary systems">
                 <table class="compare__table">
                     <thead>
                     <tr>
@@ -578,38 +582,38 @@
                     <tbody>
                     <tr>
                         <td>Vendor portability</td>
-                        <td><i data-lucide="x" class="compare__icon compare__icon--no"></i></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="x" class="compare__icon compare__icon--no" aria-hidden="true"></i><span class="sr-only">No</span></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     <tr>
                         <td>Full web technologies (HTML/CSS/JS)</td>
                         <td><span class="compare__partial">Limited</span></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     <tr>
                         <td>Open source &amp; free to use</td>
-                        <td><i data-lucide="x" class="compare__icon compare__icon--no"></i></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="x" class="compare__icon compare__icon--no" aria-hidden="true"></i><span class="sr-only">No</span></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     <tr>
                         <td>No specialist skills are required</td>
-                        <td><i data-lucide="x" class="compare__icon compare__icon--no"></i></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="x" class="compare__icon compare__icon--no" aria-hidden="true"></i><span class="sr-only">No</span></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     <tr>
                         <td>Custom data integration</td>
                         <td><span class="compare__partial">Vendor API only</span></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     <tr>
                         <td>Free choice of a control system</td>
-                        <td><i data-lucide="x" class="compare__icon compare__icon--no"></i></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="x" class="compare__icon compare__icon--no" aria-hidden="true"></i><span class="sr-only">No</span></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     <tr>
                         <td>AI-friendly tooling</td>
-                        <td><i data-lucide="x" class="compare__icon compare__icon--no"></i></td>
-                        <td><i data-lucide="check" class="compare__icon compare__icon--yes"></i></td>
+                        <td><i data-lucide="x" class="compare__icon compare__icon--no" aria-hidden="true"></i><span class="sr-only">No</span></td>
+                        <td><i data-lucide="check" class="compare__icon compare__icon--yes" aria-hidden="true"></i><span class="sr-only">Yes</span></td>
                     </tr>
                     </tbody>
                 </table>
@@ -634,13 +638,14 @@
         </div><!-- /.container -->
 
         <!-- ---- Demo Carousel ---- -->
-        <div class="demo-carousel">
+        <div class="demo-carousel" role="region" aria-label="Interactive OGraf demos">
 
             <div class="demo-carousel__viewport">
                 <div class="demo-carousel__track">
 
                 <!-- Slide 1: Live Scoreboard -->
-                <div class="demo-carousel__slide">
+                <div class="demo-carousel__slide is-active" id="demo-slide-0" role="tabpanel"
+                     aria-labelledby="demo-tab-0" tabindex="0">
                     <div class="demo-card demo-card--scoreboard">
 
                         <div class="demo-card__header">
@@ -660,29 +665,38 @@
 
                             <div class="demo-aspect-bar">
                                 <span class="demo-aspect-bar__label">Format</span>
-                                <div class="demo-aspect-bar__options">
-                                    <button class="demo-aspect-btn is-active" type="button" data-ratio="16/9" title="Landscape 16:9">
+                                <div class="demo-aspect-bar__options" role="radiogroup"
+                                     aria-label="Live Scoreboard format">
+                                    <button class="demo-aspect-btn is-active" type="button" role="radio"
+                                            aria-checked="true" tabindex="0" data-ratio="16/9"
+                                            title="Landscape 16:9">
                                         <svg width="20" height="14" viewBox="0 0 20 14">
                                             <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
                                         <span>16:9</span>
                                     </button>
-                                    <button class="demo-aspect-btn" type="button" data-ratio="4/3" title="Classic 4:3">
+                                    <button class="demo-aspect-btn" type="button" role="radio"
+                                            aria-checked="false" tabindex="-1" data-ratio="4/3"
+                                            title="Classic 4:3">
                                         <svg width="16" height="14" viewBox="0 0 16 14">
                                             <rect x="0.5" y="0.5" width="15" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
                                         <span>4:3</span>
                                     </button>
-                                    <button class="demo-aspect-btn" type="button" data-ratio="1/1" title="Square 1:1">
+                                    <button class="demo-aspect-btn" type="button" role="radio"
+                                            aria-checked="false" tabindex="-1" data-ratio="1/1"
+                                            title="Square 1:1">
                                         <svg width="14" height="14" viewBox="0 0 14 14">
                                             <rect x="0.5" y="0.5" width="13" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
                                         <span>1:1</span>
                                     </button>
-                                    <button class="demo-aspect-btn" type="button" data-ratio="9/16" title="Portrait 9:16">
+                                    <button class="demo-aspect-btn" type="button" role="radio"
+                                            aria-checked="false" tabindex="-1" data-ratio="9/16"
+                                            title="Portrait 9:16">
                                         <svg width="10" height="16" viewBox="0 0 10 16">
                                             <rect x="0.5" y="0.5" width="9" height="15" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
@@ -700,6 +714,7 @@
                                             src="website/demos/scoreboard/index.html"
                                             title="OGraf Live Scoreboard Demo"
                                             sandbox="allow-scripts allow-same-origin"
+                                            tabindex="-1"
                                     ></iframe>
                                 </div>
                             </div>
@@ -733,7 +748,8 @@
                                 </div>
 
                                 <div class="demo-controls__status">
-                                    <span class="demo-status" id="sb-status" data-state="loading">Loading...</span>
+                                    <span class="demo-status" id="sb-status" data-state="loading"
+                                          role="status" aria-live="polite" aria-atomic="true">Loading...</span>
                                 </div>
                             </div>
 
@@ -742,7 +758,8 @@
                 </div><!-- /.demo-carousel__slide -->
 
                 <!-- Slide 2: News Lower Third -->
-                <div class="demo-carousel__slide">
+                <div class="demo-carousel__slide" id="demo-slide-1" role="tabpanel"
+                     aria-labelledby="demo-tab-1" aria-hidden="true" inert tabindex="0">
                     <div class="demo-card" data-demo-controller="news-lower-third">
 
                         <div class="demo-card__header">
@@ -762,14 +779,13 @@
                             <div class="demo-aspect-bar">
                                 <span class="demo-aspect-bar__label">Format</span>
                                 <div class="demo-aspect-bar__options">
-                                    <button class="demo-aspect-btn is-active" type="button" data-ratio="16/9" title="Landscape 16:9"
-                                            disabled>
+                                    <span class="demo-aspect-fixed">
                                         <svg width="20" height="14" viewBox="0 0 20 14">
                                             <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
-                                        <span>16:9</span>
-                                    </button>
+                                        <span>16:9 fixed</span>
+                                    </span>
                                 </div>
                             </div>
 
@@ -781,6 +797,7 @@
                                             src="website/demos/lower-third/index.html"
                                             title="OGraf News Lower Third Demo"
                                             sandbox="allow-scripts allow-same-origin"
+                                            tabindex="-1"
                                     ></iframe>
                                 </div>
                             </div>
@@ -815,7 +832,8 @@
                                 </div>
 
                                 <div class="demo-controls__status">
-                                    <span class="demo-status" data-demo-status data-state="loading">Loading...</span>
+                                    <span class="demo-status" data-demo-status data-state="loading"
+                                          role="status" aria-live="polite" aria-atomic="true">Loading...</span>
                                 </div>
                             </div>
 
@@ -824,7 +842,8 @@
                 </div><!-- /.demo-carousel__slide -->
 
                 <!-- Slide 3: Responsive Lower Third -->
-                <div class="demo-carousel__slide">
+                <div class="demo-carousel__slide" id="demo-slide-2" role="tabpanel"
+                     aria-labelledby="demo-tab-2" aria-hidden="true" inert tabindex="0">
                     <div class="demo-card" data-demo-controller="responsive-lower-third">
 
                         <div class="demo-card__header">
@@ -844,8 +863,10 @@
 
                             <div class="demo-aspect-bar">
                                 <span class="demo-aspect-bar__label">Format</span>
-                                <div class="demo-aspect-bar__options">
-                                    <button class="demo-aspect-btn is-active" type="button" data-ratio="16/9"
+                                <div class="demo-aspect-bar__options" role="radiogroup"
+                                     aria-label="Responsive Lower Third format">
+                                    <button class="demo-aspect-btn is-active" type="button" role="radio"
+                                            aria-checked="true" tabindex="0" data-ratio="16/9"
                                             title="Landscape 16:9">
                                         <svg width="20" height="14" viewBox="0 0 20 14">
                                             <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
@@ -853,21 +874,27 @@
                                         </svg>
                                         <span>16:9</span>
                                     </button>
-                                    <button class="demo-aspect-btn" type="button" data-ratio="4/3" title="Classic 4:3">
+                                    <button class="demo-aspect-btn" type="button" role="radio"
+                                            aria-checked="false" tabindex="-1" data-ratio="4/3"
+                                            title="Classic 4:3">
                                         <svg width="16" height="14" viewBox="0 0 16 14">
                                             <rect x="0.5" y="0.5" width="15" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
                                         <span>4:3</span>
                                     </button>
-                                    <button class="demo-aspect-btn" type="button" data-ratio="1/1" title="Square 1:1">
+                                    <button class="demo-aspect-btn" type="button" role="radio"
+                                            aria-checked="false" tabindex="-1" data-ratio="1/1"
+                                            title="Square 1:1">
                                         <svg width="14" height="14" viewBox="0 0 14 14">
                                             <rect x="0.5" y="0.5" width="13" height="13" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
                                         </svg>
                                         <span>1:1</span>
                                     </button>
-                                    <button class="demo-aspect-btn" type="button" data-ratio="9/16" title="Portrait 9:16">
+                                    <button class="demo-aspect-btn" type="button" role="radio"
+                                            aria-checked="false" tabindex="-1" data-ratio="9/16"
+                                            title="Portrait 9:16">
                                         <svg width="10" height="16" viewBox="0 0 10 16">
                                             <rect x="0.5" y="0.5" width="9" height="15" rx="2" fill="none"
                                                   stroke="currentColor" stroke-width="1"/>
@@ -885,6 +912,7 @@
                                             src="website/demos/lower-third-stage/index.html?v=9"
                                             title="OGraf Responsive Lower Third Demo"
                                             sandbox="allow-scripts allow-same-origin"
+                                            tabindex="-1"
                                     ></iframe>
                                 </div>
                             </div>
@@ -919,7 +947,8 @@
                                 </div>
 
                                 <div class="demo-controls__status">
-                                    <span class="demo-status" data-demo-status data-state="loading">Loading...</span>
+                                    <span class="demo-status" data-demo-status data-state="loading"
+                                          role="status" aria-live="polite" aria-atomic="true">Loading...</span>
                                 </div>
                             </div>
 
@@ -938,11 +967,14 @@
             </button>
 
             <div class="demo-carousel__dots" role="tablist" aria-label="Demo navigation">
-                <button class="demo-carousel__dot is-active" type="button" role="tab" aria-selected="true" data-index="0"
+                <button class="demo-carousel__dot is-active" id="demo-tab-0" type="button" role="tab"
+                        aria-selected="true" aria-controls="demo-slide-0" tabindex="0" data-index="0"
                         aria-label="Live Scoreboard"></button>
-                <button class="demo-carousel__dot" type="button" role="tab" aria-selected="false" data-index="1"
+                <button class="demo-carousel__dot" id="demo-tab-1" type="button" role="tab"
+                        aria-selected="false" aria-controls="demo-slide-1" tabindex="-1" data-index="1"
                         aria-label="News Lower Third"></button>
-                <button class="demo-carousel__dot" type="button" role="tab" aria-selected="false" data-index="2"
+                <button class="demo-carousel__dot" id="demo-tab-2" type="button" role="tab"
+                        aria-selected="false" aria-controls="demo-slide-2" tabindex="-1" data-index="2"
                         aria-label="Responsive Lower Third"></button>
             </div>
 
@@ -1128,15 +1160,21 @@
                             <span class="code-block__dot code-block__dot--red"></span>
                             <span class="code-block__dot code-block__dot--yellow"></span>
                             <span class="code-block__dot code-block__dot--green"></span>
-                            <div class="code-block__tabs">
-                                <button class="code-block__tab is-active" type="button" data-tab="manifest">graphic.ograf.json
+                            <div class="code-block__tabs" role="tablist" aria-label="OGraf code examples">
+                                <button class="code-block__tab is-active" id="code-tab-manifest" type="button"
+                                        role="tab" aria-selected="true" aria-controls="code-panel-manifest"
+                                        tabindex="0" data-tab="manifest">graphic.ograf.json
                                 </button>
-                                <button class="code-block__tab" type="button" data-tab="module">graphic.mjs</button>
+                                <button class="code-block__tab" id="code-tab-module" type="button"
+                                        role="tab" aria-selected="false" aria-controls="code-panel-module"
+                                        tabindex="-1" data-tab="module">graphic.mjs</button>
                             </div>
                         </div>
 
                         <!-- Panel: manifest -->
-                        <pre class="code-block__pre code-block__panel is-active" data-panel="manifest"><code
+                        <pre class="code-block__pre code-block__panel is-active" id="code-panel-manifest"
+                             role="tabpanel" aria-labelledby="code-tab-manifest" tabindex="0"
+                             aria-label="graphic.ograf.json example" data-panel="manifest"><code
                                 class="code-block__code">{
   <span class="tok-key">"$schema"</span>: <span class="tok-string">"https://ograf.ebu.io/v1/specification/json-schemas/graphics/schema.json"</span>,
   <span class="tok-key">"id"</span>:      <span class="tok-string">"my-lower-third"</span>,
@@ -1159,7 +1197,9 @@
 }</code></pre>
 
                         <!-- Panel: module -->
-                        <pre class="code-block__pre code-block__panel" data-panel="module"><code
+                        <pre class="code-block__pre code-block__panel" id="code-panel-module"
+                             role="tabpanel" aria-labelledby="code-tab-module" tabindex="0" hidden
+                             aria-label="graphic.mjs example" data-panel="module"><code
                                 class="code-block__code"><span class="tok-keyword">export default class</span> <span
                                 class="tok-fn">LowerThird</span> <span class="tok-keyword">extends</span> <span
                                 class="tok-var">HTMLElement</span> {
@@ -1504,18 +1544,18 @@
 <script src="website/assets/vendor/gsap/gsap.min.js"></script>
 <script src="website/assets/vendor/gsap/ScrollTrigger.min.js"></script>
 
-<script src="website/js/site.js"></script>
+<script src="website/js/site.js?v=2"></script>
 
 <script src="website/js/animations.js?v=6"></script>
 
 <!-- Demo control panel -->
-<script src="website/js/demo-lower-third.js?v=9"></script>
+<script src="website/js/demo-lower-third.js?v=10"></script>
 
 <!-- Demo 2: Scoreboard control panel -->
-<script src="website/js/demo-scoreboard.js?v=9"></script>
+<script src="website/js/demo-scoreboard.js?v=10"></script>
 
 <!-- Demo carousel -->
-<script src="website/js/demo-carousel.js?v=8"></script>
+<script src="website/js/demo-carousel.js?v=9"></script>
 
 <!-- Multi-device stage demo -->
 <!-- Register the OGraf <ograf-lower-third> custom element on this page.
@@ -1534,16 +1574,7 @@
 <script src="website/js/logo-grid.js"></script>
 
 <!-- Code block tab switcher -->
-<script>
-    document.querySelectorAll('.code-block__tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const block = tab.closest('.code-block');
-            const target = tab.dataset.tab;
-            block.querySelectorAll('.code-block__tab').forEach(t => t.classList.toggle('is-active', t === tab));
-            block.querySelectorAll('.code-block__panel').forEach(p => p.classList.toggle('is-active', p.dataset.panel === target));
-        });
-    });
-</script>
+<script src="website/js/code-tabs.js?v=1"></script>
 
 <script>
     const lucideIcons = window['lucide'];
@@ -1551,7 +1582,7 @@
         lucideIcons.createIcons();
     }
 </script>
-<script src="website/js/video-embed.js"></script>
-<script src="website/js/hero-ticker.js"></script>
+<script src="website/js/video-embed.js?v=2"></script>
+<script src="website/js/hero-ticker.js?v=2"></script>
 </body>
 </html>

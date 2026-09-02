@@ -17,6 +17,7 @@
         const btnStop = controller.querySelector('[data-demo-action="stop"]');
         const statusEl = controller.querySelector('[data-demo-status]');
         const aspectButtons = [...controller.querySelectorAll('.demo-aspect-btn')];
+        const aspectGroup = aspectButtons[0]?.closest('[role="radiogroup"]');
         const fields = Object.fromEntries(
             [...controller.querySelectorAll('[data-demo-field]')]
                 .map(field => [field.dataset.demoField, field])
@@ -56,14 +57,20 @@
             });
         }
 
-        function setFormat(ratio) {
+        function setFormat(ratio, moveFocus = false) {
             currentFormat = FORMATS[ratio];
             player.dataset.ratio = ratio;
             aspectButtons.forEach(button => {
-                button.classList.toggle('is-active', button.dataset.ratio === ratio);
+                const isSelected = button.dataset.ratio === ratio;
+                button.classList.toggle('is-active', isSelected);
+                button.setAttribute('aria-checked', String(isSelected));
+                button.tabIndex = isSelected ? 0 : -1;
             });
             scaleIframe();
             sendCurrentFormat();
+            if (moveFocus) {
+                aspectButtons.find(button => button.dataset.ratio === ratio)?.focus();
+            }
         }
 
         iframe.addEventListener('load', () => {
@@ -71,9 +78,25 @@
             sendCurrentFormat();
         });
         aspectButtons.forEach(button => {
-            if (!button.disabled) {
-                button.addEventListener('click', () => setFormat(button.dataset.ratio));
+            button.addEventListener('click', () => setFormat(button.dataset.ratio));
+        });
+        aspectGroup?.addEventListener('keydown', event => {
+            const currentIndex = aspectButtons.indexOf(document.activeElement);
+            if (currentIndex < 0) return;
+
+            let nextIndex = null;
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                nextIndex = (currentIndex - 1 + aspectButtons.length) % aspectButtons.length;
             }
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                nextIndex = (currentIndex + 1) % aspectButtons.length;
+            }
+            if (event.key === 'Home') nextIndex = 0;
+            if (event.key === 'End') nextIndex = aspectButtons.length - 1;
+            if (nextIndex === null) return;
+
+            event.preventDefault();
+            setFormat(aspectButtons[nextIndex].dataset.ratio, true);
         });
         scaleIframe();
         window.addEventListener('resize', scaleIframe);

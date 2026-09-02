@@ -15,7 +15,9 @@
         iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
         iframe.allowFullscreen = true;
         iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.tabIndex = 0;
 
         embed.replaceChildren(iframe);
+        iframe.focus();
     }, { once: true });
 })();
