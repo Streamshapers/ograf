@@ -81,12 +81,16 @@ test('stage, scoreboard, and lower-third controls run', async ({ page }) => {
     await expect(page.locator('#sb-status')).toHaveAttribute('data-state', 'ready');
 
     await page.locator('.demo-carousel__btn--next').click();
-    await expect(page.locator('#btn-play')).toBeEnabled();
-    await page.locator('#btn-play').click({ force: true });
+    await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveClass(/is-active/);
+    const lowerThirdPlayButton = page.locator('#btn-play');
+    await lowerThirdPlayButton.scrollIntoViewIfNeeded();
+    await expect(lowerThirdPlayButton).toBeVisible();
+    await expect(lowerThirdPlayButton).toBeEnabled();
+    await lowerThirdPlayButton.click();
     await expect(page.locator('#demo-status')).toHaveAttribute('data-state', 'playing');
     await page.locator('#ctrl-name').fill('Updated Presenter');
-    await page.locator('#btn-update').click({ force: true });
-    await page.locator('#btn-stop').click({ force: true });
+    await page.locator('#btn-update').click();
+    await page.locator('#btn-stop').click();
     await expect(page.locator('#demo-status')).toHaveAttribute('data-state', 'ready');
 
     await expectCleanPage(monitor);
