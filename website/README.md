@@ -39,7 +39,7 @@ The landing page and all standalone demo documents intentionally declare `noinde
 
 Complete these tasks on the integration branch before requesting final publication approval:
 
-1. [ ] Update every Server API reference to `v1 stable, published 2026-08-13` and
+1. [x] Update every Server API reference to `v1 stable, published 2026-08-13` and
        remove the obsolete `Mid-2026` roadmap item.
 2. [ ] Remove all placeholder testimonials.
 3. [ ] Neutralize unverified marketing claims such as `adopted`, `trusted by`, and

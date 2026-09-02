@@ -282,14 +282,17 @@ gsap.from('.whatis__item--isnot', {
 
 
 /* -----------------------------------------
-   7. ROADMAP
+   7. PROJECT STATUS
 ----------------------------------------- */
 
-const roadmapTl = gsap.timeline(onScroll('.section-roadmap'));
-roadmapTl
-  .from('.roadmap__heading',    { opacity: 0, y: 30, duration: 0.6 })
-  .from('.timeline__fill',      { scaleX: 0, duration: 1, transformOrigin: 'left center', ease: 'power2.inOut' }, '-=0.2')
-  .from('.timeline__milestone', { opacity: 0, y: 32, duration: 0.6, stagger: 0.18, ease: 'power3.out' }, '-=0.6');
+const statusTl = gsap.timeline(onScroll('.section-status'));
+statusTl
+  .from('.status__eyebrow', { opacity: 0, y: 20, duration: 0.5 })
+  .from('.status__heading', { opacity: 0, y: 30, duration: 0.6 }, '-=0.2')
+  .from('.status__intro', { opacity: 0, y: 20, duration: 0.5 }, '-=0.2')
+  .from('.status-card', {
+    opacity: 0, y: 28, duration: 0.6, stagger: 0.12, ease: 'power3.out',
+  }, '-=0.3');
 
 
 /* -----------------------------------------

@@ -639,13 +639,6 @@ a:hover {
   height: 12px;
 }
 
-/* Timeline nodes - 40px circle container */
-.timeline__node-icon svg {
-  width: 18px;
-  height: 18px;
-  display: block;
-}
-
 /* GitHub repo list */
 .github__list-icon svg {
   width: 1em;
@@ -845,7 +838,7 @@ a:hover {
    Status chip - flat, calm, reads as a status indicator first
    and a navigation affordance second. A coloured pulsing dot
    signals the spec's lifecycle stage; the small label tag keeps
-   the version number scannable. Clicking jumps to #roadmap.
+   the version number scannable. Clicking jumps to #status.
    The hover state is intentionally subtle (slight background
    brighten) so the chip doesn't read as a primary button.
 ---------------------------------------------------------------------------------------------------------------------- */
@@ -883,7 +876,6 @@ a:hover {
   outline-offset: 2px;
 }
 
-.hero__badge--draft     { --badge-accent: #f59e0b; }   /* amber */
 .hero__badge--production { --badge-accent: #22c55e; }  /* green */
 
 /* Status dot with subtle pulse. */
@@ -3581,218 +3573,133 @@ a:hover {
 }
 
 /* ----------------------------------------------------------------------------------
-   ROADMAP / TIMELINE SECTION
+   PROJECT STATUS SECTION
 ---------------------------------------------------------------------------------- */
 
-.section-roadmap {
+.section-status {
   padding-block: var(--space-24);
   background-color: var(--color-bg-dark);
   color: var(--color-text-on-dark);
-  /* Anchor-scroll offset so #roadmap links from the hero badges
+  /* Anchor-scroll offset so #status links from the hero badges
      land below the fixed header rather than under it. 64px = header
      height (.site-header__inner) + a small breathing margin. */
   scroll-margin-top: 80px;
 }
 
-.roadmap__eyebrow {
+.status__eyebrow {
   color: var(--color-brand-periwinkle);
 }
 
-.roadmap__heading {
+.status__heading {
   color: #ffffff;
   margin-top: var(--space-4);
-  margin-bottom: var(--space-16);
 }
 
-/* Timeline layout */
-.timeline {
-  position: relative;
+.status__intro {
+  max-width: 66ch;
+  margin-top: var(--space-5);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
 }
 
-.timeline__list {
+.status-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-8);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-12);
 }
 
-/* Horizontal connecting line (behind nodes) */
-.timeline__track {
-  position: absolute;
-  top: 20px; /* aligns with node center */
-  left: calc(100% / 6);    /* start at center of first column */
-  right: calc(100% / 6);   /* end at center of last column */
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.1);
-  z-index: 0;
-}
-
-/* Filled portion: covers first two milestones (done + active) */
-.timeline__fill {
-  height: 100%;
-  width: 50%;
-  background: linear-gradient(to right, #059669, var(--color-brand-blue));
-}
-
-/* Each milestone */
-.timeline__milestone {
-  position: relative;
-  z-index: 1;
-}
-
-.timeline__article {
+.status-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-5);
+  min-height: 100%;
+  padding: var(--space-8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.04);
 }
 
-/* Node circle */
-.timeline__node {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
+.status-card__meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  font-size: var(--text-sm);
-  font-weight: var(--fw-bold);
-  flex-shrink: 0;
-  border: 2px solid transparent;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
-.timeline__milestone--done .timeline__node {
-  background-color: #059669;
-  color: #ffffff;
-  border-color: #059669;
-}
-
-.timeline__milestone--active .timeline__node {
-  background-color: var(--color-brand-blue);
-  color: #ffffff;
-  border-color: var(--color-brand-blue);
-  box-shadow: 0 0 0 4px rgba(35, 82, 195, 0.25);
-}
-
-.timeline__milestone--upcoming .timeline__node {
-  background-color: transparent;
-  color: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Content */
-.timeline__content {
-  display: flex;
-  flex-direction: column;
+.status-card__badge {
+  display: inline-flex;
+  align-items: center;
   gap: var(--space-2);
-}
-
-/* Status tags */
-.timeline__tag {
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-full);
+  background: rgba(5, 150, 105, 0.2);
+  color: #34D399;
   font-family: var(--font-mono), serif;
   font-size: var(--text-xs);
   font-weight: var(--fw-bold);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  display: inline-block;
-  padding: 2px var(--space-3);
-  border-radius: var(--radius-full);
-  align-self: center;
 }
 
-.timeline__tag--done {
-  background-color: rgba(5, 150, 105, 0.2);
-  color: #34D399;
+.status-card__badge svg {
+  width: 14px;
+  height: 14px;
 }
 
-.timeline__tag--active {
-  background-color: rgba(35, 82, 195, 0.25);
-  color: var(--color-brand-periwinkle);
-}
-
-.timeline__tag--upcoming {
-  background-color: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.35);
-}
-
-.timeline__title {
-  font-size: var(--text-lg);
-  font-weight: var(--fw-bold);
-  color: #ffffff;
-  letter-spacing: var(--tracking-tight);
-}
-
-.timeline__milestone--upcoming .timeline__title {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.timeline__version {
+.status-card__date {
+  color: rgba(255, 255, 255, 0.45);
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.35);
   letter-spacing: var(--tracking-wide);
 }
 
-.timeline__desc {
-  font-size: var(--text-sm);
-  line-height: var(--leading-relaxed);
-  color: rgba(255, 255, 255, 0.45);
-  max-width: 26ch;
-  margin-inline: auto;
+.status-card__title {
+  margin-top: var(--space-8);
+  color: #ffffff;
+  font-size: var(--text-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-tight);
 }
 
-/* Responsive - vertical timeline on mobile */
+.status-card__desc {
+  margin-top: var(--space-3);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.status-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: auto;
+  padding-top: var(--space-8);
+}
+
+.status-card__links a {
+  color: var(--color-brand-periwinkle);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+}
+
+.status-card__links a:hover {
+  color: #ffffff;
+}
+
+.status-card__links a:focus-visible {
+  outline: 2px solid var(--color-brand-periwinkle);
+  outline-offset: 4px;
+}
+
 @media (max-width: 720px) {
-  .timeline__list {
+  .status-grid {
     grid-template-columns: 1fr;
-    gap: 0;
   }
 
-  .timeline__track {
-    display: none;
-  }
-
-  .timeline__milestone {
-    padding-bottom: var(--space-10);
-    padding-left: var(--space-2);
-    position: relative;
-  }
-
-  .timeline__article {
-    flex-direction: row;
-    text-align: left;
-    align-items: flex-start;
-    gap: var(--space-5);
-  }
-
-  /* Vertical line on mobile */
-  .timeline__milestone:not(:last-child)::before {
-    content: '';
-    position: absolute;
-    left: 19px; /* center of the 40px node */
-    top: 44px;
-    bottom: 0;
-    width: 2px;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .timeline__milestone--done::before {
-    background-color: rgba(5, 150, 105, 0.4) !important;
-  }
-
-  .timeline__content {
-    align-items: flex-start;
-  }
-
-  .timeline__tag {
-    align-self: flex-start;
-  }
-
-  .timeline__desc {
-    max-width: none;
-    margin-inline: 0;
+  .status-card {
+    padding: var(--space-6);
   }
 }
 

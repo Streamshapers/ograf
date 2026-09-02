@@ -24,6 +24,13 @@ async function openLandingPage(page) {
     await expect(page.locator('h1')).toBeVisible();
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
     await expect(page.locator('.logo-grid__item')).not.toHaveCount(0);
+    await expect(page.locator('.hero__badge')).toHaveCount(2);
+    await expect(page.locator('.hero__badge').nth(1)).toContainText('v1');
+    await expect(page.locator('.hero__badge').nth(1)).toContainText('Server API · Stable');
+    await expect(page.locator('.status-card')).toHaveCount(2);
+    await expect(page.locator('.status-card').nth(1)).toContainText('Published 2026-08-13');
+    await expect(page.locator('body')).not.toContainText('Mid-2026');
+    await expect(page.locator('body')).not.toContainText('Draft – Published');
     return monitor;
 }
 

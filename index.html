@@ -122,17 +122,17 @@
                 </div>
 
                 <div class="hero__badges">
-                    <a class="hero__badge hero__badge--production" href="#roadmap"
-                       aria-label="OGraf Graphics Spec v1 - Production. Jump to roadmap.">
+                    <a class="hero__badge hero__badge--production" href="#status"
+                       aria-label="OGraf Graphics Specification v1, stable, published 2025-09-17. Jump to project status.">
                         <span class="hero__badge-dot" aria-hidden="true"></span>
                         <span class="hero__badge-label">v1</span>
-                        <span class="hero__badge-text">Graphics Spec &middot; Production</span>
+                        <span class="hero__badge-text">Graphics Specification &middot; Stable</span>
                     </a>
-                    <a class="hero__badge hero__badge--draft" href="#roadmap"
-                       aria-label="OGraf Server API - Draft, in active use. Jump to roadmap.">
+                    <a class="hero__badge hero__badge--production" href="#status"
+                       aria-label="OGraf Server API v1, stable, published 2026-08-13. Jump to project status.">
                         <span class="hero__badge-dot" aria-hidden="true"></span>
-                        <span class="hero__badge-label">Draft</span>
-                        <span class="hero__badge-text">Server API &middot; In Active Use</span>
+                        <span class="hero__badge-label">v1</span>
+                        <span class="hero__badge-text">Server API &middot; Stable</span>
                     </a>
                 </div>
 
@@ -1138,69 +1138,49 @@
     </section>
 
     <!-- ---------------------------------------
-         ROADMAP / TIMELINE
+         PROJECT STATUS
     --------------------------------------- -->
-    <section class="section-roadmap" id="roadmap">
+    <section class="section-status" id="status">
         <div class="container">
 
-            <div class="roadmap__header">
-                <p class="eyebrow roadmap__eyebrow">Roadmap</p>
-                <h2 class="heading-section roadmap__heading">Where OGraf stands today.</h2>
+            <div class="status__header">
+                <p class="eyebrow status__eyebrow">Project Status</p>
+                <h2 class="heading-section status__heading">OGraf v1 is stable.</h2>
+                <p class="status__intro">Version 1 includes the Graphics Specification and the Server API. Both are
+                    published, stable, and maintained with backwards-compatible or optional changes.</p>
             </div>
 
-            <div class="timeline">
+            <div class="status-grid">
+                <article class="status-card">
+                    <div class="status-card__meta">
+                        <span class="status-card__badge"><i data-lucide="circle-check" aria-hidden="true"></i>
+                            Stable</span>
+                        <span class="status-card__date mono">Published 2025-09-17</span>
+                    </div>
+                    <h3 class="status-card__title">OGraf Graphics Specification</h3>
+                    <p class="status-card__desc">The stable Version 1 specification for HTML-based graphics.</p>
+                    <div class="status-card__links">
+                        <a href="https://ograf.ebu.io/v1/specification/docs/Specification.html"
+                           target="_blank" rel="noopener">Read the specification</a>
+                    </div>
+                </article>
 
-                <div class="timeline__track" aria-hidden="true">
-                    <div class="timeline__fill"></div>
-                </div>
-
-                <ol class="timeline__list">
-                    <li class="timeline__milestone timeline__milestone--done">
-                        <article class="timeline__article">
-                            <div class="timeline__node" aria-hidden="true">
-                                <span class="timeline__node-icon"><i data-lucide="check"></i></span>
-                            </div>
-                            <div class="timeline__content">
-                                <p class="timeline__tag timeline__tag--done">Production-ready</p>
-                                <h3 class="timeline__title">OGraf Graphics Specification</h3>
-                                <p class="timeline__version mono">v1 – Stable</p>
-                                <p class="timeline__desc">The core standard for HTML graphics in broadcast. Fully specified,
-                                    publicly available, in active industry use.</p>
-                            </div>
-                        </article>
-                    </li>
-
-                    <li class="timeline__milestone timeline__milestone--active">
-                        <article class="timeline__article">
-                            <div class="timeline__node" aria-hidden="true">
-                                <span class="timeline__node-icon"><i data-lucide="circle-dot"></i></span>
-                            </div>
-                            <div class="timeline__content">
-                                <p class="timeline__tag timeline__tag--active">In active use</p>
-                                <h3 class="timeline__title">OGraf Control API</h3>
-                                <p class="timeline__version mono">Draft – Published</p>
-                                <p class="timeline__desc">The API layer connecting control systems to renderers. Draft
-                                    published, already used in production by early adopters.</p>
-                            </div>
-                        </article>
-                    </li>
-
-                    <li class="timeline__milestone timeline__milestone--upcoming">
-                        <article class="timeline__article">
-                            <div class="timeline__node" aria-hidden="true">
-                                <span class="timeline__node-icon"><i data-lucide="circle"></i></span>
-                            </div>
-                            <div class="timeline__content">
-                                <p class="timeline__tag timeline__tag--upcoming">Upcoming</p>
-                                <h3 class="timeline__title">OGraf Control API</h3>
-                                <p class="timeline__version mono">v1 - Mid-2026</p>
-                                <p class="timeline__desc">Finalized v1 of the Control API. Locking down the standard for
-                                    long-term stability and broad vendor adoption.</p>
-                            </div>
-                        </article>
-                    </li>
-                </ol>
-
+                <article class="status-card">
+                    <div class="status-card__meta">
+                        <span class="status-card__badge"><i data-lucide="circle-check" aria-hidden="true"></i>
+                            Stable</span>
+                        <span class="status-card__date mono">Published 2026-08-13</span>
+                    </div>
+                    <h3 class="status-card__title">OGraf Server API</h3>
+                    <p class="status-card__desc">The stable Version 1 REST API between OGraf controllers and
+                        renderers.</p>
+                    <div class="status-card__links">
+                        <a href="https://ograf.ebu.io/v1/specification/docs/Specification_Server_API.html"
+                           target="_blank" rel="noopener">Read the documentation</a>
+                        <a href="https://ograf.ebu.io/v1/specification/open-api/docs/"
+                           target="_blank" rel="noopener">Explore OpenAPI</a>
+                    </div>
+                </article>
             </div>
 
         </div>
