@@ -29,6 +29,13 @@ const DEMO_PACKAGES = [
             { source: 'demos/lower-third/graphic.mjs', archive: 'graphic.mjs' },
             { source: 'demos/lower-third/graphic.ograf.json', archive: 'graphic.ograf.json' }
         ]
+    },
+    {
+        output: 'demos/lower-third-stage/ograf-demo-responsive-lower-third.zip',
+        files: [
+            { source: 'demos/lower-third-stage/graphic.mjs', archive: 'graphic.mjs' },
+            { source: 'demos/lower-third-stage/graphic.ograf.json', archive: 'graphic.ograf.json' }
+        ]
     }
 ];
 

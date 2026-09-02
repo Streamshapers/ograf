@@ -1,7 +1,7 @@
 {
   "$schema": "https://ograf.ebu.io/v1/specification/json-schemas/graphics/schema.json",
-  "id": "ograf-demo-lower-third",
-  "name": "News Lower Third",
+  "id": "ograf-demo-responsive-lower-third",
+  "name": "Responsive Lower Third",
   "main": "graphic.mjs",
   "supportsRealTime": true,
   "supportsNonRealTime": false,
