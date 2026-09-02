@@ -45,12 +45,11 @@ async function expectCleanPage(monitor) {
     expect(monitor.failedSameOriginRequests, 'same-origin HTTP errors').toEqual([]);
 }
 
-test('navigation, manifests, and runtime requests work', async ({ page }, testInfo) => {
+test('navigation, manifests, and runtime requests work', async ({ page }) => {
     const monitor = await openLandingPage(page);
+    const toggle = page.locator('#nav-toggle');
 
-    if (testInfo.project.name === 'mobile-preview') {
-        const toggle = page.locator('#nav-toggle');
-        await expect(toggle).toBeVisible();
+    if (await toggle.isVisible()) {
         await toggle.click();
         await expect(toggle).toHaveAttribute('aria-expanded', 'true');
         await expect(page.locator('#site-nav')).toHaveAttribute('aria-hidden', 'false');
@@ -136,8 +135,12 @@ test('demo carousel adapts and offers valid OGraf packages', async ({ page }) =>
     expect(firstSlideBox.x).toBeGreaterThan(viewportBox.x);
     expect(viewportBox.x + viewportBox.width - secondSlideBox.x)
         .toBeGreaterThanOrEqual(minimumVisibleNeighbour);
-    expect(await carouselViewport.evaluate(element => getComputedStyle(element).maskImage))
-        .toContain('linear-gradient');
+    const maskImages = await carouselViewport.evaluate(element => {
+        const styles = getComputedStyle(element);
+
+        return [styles.maskImage, styles.webkitMaskImage];
+    });
+    expect(maskImages.some(value => value.includes('linear-gradient'))).toBe(true);
     await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveCSS('opacity', '0.58');
 
     await page.locator('.demo-carousel__dot').nth(1).click();

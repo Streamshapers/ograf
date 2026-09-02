@@ -45,6 +45,20 @@ export default defineConfig({
                 viewport: { width: 820, height: 1180 },
                 baseURL: `http://127.0.0.1:${PORT}/ograf`
             }
+        },
+        {
+            name: 'desktop-firefox-root',
+            use: {
+                ...devices['Desktop Firefox'],
+                baseURL: `http://127.0.0.1:${PORT}`
+            }
+        },
+        {
+            name: 'mobile-webkit-preview',
+            use: {
+                ...devices['iPhone 13'],
+                baseURL: `http://127.0.0.1:${PORT}/ograf`
+            }
         }
     ]
 });

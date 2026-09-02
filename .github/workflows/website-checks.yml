@@ -45,8 +45,8 @@ jobs:
           destination: ./_site
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Playwright browser
-        run: npx --prefix website/_tooling playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: npx --prefix website/_tooling playwright install --with-deps chromium firefox webkit
 
       - name: Test generated site at root and preview paths
         run: npm --prefix website/_tooling test
