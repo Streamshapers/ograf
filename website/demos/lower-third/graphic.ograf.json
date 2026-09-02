@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ograf.ebu.io/v1/specification/json-schemas/graphics/schema.json",
+  "id": "ograf-demo-lower-third",
+  "name": "News Lower Third",
+  "main": "graphic.mjs",
+  "supportsRealTime": true,
+  "supportsNonRealTime": false,
+  "stepCount": 1,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name":    { "type": "string", "default": "Anders Berg" },
+      "title":   { "type": "string", "default": "Senior Correspondent" },
+      "channel": { "type": "string", "default": "OGraf News" }
+    }
+  }
+}

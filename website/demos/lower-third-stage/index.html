@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex,nofollow">
+  <title>OGraf Demo — News Lower Third</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background-color: #0a0e1a;
+      position: relative;
+    }
+
+    /* Background video — autoplay, muted, looped, plays inline. */
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Dark overlay to keep text readable, above video, below graphic. */
+    body::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    ograf-lower-third {
+      display: block;
+      width: 1920px;
+      height: 1080px;
+      position: relative;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <!-- WebM (VP9) — preferred by modern Chrome/Firefox/Edge. -->
+    <source src="../../assets/video/Background-Interview-Video-720.webm" type="video/webm">
+    <!-- MP4 (H.264) — fallback for Safari & older WebViews. -->
+    <source src="../../assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
+  </video>
+
+  <ograf-lower-third id="graphic"></ograf-lower-third>
+
+  <script type="module">
+    /* graphic.mjs self-registers <ograf-lower-third> on import — we
+       just need the side-effect, no need to grab the class. */
+    import './graphic.mjs';
+
+    const el = document.getElementById('graphic');
+    const messageOrigin = window.location.origin;
+
+    const notifyParent = message => parent.postMessage(message, messageOrigin);
+
+    // Read viewing-context hints from the URL so the LT can adapt its
+    // layout when this demo is embedded inside a non-16:9 viewport
+    // (e.g. the phone slot in the multi-device stage section).
+    const params = new URLSearchParams(location.search);
+    const layout = params.get('layout');
+    const focusX = parseFloat(params.get('focusX'));
+    if (layout) el.setAttribute('layout', layout);
+    if (Number.isFinite(focusX)) el.style.setProperty('--focus-x', focusX);
+
+    // Listen for control messages from the parent page
+    window.addEventListener('message', async ({ data, origin, source }) => {
+      if (source !== parent || origin !== messageOrigin) return;
+      const { action, data: payload } = data ?? {};
+      if (!action) return;
+
+      switch (action) {
+        case 'ping':
+          notifyParent({ event: 'ready' });
+          break;
+
+        case 'play':
+          // Apply any data update silently before playing
+          if (payload && Object.keys(payload).length) {
+            await el.updateAction(payload, true); // skipAnimation=true
+          }
+          await el.playAction(null, null, false);
+          notifyParent({ event: 'playing' });
+          break;
+
+        case 'stop':
+          await el.stopAction(false);
+          notifyParent({ event: 'stopped' });
+          break;
+
+        case 'update':
+          await el.updateAction(payload ?? {});
+          break;
+      }
+    });
+
+    // Auto-load with defaults on startup
+    await el.load({});
+    notifyParent({ event: 'ready' });
+  </script>
+
+</body>
+</html>

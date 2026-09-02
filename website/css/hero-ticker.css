@@ -1,0 +1,392 @@
+/* ═══════════════════════════════════════════════════════════
+   HERO TICKER — diagonal reel of OGraf templates
+   Drops behind the existing .section-hero content.
+   Add to <head> AFTER style.css.
+═══════════════════════════════════════════════════════════ */
+
+/* Make sure hero is a positioned, clipped container.
+   (style.css already does this — the rule below is defensive.) */
+.section-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The diagonal stage that holds the rotating rows.
+   Sits between the hero's existing radial glow (::before) and the
+   ::after vignette + .hero__inner content. */
+.hero-ticker {
+  position: absolute;
+  inset: 0;
+  z-index: 0;             /* above ::before glow, below content */
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(ellipse 110% 90% at 50% 50%,
+                       rgba(0,0,0,1) 30%, rgba(0,0,0,0.45) 65%, rgba(0,0,0,0) 95%);
+          mask-image: radial-gradient(ellipse 110% 90% at 50% 50%,
+                       rgba(0,0,0,1) 30%, rgba(0,0,0,0.45) 65%, rgba(0,0,0,0) 95%);
+  opacity: 0.85;
+}
+
+/* Inner rotation wrapper — rotated -9° to give the diagonal feel.
+   Width is wider than viewport so the rotated edges reach corners. */
+.hero-ticker__diag {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  transform: translate(-50%, -50%) rotate(-6deg);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 28px);
+  pointer-events: auto;
+}
+
+/* Soft veil so the headline still reads on top.
+   Dark in the centre, transparent at edges. */
+.hero-ticker__veil {
+  /* Vertical curtain over the left half of the hero so the content has
+     a calm dark backdrop while the diagonal ticker stays fully visible
+     on the right side. */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(13, 17, 23, 0.1) 0%,
+    rgba(13, 17, 23, 0.55) 28%,
+    rgba(13, 17, 23, 0.55) 50%,
+    rgba(13, 17, 23, 0.1) 72%,
+    rgba(13, 17, 23, 0)    100%
+  );
+}
+
+/* Bring existing hero content above the ticker — but make the wrapper
+   itself transparent to pointer events so empty space passes hovers
+   through to the cards behind. The actual content blocks (.hero__content,
+   .hero__badge) re-enable pointer events for themselves. */
+.section-hero .hero__inner { position: relative; z-index: 2; pointer-events: none; }
+.section-hero .hero__content,
+.section-hero .hero__badge { pointer-events: auto; }
+
+/* ─── Ticker rows ─── */
+.htk-row {
+  display: flex;
+  width: max-content;
+  gap: clamp(14px, 1.6vw, 24px);
+  will-change: transform;
+}
+/* 4 copies of the deck → animate by exactly 25% (one deck width) so the
+   loop is seamless and the row is wide enough for ultra-wide viewports. */
+.htk-row--left  { animation: htkLeft  85s linear infinite; }
+.htk-row--right { animation: htkRight 95s linear infinite; }
+@keyframes htkLeft  { from { transform: translateX(0);    } to { transform: translateX(-25%); } }
+@keyframes htkRight { from { transform: translateX(-25%); } to { transform: translateX(0);    } }
+
+/* Hover-pause is disabled — the previous JS / WAAPI / CSS implementations
+   all produced visible jitter on deceleration, so the rows now just keep
+   scrolling continuously. */
+
+/* Respect reduced motion — freeze the rows */
+@media (prefers-reduced-motion: reduce) {
+  .htk-row { animation: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CARD FRAME
+═══════════════════════════════════════════════════════════ */
+.htk-card {
+  flex: 0 0 auto;
+  display: block;
+  width: 320px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .35s cubic-bezier(.2,.7,.3,1);
+}
+.htk-card:hover { transform: translateY(-4px); }
+
+.htk-card__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px 8px;
+  font-family: var(--font-mono, 'Space Mono'), monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(249,250,251,0.55);
+  text-transform: uppercase;
+}
+.htk-card__dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--htk-accent, #87A0DE);
+  box-shadow: 0 0 8px var(--htk-accent, #87A0DE);
+  flex-shrink: 0;
+}
+.htk-card__tag  { color: rgba(249,250,251,0.85); font-weight: 700; }
+.htk-card__type { margin-left: auto; color: rgba(249,250,251,0.4); }
+
+.htk-card__frame {
+  position: relative;
+  width: 320px;
+  height: 180px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #15171f;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 18px 40px rgba(0,0,0,0.5),
+    0 0 32px -8px var(--htk-accent, #87A0DE);
+  transition: border-color .2s ease;
+}
+.htk-card:hover .htk-card__frame { border-color: rgba(255,255,255,0.18); }
+
+/* ═══════════════════════════════════════════════════════════
+   TEMPLATE STYLES — mini broadcast graphics
+═══════════════════════════════════════════════════════════ */
+.htk-tpl { position: absolute; inset: 0; font-family: var(--font-sans, 'Plus Jakarta Sans'), sans-serif; color: #fff; }
+@keyframes htkPulse { 50% { opacity: 0.4; } }
+
+/* ── Lower Third ── */
+.htk--lt::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, #1d3a5c 0%, #0f1d33 100%);
+}
+.htk--lt::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(135,160,222,0.4), transparent 50%);
+}
+.htk-lt__bug {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(244,63,94,0.95); color: #fff;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+  padding: 3px 7px; border-radius: 3px;
+}
+.htk-lt__bug i {
+  width: 5px; height: 5px; border-radius: 999px;
+  background: #fff; animation: htkPulse 1.4s ease-in-out infinite;
+}
+.htk-lt__bar {
+  position: absolute; bottom: 12px; left: 12px; right: 12px; z-index: 2;
+  background: rgba(255,255,255,0.97); color: #0D1117;
+  padding: 8px 12px;
+  border-left: 3px solid #2352C3; border-radius: 2px;
+}
+.htk-lt__name { font-weight: 800; font-size: 14px; letter-spacing: -0.02em; }
+.htk-lt__role { font-size: 10px; color: #6B7280; font-weight: 500; }
+
+/* ── Scoreboard ── */
+.htk--sb::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, #0a3d2c 0%, #06251c 100%);
+}
+.htk-sb__panel {
+  position: absolute; bottom: 12px; left: 12px; z-index: 2;
+  background: rgba(8,10,15,0.92); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px; padding: 6px 8px; min-width: 140px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.htk-sb__row { display: flex; align-items: center; gap: 8px; }
+.htk-sb__crest {
+  width: 16px; height: 16px; border-radius: 2px;
+  display: grid; place-items: center;
+  font-size: 9px; font-weight: 800; color: #fff;
+}
+.htk-sb__team  { flex: 1; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+.htk-sb__score { font-family: var(--font-mono), monospace; font-size: 14px; font-weight: 700;
+                 min-width: 18px; text-align: right; color: #fff; }
+.htk-sb__time {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  background: rgba(244,63,94,0.95); color: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 2px;
+}
+
+/* ── Breaking ── */
+.htk--brk::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 50%, rgba(244,63,94,0.25), transparent 60%),
+    linear-gradient(135deg, #1a0c0c 0%, #2a0708 100%);
+}
+.htk-brk__bar {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+  display: flex; align-items: center;
+  padding: 12px 0; border-top: 2px solid #fff;
+}
+.htk-brk__chip {
+  background: #fff; color: #b91c1c;
+  font-weight: 800; font-size: 11px; letter-spacing: 0.1em;
+  padding: 4px 10px; margin-left: 12px;
+}
+.htk-brk__text {
+  flex: 1; font-family: var(--font-mono), monospace;
+  font-size: 12px; font-weight: 700; color: #fff;
+  margin-left: 12px; letter-spacing: 0.04em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 12px;
+}
+
+/* ── Weather ── */
+.htk--wx::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, #1d4ed8 0%, #60a5fa 60%, #fde68a 100%);
+}
+.htk-wx__sun {
+  position: absolute; top: 20px; right: 20px; z-index: 2;
+  width: 56px; height: 56px; border-radius: 999px;
+  background: radial-gradient(circle, #fef3c7 0%, #fbbf24 60%, transparent 80%);
+  filter: blur(2px);
+}
+.htk-wx__city {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.15em; color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.htk-wx__temp {
+  position: absolute; bottom: 36px; left: 14px; z-index: 2;
+  font-size: 56px; font-weight: 800; line-height: 1;
+  color: #fff; letter-spacing: -0.04em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.htk-wx__cond {
+  position: absolute; bottom: 14px; left: 14px; z-index: 2;
+  font-size: 12px; font-weight: 600; color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* ── Election ── */
+.htk--el { background: linear-gradient(180deg, #0f1218 0%, #181c25 100%); padding: 14px;
+            display: flex; flex-direction: column; gap: 7px; }
+.htk-el__head { font-family: var(--font-mono), monospace;
+                font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
+                color: #87A0DE; margin-bottom: 4px; }
+.htk-el__row  { display: flex; align-items: center; gap: 8px; font-size: 10px; }
+.htk-el__name { width: 56px; color: rgba(255,255,255,0.85); font-weight: 600; font-size: 10px; }
+.htk-el__bar  { flex: 1; height: 8px; background: rgba(255,255,255,0.08);
+                border-radius: 2px; overflow: hidden; }
+.htk-el__bar > i { display: block; height: 100%; border-radius: 2px; }
+.htk-el__pct  { font-family: var(--font-mono), monospace; font-weight: 700;
+                width: 32px; text-align: right; color: #fff; font-size: 10px; }
+
+/* ── Stocks ── */
+.htk--stk { background: #08090D; padding: 12px 14px 0;
+            display: flex; flex-direction: column; }
+.htk-stk__head  { display: flex; align-items: baseline; gap: 10px; }
+.htk-stk__sym   { font-family: var(--font-mono), monospace;
+                  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+                  color: rgba(255,255,255,0.6); }
+.htk-stk__price { font-family: var(--font-mono), monospace;
+                  font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+.htk-stk__delta { margin-left: auto; background: rgba(16,185,129,0.18); color: #10B981;
+                  font-family: var(--font-mono), monospace;
+                  font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; }
+.htk-stk__chart { width: 100%; height: 70px; margin-top: 6px; flex: 1; }
+.htk-stk__bar   { font-family: var(--font-mono), monospace;
+                  font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: #10B981;
+                  border-top: 1px solid rgba(255,255,255,0.06); padding: 6px 0; }
+
+/* ── Channel Bug ── */
+.htk--bug::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(35,82,195,0.4), transparent 60%),
+    linear-gradient(135deg, #0a0c14 0%, #131623 100%);
+}
+.htk-bug__logo  { position: absolute; top: 18px; left: 18px; z-index: 2;
+                  font-size: 28px; font-weight: 800; letter-spacing: -0.04em; }
+.htk-bug__sub   { position: absolute; top: 56px; left: 18px; z-index: 2;
+                  font-family: var(--font-mono), monospace;
+                  font-size: 10px; letter-spacing: 0.18em;
+                  color: rgba(255,255,255,0.5); font-weight: 700; }
+.htk-bug__clock { position: absolute; right: 18px; bottom: 18px; z-index: 2;
+                  font-family: var(--font-mono), monospace;
+                  font-size: 38px; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+
+/* ── Stat callout ── */
+.htk--stat { background: linear-gradient(135deg, #2352C3 0%, #1d3aa8 100%);
+             display: flex; flex-direction: column; justify-content: center;
+             padding: 18px 18px 16px; }
+.htk-stat__eyebrow { font-family: var(--font-mono), monospace;
+                     font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+                     color: rgba(255,255,255,0.7); }
+.htk-stat__value   { font-size: 56px; font-weight: 800; line-height: 1;
+                     letter-spacing: -0.04em; color: #fff; margin-top: 8px; }
+.htk-stat__label   { font-size: 12px; color: rgba(255,255,255,0.85);
+                     margin-top: 8px; max-width: 220px; line-height: 1.3; }
+
+/* ── F1 leaderboard ── */
+.htk--lb { background: linear-gradient(180deg, #0f1218 0%, #181c25 100%);
+            padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; }
+.htk-lb__head { font-family: var(--font-mono), monospace;
+                font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
+                color: #F59E0B; margin-bottom: 4px; }
+.htk-lb__row  { display: flex; align-items: center; gap: 8px;
+                background: rgba(255,255,255,0.03);
+                padding: 4px 6px; border-radius: 3px;
+                font-family: var(--font-mono), monospace; font-size: 11px; }
+.htk-lb__pos  { width: 14px; font-weight: 700; color: rgba(255,255,255,0.5); font-size: 10px; }
+.htk-lb__bar  { width: 3px; height: 14px; border-radius: 1px; }
+.htk-lb__code { flex: 1; font-weight: 700; color: #fff; font-size: 11px; }
+.htk-lb__time { color: rgba(255,255,255,0.7); font-size: 10px; }
+
+/* ── Title card ── */
+.htk--ttl::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 80%, rgba(244,63,94,0.45), transparent 60%),
+    linear-gradient(180deg, #1a0a0e 0%, #0a060a 100%);
+}
+.htk--ttl { display: grid; place-items: center; text-align: center; padding: 16px; }
+.htk-ttl__kicker { font-family: var(--font-mono), monospace;
+                   font-size: 10px; font-weight: 700; letter-spacing: 0.3em;
+                   color: #F43F5E; margin-bottom: 6px; position: relative; z-index: 2; }
+.htk-ttl__title  { font-size: 26px; font-weight: 800; letter-spacing: -0.03em;
+                   color: #fff; position: relative; z-index: 2; }
+.htk-ttl__rule   { width: 50px; height: 2px; background: #F43F5E;
+                   margin-top: 10px; position: relative; z-index: 2; }
+
+/* ── Countdown ── */
+.htk--cd { background:
+            radial-gradient(ellipse at 50% 50%, rgba(35,82,195,0.4), transparent 60%),
+            linear-gradient(180deg, #06080d 0%, #0a0d18 100%);
+           display: flex; flex-direction: column; justify-content: center;
+           align-items: center; gap: 6px; }
+.htk-cd__label { font-family: var(--font-mono), monospace;
+                 font-size: 10px; font-weight: 700; letter-spacing: 0.3em; color: #87A0DE; }
+.htk-cd__time  { display: flex; align-items: baseline; gap: 4px;
+                 font-family: var(--font-mono), monospace; }
+.htk-cd__time span {
+  font-size: 36px; font-weight: 700; color: #fff;
+  letter-spacing: -0.02em;
+  background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.htk-cd__time em { font-size: 24px; color: #87A0DE; font-style: normal; }
+.htk-cd__sub   { font-family: var(--font-mono), monospace;
+                 font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
+                 color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+/* ── Quote ── */
+.htk--qt { background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+           color: #0D1117; padding: 18px;
+           display: flex; flex-direction: column; justify-content: center; }
+.htk-qt__mark { position: absolute; top: -12px; left: 14px;
+                font-size: 100px; font-family: 'Times New Roman', serif;
+                color: #87A0DE; line-height: 1; }
+.htk-qt__text { position: relative; z-index: 1;
+                font-size: 16px; font-weight: 700; line-height: 1.25;
+                letter-spacing: -0.02em; color: #0D1117; }
+.htk-qt__by   { font-family: var(--font-mono), monospace; font-size: 10px;
+                margin-top: 10px; color: #6B7280; font-weight: 700; }
+
+/* Hero copy gets stronger contrast over the busy diagonal ticker. */
+.section-hero .hero__heading,
+.section-hero .hero__sub {
+  text-shadow:
+    0 2px 14px rgba(13, 17, 23, 0.9),
+    0 0 8px   rgba(13, 17, 23, 0.7);
+}
