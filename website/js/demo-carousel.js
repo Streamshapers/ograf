@@ -8,6 +8,12 @@
     const dotList = document.querySelector('.demo-carousel__dots');
     const carousel = document.querySelector('.demo-carousel');
     const demosSection = document.getElementById('demos');
+    const SYNCHRONIZED_REGION_SELECTORS = [
+        '.demo-card__header',
+        '.demo-aspect-bar',
+        '.demo-controls'
+    ];
+    const cardLayoutQuery = window.matchMedia('(min-width: 901px)');
 
     if (!track || !slides.length || !btnPrev || !btnNext || !dotList || !carousel) return;
 
@@ -16,6 +22,32 @@
         index
     ]));
     let current = 0;
+    let layoutFrame = null;
+
+    function synchronizeRegionHeight(selector) {
+        const regions = slides.map(slide => slide.querySelector(selector)).filter(Boolean);
+        if (!regions.length) return;
+
+        regions.forEach(region => region.style.removeProperty('min-height'));
+        if (!cardLayoutQuery.matches) return;
+
+        const maximumHeight = Math.ceil(Math.max(
+            ...regions.map(region => region.getBoundingClientRect().height)
+        ));
+        regions.forEach(region => region.style.minHeight = `${maximumHeight}px`);
+    }
+
+    function synchronizeCardLayout() {
+        SYNCHRONIZED_REGION_SELECTORS.forEach(synchronizeRegionHeight);
+    }
+
+    function scheduleCardLayoutSynchronization() {
+        window.cancelAnimationFrame(layoutFrame);
+        layoutFrame = window.requestAnimationFrame(() => {
+            layoutFrame = null;
+            synchronizeCardLayout();
+        });
+    }
 
     function loadSlide(slide) {
         slide.querySelectorAll('iframe[data-src]').forEach(iframe => {
@@ -157,9 +189,15 @@
         loadSlide(slides[current]);
     }
 
-    window.addEventListener('resize', () => goTo(current, { loadContent: false }));
+    window.addEventListener('resize', () => {
+        goTo(current, { loadContent: false });
+        scheduleCardLayoutSynchronization();
+    });
     window.addEventListener('hashchange', syncFromLocation);
     window.addEventListener('popstate', syncFromLocation);
+
+    synchronizeCardLayout();
+    document.fonts?.ready.then(scheduleCardLayoutSynchronization);
 
     const initialExampleId = exampleIdFromHash();
     if (initialExampleId) {
