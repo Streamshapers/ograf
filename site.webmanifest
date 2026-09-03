@@ -1,0 +1,15 @@
+{
+  "name": "OGraf",
+  "short_name": "OGraf",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#87A0DE",
+  "background_color": "#87A0DE",
+  "display": "standalone"
+}
