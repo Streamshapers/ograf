@@ -623,8 +623,8 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
     await expectCleanPage(monitor);
 });
 
-test('carousel demos share a stable player height on compact laptops', async ({ page }) => {
-    await page.setViewportSize({ width: 1260, height: 802 });
+test('carousel demos share a stable player and card height on compact laptops', async ({ page }) => {
+    await page.setViewportSize({ width: 1123, height: 549 });
     const monitor = await openLandingPage(page);
     const formats = [
         { ratio: '16/9', width: '1920px', height: '1080px' },
@@ -654,17 +654,31 @@ test('carousel demos share a stable player height on compact laptops', async ({ 
 
     await page.locator('#demos').scrollIntoViewIfNeeded();
 
-    const carouselStageHeights = [];
+    const carouselDimensions = [];
     const carouselTabs = page.locator('.demo-carousel__dot');
     const carouselTabCount = await carouselTabs.count();
     for (let index = 0; index < carouselTabCount; index += 1) {
         await carouselTabs.nth(index).click();
         await expect(page.locator('.demo-carousel__slide').nth(index)).toHaveClass(/is-active/);
         const activeSlide = page.locator('.demo-carousel__slide.is-active');
+        const cardBox = await activeSlide.locator('.demo-card').boundingBox();
+        const aspectBox = await activeSlide.locator('.demo-aspect-bar').boundingBox();
         const stageBox = await activeSlide.locator('.demo-player-stage').boundingBox();
-        carouselStageHeights.push(stageBox.height);
+        carouselDimensions.push({
+            cardHeight: cardBox.height,
+            aspectHeight: aspectBox.height,
+            stageHeight: stageBox.height,
+            stageTop: stageBox.y - cardBox.y,
+            stageBottom: cardBox.y + cardBox.height - stageBox.y - stageBox.height
+        });
     }
-    expect(Math.max(...carouselStageHeights) - Math.min(...carouselStageHeights)).toBeLessThan(1);
+    for (const property of Object.keys(carouselDimensions[0])) {
+        const values = carouselDimensions.map(dimensions => dimensions[property]);
+        expect(
+            Math.max(...values) - Math.min(...values),
+            `${property} should remain aligned across every carousel card`
+        ).toBeLessThan(1);
+    }
 
     await carouselTabs.nth(0).click();
     await expectStableHeight(page.locator('.demo-card--scoreboard'));
