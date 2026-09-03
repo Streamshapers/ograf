@@ -234,6 +234,7 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
         const siteHeader = page.locator('.site-header');
         const tv = page.locator('.stage-device--tv');
         const tablet = page.locator('.stage-device--tablet');
+        const phone = page.locator('.stage-device--phone');
         const controls = page.locator('.stage__controls');
         const deviceLabels = page.locator('.stage-device__label');
 
@@ -245,12 +246,14 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
         const headerBox = await siteHeader.boundingBox();
         const tvBox = await tv.boundingBox();
         const tabletBox = await tablet.boundingBox();
+        const phoneBox = await phone.boundingBox();
         const controlsBox = await controls.boundingBox();
 
         expect(sectionBox).not.toBeNull();
         expect(headerBox).not.toBeNull();
         expect(tvBox).not.toBeNull();
         expect(tabletBox).not.toBeNull();
+        expect(phoneBox).not.toBeNull();
         expect(controlsBox).not.toBeNull();
         expect(sectionBox.height).toBeLessThanOrEqual(viewport.height - headerBox.height + 1);
         expect(controlsBox.y + controlsBox.height)
@@ -259,6 +262,13 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
         const tabletOverlap = tabletBox.x + tabletBox.width - tvBox.x;
         expect(tabletOverlap).toBeGreaterThan(0);
         expect(tabletOverlap).toBeLessThanOrEqual(16);
+
+        const lowestDeviceEdge = Math.max(
+            tvBox.y + tvBox.height,
+            tabletBox.y + tabletBox.height,
+            phoneBox.y + phoneBox.height
+        );
+        expect(controlsBox.y - lowestDeviceEdge).toBeGreaterThanOrEqual(8);
 
         const pageWidth = await page.evaluate(() => ({
             clientWidth: document.documentElement.clientWidth,
