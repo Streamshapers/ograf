@@ -3,6 +3,15 @@
   "id": "responsive-lower-third",
   "name": "Responsive Lower Third",
   "main": "graphic.mjs",
+  "thumbnails": [
+    {
+      "file": "thumbnail.webp",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
   "supportsRealTime": true,
   "supportsNonRealTime": false,
   "stepCount": 1,

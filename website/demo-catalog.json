@@ -39,7 +39,12 @@
                 {
                     "source": "v1/examples/scoreboard/scoreboard.ograf.json",
                     "archive": "scoreboard.ograf.json",
-                    "sha256": "602cd6ba7a4d87fd1b69ed78a32f692122a7e2861b7028fa803cd6717b888e42"
+                    "sha256": "d2e7ce44b39b8efaddf732afc3ff64630b83f512e2b4ad5a1fe1c451bb300140"
+                },
+                {
+                    "source": "v1/examples/scoreboard/thumbnail.webp",
+                    "archive": "thumbnail.webp",
+                    "sha256": "72aa6f6d77e6f03a2c6ae38a8de1e037d38bd9fd1e1858cd7a8a6963c4fbc02e"
                 }
             ]
         },
@@ -74,7 +79,12 @@
                 {
                     "source": "v1/examples/responsive-lower-third/responsive-lower-third.ograf.json",
                     "archive": "responsive-lower-third.ograf.json",
-                    "sha256": "d59510d92d628bd97d37011badde26d7c6e2a3054384fd4e05add14d0d5d184c"
+                    "sha256": "154701cbfd504e3557f1912be07c524371fbe3bc51cbf421a4216c0c833c51c4"
+                },
+                {
+                    "source": "v1/examples/responsive-lower-third/thumbnail.webp",
+                    "archive": "thumbnail.webp",
+                    "sha256": "19f2a00fbfa5baf81aa1ae20c18518a4ec6ea275cbdce0638a8f51b1731594a3"
                 }
             ]
         },
@@ -109,7 +119,7 @@
                 {
                     "source": "v1/examples/l3rd-name/l3rd.ograf.json",
                     "archive": "l3rd.ograf.json",
-                    "sha256": "94982752504f5b082376ee96898ceec70d7479e8edf34e064bf40f2390c45d8b"
+                    "sha256": "3c0abde2cef6ab51cc6eea77d72961c603ce668ccfc16ad6c7013708db8bd660"
                 },
                 {
                     "source": "v1/examples/l3rd-name/lib/CSSPlugin.js",
@@ -140,6 +150,11 @@
                     "source": "v1/examples/l3rd-name/lib/utils/strings.js",
                     "archive": "lib/utils/strings.js",
                     "sha256": "fc284f768f1860ad03c914aa1efef24fe4d8e2aa712700909126f4956647a328"
+                },
+                {
+                    "source": "v1/examples/l3rd-name/thumbnail.webp",
+                    "archive": "thumbnail.webp",
+                    "sha256": "1e3d3545e9aca35e296212361cfd6264ccae7977113a1fcbd846c7b14e55b6d4"
                 }
             ]
         }
