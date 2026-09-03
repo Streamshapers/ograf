@@ -55,17 +55,8 @@
                     "height": 1080
                 },
                 "background": {
-                    "type": "video",
-                    "sources": [
-                        {
-                            "src": "website/assets/video/Background-Interview-Video-720.webm",
-                            "type": "video/webm"
-                        },
-                        {
-                            "src": "website/assets/video/Background-Interview-Video-720.mp4",
-                            "type": "video/mp4"
-                        }
-                    ],
+                    "type": "image",
+                    "src": "website/assets/img/bg-interview.webp",
                     "overlay": "rgba(4, 7, 18, 0.18)"
                 }
             },
@@ -99,17 +90,8 @@
                     "height": 1080
                 },
                 "background": {
-                    "type": "video",
-                    "sources": [
-                        {
-                            "src": "website/assets/video/Background-Interview-Video-720.webm",
-                            "type": "video/webm"
-                        },
-                        {
-                            "src": "website/assets/video/Background-Interview-Video-720.mp4",
-                            "type": "video/mp4"
-                        }
-                    ],
+                    "type": "image",
+                    "src": "website/assets/img/bg-interview.webp",
                     "overlay": "rgba(4, 7, 18, 0.18)"
                 }
             },
