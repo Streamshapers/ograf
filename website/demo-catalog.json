@@ -16,7 +16,7 @@
                 "renderer": "viewport",
                 "background": {
                     "type": "image",
-                    "src": "website/assets/img/bg-stadium.jpg",
+                    "src": "website/assets/img/bg-stadium.webp",
                     "overlay": "rgba(4, 7, 18, 0.6)"
                 }
             },

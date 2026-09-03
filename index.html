@@ -55,7 +55,7 @@
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=10">
+    <link rel="stylesheet" href="website/css/style.css?v=11">
     <link rel="stylesheet" href="website/css/hero-ticker.css">
 </head>
 <body>
@@ -245,9 +245,12 @@
                 <div class="stage-device stage-device--tv stage-bento__tile stage-bento__tile--tv" aria-hidden="true">
                     <div class="stage-device__frame">
                         <div class="stage-device__screen" data-ratio="16/9" data-focus-x="0.5">
-                            <video class="stage-device__bg-video" muted loop playsinline preload="metadata">
-                                <source src="website/assets/video/Background-Interview-Video-720.webm" type="video/webm">
-                                <source src="website/assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
+                            <video class="stage-device__bg-video" muted loop playsinline preload="none"
+                                   poster="website/assets/img/bg-interview.webp">
+                                <source data-src="website/assets/video/Background-Interview-Video-720.webm"
+                                        type="video/webm">
+                                <source data-src="website/assets/video/Background-Interview-Video-720.mp4"
+                                        type="video/mp4">
                             </video>
                             <div class="stage-device__bg-overlay"></div>
                             <div class="stage-device__canvas">
@@ -270,9 +273,12 @@
                         <div class="stage-device__frame">
                             <span class="stage-device__camera"></span>
                             <div class="stage-device__screen" data-ratio="16/9" data-focus-x="0.55">
-                                <video class="stage-device__bg-video" muted loop playsinline preload="metadata">
-                                    <source src="website/assets/video/Background-Interview-Video-720.webm" type="video/webm">
-                                    <source src="website/assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
+                                <video class="stage-device__bg-video" muted loop playsinline preload="none"
+                                       poster="website/assets/img/bg-interview.webp">
+                                    <source data-src="website/assets/video/Background-Interview-Video-720.webm"
+                                            type="video/webm">
+                                    <source data-src="website/assets/video/Background-Interview-Video-720.mp4"
+                                            type="video/mp4">
                                 </video>
                                 <div class="stage-device__bg-overlay"></div>
                                 <div class="stage-device__canvas">
@@ -291,9 +297,12 @@
                             <span class="stage-device__side-button stage-device__side-button--right-top"></span>
                             <span class="stage-device__side-button stage-device__side-button--right-bot"></span>
                             <div class="stage-device__screen" data-ratio="16/9" data-focus-x="0.6">
-                                <video class="stage-device__bg-video" muted loop playsinline preload="metadata">
-                                    <source src="website/assets/video/Background-Interview-Video-720.webm" type="video/webm">
-                                    <source src="website/assets/video/Background-Interview-Video-720.mp4" type="video/mp4">
+                                <video class="stage-device__bg-video" muted loop playsinline preload="none"
+                                       poster="website/assets/img/bg-interview.webp">
+                                    <source data-src="website/assets/video/Background-Interview-Video-720.webm"
+                                            type="video/webm">
+                                    <source data-src="website/assets/video/Background-Interview-Video-720.mp4"
+                                            type="video/mp4">
                                 </video>
                                 <div class="stage-device__bg-overlay"></div>
                                 <div class="stage-device__canvas">
@@ -721,7 +730,7 @@
                                     <iframe
                                             id="sb-iframe"
                                             class="demo-player__iframe"
-                                            src="website/demo-player/index.html?example=scoreboard"
+                                            data-src="website/demo-player/index.html?example=scoreboard"
                                             title="OGraf Live Scoreboard Demo"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -805,7 +814,7 @@
                                     <iframe
                                             class="demo-player__iframe"
                                             data-demo-iframe
-                                            src="website/demo-player/index.html?example=l3rd-name"
+                                            data-src="website/demo-player/index.html?example=l3rd-name"
                                             title="OGraf L3rd Name Example"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -917,7 +926,7 @@
                                     <iframe
                                             class="demo-player__iframe"
                                             data-demo-iframe
-                                            src="website/demo-player/index.html?example=responsive-lower-third"
+                                            data-src="website/demo-player/index.html?example=responsive-lower-third"
                                             title="OGraf Responsive Lower Third Demo"
                                             sandbox="allow-scripts allow-same-origin"
                                             tabindex="-1"
@@ -1546,7 +1555,7 @@
 </footer>
 
 <!-- Lucide icons -->
-<script src="website/assets/vendor/lucide/lucide.min.js"></script>
+<script src="website/assets/vendor/lucide/lucide.min.js?v=2"></script>
 
 <!-- GSAP + ScrollTrigger -->
 <script src="website/assets/vendor/gsap/gsap.min.js"></script>
@@ -1563,7 +1572,7 @@
 <script src="website/js/demo-scoreboard.js?v=10"></script>
 
 <!-- Demo carousel -->
-<script src="website/js/demo-carousel.js?v=9"></script>
+<script src="website/js/demo-carousel.js?v=10"></script>
 
 <!-- Build current example ZIP downloads in the browser. -->
 <script type="module" src="website/js/example-download.js?v=1"></script>
@@ -1577,7 +1586,7 @@
     customElements.define('ograf-lower-third', ResponsiveLowerThird);
 </script>
 
-<script src="website/js/stage-demo.js?v=2"></script>
+<script src="website/js/stage-demo.js?v=3"></script>
 
 <!-- Vendor logo ticker (auto-discovers logos in assets/img/vendor-logos/vendors/) -->
 <script src="website/js/vendor-ticker.js?v=2"></script>

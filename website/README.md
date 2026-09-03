@@ -35,6 +35,29 @@ files in the browser, so no generated archives are committed.
 When changing a stylesheet or script referenced by `index.html`, increment its `?v=` query
 value so GitHub Pages cannot serve incompatible HTML and cached runtime files together.
 
+## Performance
+
+Heavy media is loaded only when it is needed. The multi-device background video starts
+loading shortly before the stage enters the viewport, and each carousel player is initialized
+when its slide becomes visible or is selected. Reduced-motion mode keeps those videos paused
+and unloaded until required by another visible demo.
+
+The vendoring step creates a Lucide runtime bundle containing only the icons used by the page.
+`validate` enforces byte budgets for that bundle and the largest image assets, and rejects
+duplicate legacy JPG backgrounds.
+
+A cold-load Chromium audit against the uncompressed local server on 2026-09-03 measured the
+initial same-origin response body total before and after this optimization:
+
+| Viewport | Before | After | Reduction |
+|---|---:|---:|---:|
+| Desktop, 1440 x 900 | 5.08 MB | 0.73 MB | 85.7% |
+| Mobile, Pixel 7 profile | 5.03 MB | 0.68 MB | 86.6% |
+
+These values are an implementation comparison rather than a production Core Web Vitals
+claim. Re-run a throttled Lighthouse check against the deployed preview during the final
+release review.
+
 ## Repository layout
 
 - `/index.html`, `/favicon.svg`, and `/site.webmanifest` are public entry files.
@@ -64,7 +87,7 @@ Complete these tasks on the integration branch before requesting final publicati
 7. [x] Do not add a temporary automated content guard. Cover obsolete wording,
        placeholder content, and the intended indexing state in the final release review
        under item 10 instead.
-8. [ ] Profile performance and optimize images and videos.
+8. [x] Profile performance and optimize images and videos.
 9. [x] Prepare canonical, Open Graph, Twitter/X, and structured metadata without
        referencing an unapproved or missing social-preview image.
 10. [ ] Add a concrete release checklist and a draft pull-request description to the

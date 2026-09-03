@@ -1,4 +1,4 @@
-import { access, readFile, readdir } from 'node:fs/promises';
+import { access, readFile, readdir, stat } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,6 +19,12 @@ const FORBIDDEN_RUNTIME_HOSTS = [
     'cdn.jsdelivr.net',
     'youtube.com/embed'
 ];
+const RUNTIME_ASSET_BUDGETS = new Map([
+    ['website/assets/img/bg-interview.webp', 100_000],
+    ['website/assets/img/bg-stadium.webp', 350_000],
+    ['website/assets/img/ograf-social-preview.png', 280_000],
+    ['website/assets/vendor/lucide/lucide.min.js', 10_000]
+]);
 const errors = [];
 
 async function exists(path) {
@@ -167,6 +173,8 @@ async function validateRepositoryContract() {
         'website/assets/vendor/gsap/gsap.min.js',
         'website/assets/vendor/gsap/ScrollTrigger.min.js',
         'website/assets/vendor/lucide/lucide.min.js',
+        'website/assets/img/bg-interview.webp',
+        'website/assets/img/bg-stadium.webp',
         'website/assets/img/ograf-social-preview.png',
         'website/demo-catalog.json',
         'website/demo-player/index.html',
@@ -178,6 +186,22 @@ async function validateRepositoryContract() {
     for (const requiredPath of requiredPaths) {
         if (!await exists(resolve(REPOSITORY_ROOT, requiredPath))) {
             report(`Required path is missing: ${requiredPath}`);
+        }
+    }
+
+    for (const [assetPath, maximumBytes] of RUNTIME_ASSET_BUDGETS) {
+        const assetStats = await stat(resolve(REPOSITORY_ROOT, assetPath));
+        if (assetStats.size > maximumBytes) {
+            report(`${assetPath} exceeds its ${maximumBytes}-byte performance budget`);
+        }
+    }
+
+    for (const legacyImage of [
+        'website/assets/img/bg-interview.jpg',
+        'website/assets/img/bg-stadium.jpg'
+    ]) {
+        if (await exists(resolve(REPOSITORY_ROOT, legacyImage))) {
+            report(`Optimized image duplicates legacy asset ${legacyImage}`);
         }
     }
 

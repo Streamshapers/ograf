@@ -30,11 +30,25 @@
   const lts     = [...document.querySelectorAll('ograf-lower-third.stage-device__graphic')];
   const backgroundVideos = [...document.querySelectorAll('.stage-device__bg-video')];
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const section = document.querySelector('.section-stage');
+  let backgroundVideosActivated = false;
   if (!lts.length) return;
+
+  function loadBackgroundVideos() {
+    if (backgroundVideosActivated || motionQuery.matches) return;
+    backgroundVideosActivated = true;
+    backgroundVideos.forEach(video => {
+      video.querySelectorAll('source[data-src]').forEach(source => {
+        source.src = source.dataset.src;
+        source.removeAttribute('data-src');
+      });
+      video.load();
+    });
+  }
 
   function syncBackgroundVideos() {
     backgroundVideos.forEach(video => {
-      if (motionQuery.matches) {
+      if (motionQuery.matches || !backgroundVideosActivated) {
         video.pause();
         try {
           video.currentTime = 0;
@@ -49,8 +63,28 @@
     });
   }
 
-  syncBackgroundVideos();
-  motionQuery.addEventListener('change', syncBackgroundVideos);
+  function activateBackgroundVideos() {
+    loadBackgroundVideos();
+    syncBackgroundVideos();
+  }
+
+  if (section && 'IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      videoObserver.disconnect();
+      activateBackgroundVideos();
+    }, { rootMargin: '300px 0px' });
+    videoObserver.observe(section);
+  } else {
+    activateBackgroundVideos();
+  }
+
+  motionQuery.addEventListener('change', () => {
+    if (!motionQuery.matches && section?.getBoundingClientRect().top < window.innerHeight + 300) {
+      loadBackgroundVideos();
+    }
+    syncBackgroundVideos();
+  });
 
   // -- Form / control elements -------------------------------
   const btnToggle = document.getElementById('stage-toggle');
@@ -167,6 +201,7 @@
   // -- Toggle button -----------------------------------------
   if (btnToggle) {
     btnToggle.addEventListener('click', async () => {
+      activateBackgroundVideos();
       if (isPlaying) {
         // Optimistic UI update - animation runs after.
         setToggleState(false);
@@ -212,7 +247,6 @@
   //   - user prefers reduced motion
   //   - user has already interacted with the toggle
   //   - we already auto-played once (one-shot per page load)
-  const section = document.querySelector('.section-stage');
   if (section && 'IntersectionObserver' in window) {
     let autoPlayed     = false;
     let userInteracted = false;

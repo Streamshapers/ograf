@@ -172,6 +172,55 @@ test('navigation, manifests, and runtime requests work', async ({ page }) => {
     await expectCleanPage(monitor);
 });
 
+test('heavy demo media loads only when requested', async ({ page }) => {
+    const sameOriginRequests = [];
+    page.on('request', request => {
+        if (request.url().startsWith('http://127.0.0.1:')) {
+            sameOriginRequests.push(new URL(request.url()).pathname);
+        }
+    });
+
+    const monitor = await openLandingPage(page);
+    const stageSources = page.locator('.stage-device__bg-video source');
+    const deferredFrames = page.locator('.demo-player__iframe[data-src]');
+
+    await expect(stageSources).toHaveCount(6);
+    for (const source of await stageSources.all()) {
+        await expect(source).not.toHaveAttribute('src');
+        await expect(source).toHaveAttribute('data-src', /Background-Interview-Video-720/);
+    }
+    await expect(deferredFrames).toHaveCount(3);
+    expect(sameOriginRequests.some(path => path.includes('Background-Interview-Video-720')))
+        .toBe(false);
+    expect(sameOriginRequests.some(path => path.includes('/v1/examples/l3rd-name/')))
+        .toBe(false);
+
+    await page.locator('.section-stage').scrollIntoViewIfNeeded();
+    await expect.poll(() => sameOriginRequests.some(
+        path => path.includes('Background-Interview-Video-720')
+    )).toBe(true);
+
+    await page.locator('#demos').scrollIntoViewIfNeeded();
+    await expect(page.locator('#sb-iframe')).toHaveAttribute(
+        'src',
+        'website/demo-player/index.html?example=scoreboard'
+    );
+    await expect(page.locator('#sb-play')).toBeEnabled();
+
+    await page.locator('#demo-tab-1').click();
+    const l3rdFrame = page.locator('#demo-slide-1 .demo-player__iframe');
+    await expect(l3rdFrame).toHaveAttribute(
+        'src',
+        'website/demo-player/index.html?example=l3rd-name'
+    );
+    await expect(page.locator('#demo-slide-1 [data-demo-action="play"]')).toBeEnabled();
+    await expect(page.locator('#demo-slide-2 .demo-player__iframe')).not.toHaveAttribute('src');
+
+    await expect(page.locator('[data-lucide]')).not.toHaveCount(0);
+    await expect(page.locator('i[data-lucide]')).toHaveCount(0);
+    await expectCleanPage(monitor);
+});
+
 test('stage and all carousel example controls run', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const monitor = await openLandingPage(page);

@@ -14,7 +14,6 @@ async function openAccessibleLandingPage(page) {
     await page.goto('./');
     await expect(page.locator('h1')).toBeVisible();
     await expect(page.locator('#stage-toggle')).toBeEnabled();
-    await expect(page.locator('#sb-play')).toBeEnabled();
 }
 
 function formatAxeResults(results) {
@@ -178,6 +177,7 @@ test('keyboard users can operate navigation, demos, formats, and code tabs', asy
 
     await firstDemoTab.focus();
     await page.keyboard.press('Enter');
+    await expect(page.locator('#sb-play')).toBeEnabled();
     await page.locator('#sb-play').focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#sb-status')).toHaveAttribute('data-state', 'playing');
@@ -218,6 +218,11 @@ test('reduced motion stops automatic motion but keeps explicit demo controls', a
         videos.map(video => ({ paused: video.paused, currentTime: video.currentTime }))
     ));
     expect(mainVideoStates.every(state => state.paused && state.currentTime < 0.1)).toBe(true);
+
+    await page.locator('#demo-tab-1').click();
+    await expect(page.locator('#demo-slide-1 [data-demo-action="play"]')).toBeEnabled();
+    await page.locator('#demo-tab-2').click();
+    await expect(page.locator('#demo-slide-2 [data-demo-action="play"]')).toBeEnabled();
 
     const demoVideoStates = await page.locator('.demo-player__iframe').evaluateAll(iframes => (
         iframes.flatMap(iframe => {

@@ -5,10 +5,18 @@
     const btnNext = document.querySelector('.demo-carousel__btn--next');
     const dots = [...document.querySelectorAll('.demo-carousel__dot')];
     const dotList = document.querySelector('.demo-carousel__dots');
+    const carousel = document.querySelector('.demo-carousel');
 
     if (!track || !slides.length || !btnPrev || !btnNext || !dotList) return;
 
     let current = 0;
+
+    function loadSlide(slide) {
+        slide.querySelectorAll('iframe[data-src]').forEach(iframe => {
+            iframe.src = iframe.dataset.src;
+            iframe.removeAttribute('data-src');
+        });
+    }
 
     function getOffset(index) {
         const slideWidth = slides[0].offsetWidth;
@@ -17,10 +25,11 @@
         return index * (slideWidth + gap);
     }
 
-    function goTo(index, { moveTabFocus = false } = {}) {
+    function goTo(index, { loadContent = true, moveTabFocus = false } = {}) {
         const selectedIndex = Math.max(0, Math.min(index, slides.length - 1));
         const focusedControl = document.activeElement;
         current = selectedIndex;
+        if (loadContent) loadSlide(slides[selectedIndex]);
         track.style.transform = `translateX(-${getOffset(selectedIndex)}px)`;
 
         slides.forEach((slide, slideIndex) => {
@@ -61,6 +70,17 @@
         goTo(nextIndex, { moveTabFocus: true });
     });
 
-    window.addEventListener('resize', () => goTo(current));
-    goTo(0);
+    if (carousel && 'IntersectionObserver' in window) {
+        const playerObserver = new IntersectionObserver(entries => {
+            if (!entries.some(entry => entry.isIntersecting)) return;
+            playerObserver.disconnect();
+            loadSlide(slides[current]);
+        }, { rootMargin: '500px 0px' });
+        playerObserver.observe(carousel);
+    } else {
+        loadSlide(slides[current]);
+    }
+
+    window.addEventListener('resize', () => goTo(current, { loadContent: false }));
+    goTo(0, { loadContent: false });
 })();

@@ -2,6 +2,8 @@ import { copyFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { createLucideBundle } from './create-lucide-bundle.mjs';
+
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const TOOLING_ROOT = resolve(SCRIPT_DIRECTORY, '..');
 const REPOSITORY_ROOT = resolve(TOOLING_ROOT, '..', '..');
@@ -11,7 +13,6 @@ const ASSET_ROOT = resolve(REPOSITORY_ROOT, 'website/assets');
 const COPIES = [
     ['gsap/dist/gsap.min.js', 'vendor/gsap/gsap.min.js'],
     ['gsap/dist/ScrollTrigger.min.js', 'vendor/gsap/ScrollTrigger.min.js'],
-    ['lucide/dist/umd/lucide.min.js', 'vendor/lucide/lucide.min.js'],
     ['lucide/LICENSE', 'vendor/licenses/lucide-ISC.txt'],
     ['@fontsource/plus-jakarta-sans/LICENSE',
         'vendor/licenses/plus-jakarta-sans-OFL-1.1.txt'],
@@ -47,4 +48,8 @@ for (const [sourcePath, destinationPath] of COPIES) {
     await copyFile(resolve(NODE_MODULES, sourcePath), resolvedDestination);
 }
 
-console.log(`Vendored ${COPIES.length} runtime assets.`);
+const lucideBundlePath = resolve(ASSET_ROOT, 'vendor/lucide/lucide.min.js');
+await mkdir(dirname(lucideBundlePath), { recursive: true });
+await createLucideBundle(lucideBundlePath);
+
+console.log(`Vendored ${COPIES.length + 1} runtime assets.`);

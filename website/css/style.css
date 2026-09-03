@@ -3512,7 +3512,7 @@ a:hover {
   color: var(--color-text-on-dark);
   background:
     linear-gradient(rgba(13, 17, 23, 0.72), rgba(13, 17, 23, 0.9)),
-    url('../assets/img/bg-interview.jpg') center / cover;
+    url('../assets/img/bg-interview.webp') center / cover;
   text-align: left;
 }
 
