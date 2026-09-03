@@ -242,16 +242,11 @@ test('@webkit reduced motion stops automatic motion but keeps explicit demo cont
     await page.locator('#demo-tab-2').click();
     await expect(page.locator('#demo-slide-2 [data-demo-action="play"]')).toBeEnabled();
 
-    const demoVideoStates = await page.locator('.demo-player__iframe').evaluateAll(iframes => (
-        iframes.flatMap(iframe => {
-            const video = iframe.contentDocument?.querySelector('.bg-video');
-            if (!video) return [];
-
-            return [{ paused: video.paused, currentTime: video.currentTime }];
-        })
-    ));
-    expect(demoVideoStates).toHaveLength(2);
-    expect(demoVideoStates.every(state => state.paused && state.currentTime < 0.1)).toBe(true);
+    const demoBackgroundVideoCount = await page.locator('.demo-player__iframe')
+        .evaluateAll(iframes => iframes.reduce((count, iframe) => (
+            count + (iframe.contentDocument?.querySelectorAll('.bg-video').length ?? 0)
+        ), 0));
+    expect(demoBackgroundVideoCount).toBe(0);
 
     await page.locator('#stage-toggle').click();
     await expect(page.locator('#stage-sync')).toHaveAttribute('data-state', 'live');
