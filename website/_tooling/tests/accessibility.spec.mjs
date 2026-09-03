@@ -59,6 +59,23 @@ async function expectFocusRing(locator) {
     expect(ring.width).toBeGreaterThanOrEqual(3);
 }
 
+async function expectCodePanelsToFit(page) {
+    const codeTabs = page.locator('.code-block__tab');
+
+    for (let index = 0; index < await codeTabs.count(); index += 1) {
+        await codeTabs.nth(index).click();
+        const panelId = await codeTabs.nth(index).getAttribute('aria-controls');
+        const panel = page.locator(`#${panelId}`);
+        await expect(panel).toBeVisible();
+
+        const dimensions = await panel.evaluate(element => ({
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth
+        }));
+        expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
+    }
+}
+
 test('@mobile visible application states have no WCAG A or AA violations', async ({ page }, testInfo) => {
     await page.route('https://www.youtube-nocookie.com/**', route => route.fulfill({
         status: 200,
@@ -66,6 +83,7 @@ test('@mobile visible application states have no WCAG A or AA violations', async
         body: '<!doctype html><html lang="en"><title>Video</title><body>Video</body></html>'
     }));
     await openAccessibleLandingPage(page);
+    await expectCodePanelsToFit(page);
 
     await expect(page.locator('.demo-player__iframe')).toHaveCount(3);
     for (const iframe of await page.locator('.demo-player__iframe').all()) {

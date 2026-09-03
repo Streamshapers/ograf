@@ -241,6 +241,16 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
         await section.scrollIntoViewIfNeeded();
         await expect(deviceLabels).toHaveCount(3);
         await expect(deviceLabels.first()).toBeHidden();
+        const sectionPadding = await section.evaluate(element => {
+            const style = getComputedStyle(element);
+
+            return {
+                top: parseFloat(style.paddingTop),
+                bottom: parseFloat(style.paddingBottom)
+            };
+        });
+        expect(sectionPadding.top).toBeGreaterThanOrEqual(32);
+        expect(sectionPadding.bottom).toBeGreaterThanOrEqual(32);
 
         const sectionBox = await section.boundingBox();
         const headerBox = await siteHeader.boundingBox();

@@ -1863,7 +1863,7 @@ a:hover {
    desktop display, so size the composition from the available screen height. */
 @media (min-width: 900px) and (min-height: 650px) and (max-height: 960px) {
   .section-stage {
-    padding-block: clamp(20px, 2.5svh, 28px);
+    padding-block: clamp(var(--space-8), 5svh, var(--space-12));
   }
 
   .stage__header {
@@ -1881,7 +1881,7 @@ a:hover {
   }
 
   .stage__bento {
-    width: min(100%, calc((100svh - 260px) * 1.9));
+    width: min(100%, calc((100svh - 300px) * 1.9));
     max-width: 1100px;
     row-gap: var(--space-4);
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -3719,15 +3719,60 @@ a:hover {
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
+.code-block__traffic-lights {
+  display: flex;
+  gap: var(--space-2);
+}
+
 .code-block__dot {
+  position: relative;
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  display: grid;
+  place-items: center;
 }
 
-.code-block__dot--red    { background: #ff5f57; }
-.code-block__dot--yellow { background: #ffbd2e; }
-.code-block__dot--green  { background: #28c840; }
+.code-block__dot::after {
+  color: var(--color-bg-dark);
+  font-family: system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.75);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.code-block__traffic-lights:hover .code-block__dot::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.code-block__dot--red {
+  background: #ff5f57;
+}
+
+.code-block__dot--red::after {
+  content: '\00D7';
+}
+
+.code-block__dot--yellow {
+  background: #ffbd2e;
+}
+
+.code-block__dot--yellow::after {
+  content: '\2212';
+}
+
+.code-block__dot--green {
+  background: #28c840;
+}
+
+.code-block__dot--green::after {
+  content: '\2922';
+  font-size: 8px;
+}
 
 .code-block__filename {
   font-family: var(--font-mono), serif;
@@ -3774,8 +3819,10 @@ a:hover {
 
 .code-block__pre {
   margin: 0;
-  padding: var(--space-6);
-  overflow-x: auto;
+  padding: clamp(var(--space-4), 3vw, var(--space-6));
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
   font-size: 0.8125rem;
   line-height: 1.75;
 }
@@ -3797,6 +3844,26 @@ a:hover {
   .code-section__layout {
     grid-template-columns: 1fr;
     gap: var(--space-10);
+  }
+}
+
+@media (max-width: 520px) {
+  .code-block__header {
+    padding-inline: var(--space-3);
+  }
+
+  .code-block__traffic-lights {
+    display: none;
+  }
+
+  .code-block__tabs {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .code-block__tab {
+    flex: 1 1 0;
+    padding-inline: var(--space-2);
   }
 }
 
