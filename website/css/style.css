@@ -1892,12 +1892,12 @@ a:hover {
 
   .stage-bento__row--bottom .stage-device--tablet {
     justify-self: end;
-    transform: translate(12%, 7%);
+    transform: translate(12%, 0);
   }
 
   .stage-bento__row--bottom .stage-device--phone {
     justify-self: start;
-    transform: translate(-22%, 7%);
+    transform: translate(-22%, 0);
   }
 
   .stage-bento__row--bottom .stage-device--tablet .stage-device__screen {
