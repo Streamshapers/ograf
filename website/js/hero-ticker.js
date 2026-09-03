@@ -1,269 +1,149 @@
-/* -----------------------------------------------------------
-   HERO TICKER - diagonal reel of OGraf templates
-   Vanilla JS - no dependencies. Loads after the DOM.
-   Drops a diagonal ticker behind the existing .section-hero,
-   leaves all other markup untouched.
------------------------------------------------------------ */
-(function () {
-  'use strict';
+import {
+    loadDemoCatalog,
+    resolveSitePath,
+    selectHeroThumbnail
+} from './demo-catalog.js';
 
-  // -- Card data - matches the demo slugs in #demos ------------
-  const TEMPLATES = [
-    {
-      slug: 'lower-third',
-      label: 'Lower Third',
-      accent: '#10B981',
-      html: `
-        <div class="htk-tpl htk--lt">
-          <span class="htk-lt__bug"><i></i>LIVE</span>
-          <div class="htk-lt__bar">
-            <div class="htk-lt__name">Anders Berg</div>
-            <div class="htk-lt__role">Senior Correspondent</div>
-          </div>
-        </div>`,
-    },
-    {
-      slug: 'scoreboard',
-      label: 'Scoreboard',
-      accent: '#2352C3',
-      html: `
-        <div class="htk-tpl htk--sb">
-          <div class="htk-sb__panel">
-            <div class="htk-sb__row">
-              <span class="htk-sb__crest" style="background:#2352C3">F</span>
-              <span class="htk-sb__team">FCZ</span>
-              <span class="htk-sb__score">2</span>
-            </div>
-            <div class="htk-sb__row">
-              <span class="htk-sb__crest" style="background:#F43F5E">A</span>
-              <span class="htk-sb__team">AJX</span>
-              <span class="htk-sb__score">1</span>
-            </div>
-          </div>
-          <div class="htk-sb__time">67'</div>
-        </div>`,
-    },
-    {
-      slug: 'breaking',
-      label: 'Breaking News',
-      accent: '#F43F5E',
-      html: `
-        <div class="htk-tpl htk--brk">
-          <div class="htk-brk__bar">
-            <span class="htk-brk__chip">BREAKING</span>
-            <span class="htk-brk__text">EU REACHES CLIMATE DEAL</span>
-          </div>
-        </div>`,
-    },
-    {
-      slug: 'weather',
-      label: 'Weather',
-      accent: '#F59E0B',
-      html: `
-        <div class="htk-tpl htk--wx">
-          <div class="htk-wx__sun"></div>
-          <div class="htk-wx__city">GENEVA</div>
-          <div class="htk-wx__temp">22&deg;</div>
-          <div class="htk-wx__cond">Sunny</div>
-        </div>`,
-    },
-    {
-      slug: 'election',
-      label: 'Election Live',
-      accent: '#87A0DE',
-      html: `
-        <div class="htk-tpl htk--el">
-          <div class="htk-el__head">RESULTS - LIVE</div>
-          <div class="htk-el__row">
-            <span class="htk-el__name">Greens</span>
-            <span class="htk-el__bar"><i style="width:67%;background:#10B981"></i></span>
-            <span class="htk-el__pct">28%</span>
-          </div>
-          <div class="htk-el__row">
-            <span class="htk-el__name">Liberals</span>
-            <span class="htk-el__bar"><i style="width:58%;background:#F59E0B"></i></span>
-            <span class="htk-el__pct">24%</span>
-          </div>
-          <div class="htk-el__row">
-            <span class="htk-el__name">Soc Dem</span>
-            <span class="htk-el__bar"><i style="width:46%;background:#F43F5E"></i></span>
-            <span class="htk-el__pct">19%</span>
-          </div>
-          <div class="htk-el__row">
-            <span class="htk-el__name">Centre</span>
-            <span class="htk-el__bar"><i style="width:34%;background:#87A0DE"></i></span>
-            <span class="htk-el__pct">14%</span>
-          </div>
-        </div>`,
-    },
-    {
-      slug: 'stocks',
-      label: 'Markets - FX',
-      accent: '#10B981',
-      html: `
-        <div class="htk-tpl htk--stk">
-          <div class="htk-stk__head">
-            <span class="htk-stk__sym">EURX</span>
-            <span class="htk-stk__price">1.0842</span>
-            <span class="htk-stk__delta">+0.42%</span>
-          </div>
-          <svg class="htk-stk__chart" viewBox="0 0 90 24" preserveAspectRatio="none">
-            <polyline fill="rgba(16,185,129,0.18)" stroke="none"
-              points="0,24 4,12 12,8 18,14 22,10 30,16 38,8 46,14 54,6 62,12 70,4 78,10 86,2 90,8 90,24"/>
-            <polyline fill="none" stroke="#10B981" stroke-width="1.2"
-              points="4,12 12,8 18,14 22,10 30,16 38,8 46,14 54,6 62,12 70,4 78,10 86,2"/>
-          </svg>
-          <div class="htk-stk__bar">FX - LIVE FRANKFURT</div>
-        </div>`,
-    },
-    {
-      slug: 'channel-bug',
-      label: 'Channel Bug',
-      accent: '#87A0DE',
-      html: `
-        <div class="htk-tpl htk--bug">
-          <div class="htk-bug__logo"><span style="color:#87A0DE">O</span><span>graf</span></div>
-          <div class="htk-bug__sub">NEWS - 24</div>
-          <div class="htk-bug__clock">21:47</div>
-        </div>`,
-    },
-    {
-      slug: 'stat-callout',
-      label: 'Stat Callout',
-      accent: '#2352C3',
-      html: `
-        <div class="htk-tpl htk--stat">
-          <div class="htk-stat__eyebrow">DATA - ECONOMY</div>
-          <div class="htk-stat__value">&euro;8.4B</div>
-          <div class="htk-stat__label">Renewable investment 2025</div>
-        </div>`,
-    },
-    {
-      slug: 'leaderboard',
-      label: 'F1 Leaderboard',
-      accent: '#F59E0B',
-      html: `
-        <div class="htk-tpl htk--lb">
-          <div class="htk-lb__head">F1 - LAP 38/52</div>
-          <div class="htk-lb__row"><span class="htk-lb__pos">1</span><span class="htk-lb__bar" style="background:#0600EF"></span><span class="htk-lb__code">VER</span><span class="htk-lb__time">LEADER</span></div>
-          <div class="htk-lb__row"><span class="htk-lb__pos">2</span><span class="htk-lb__bar" style="background:#00D7B6"></span><span class="htk-lb__code">HAM</span><span class="htk-lb__time">+ 4.211</span></div>
-          <div class="htk-lb__row"><span class="htk-lb__pos">3</span><span class="htk-lb__bar" style="background:#E8002D"></span><span class="htk-lb__code">LEC</span><span class="htk-lb__time">+ 9.734</span></div>
-          <div class="htk-lb__row"><span class="htk-lb__pos">4</span><span class="htk-lb__bar" style="background:#FF8000"></span><span class="htk-lb__code">NOR</span><span class="htk-lb__time">+12.012</span></div>
-        </div>`,
-    },
-    {
-      slug: 'title-card',
-      label: 'Title Card',
-      accent: '#F43F5E',
-      html: `
-        <div class="htk-tpl htk--ttl">
-          <div class="htk-ttl__kicker">EPISODE 04</div>
-          <div class="htk-ttl__title">INSIDE THE STUDIO</div>
-          <div class="htk-ttl__rule"></div>
-        </div>`,
-    },
-    {
-      slug: 'countdown',
-      label: 'Countdown',
-      accent: '#2352C3',
-      html: `
-        <div class="htk-tpl htk--cd">
-          <div class="htk-cd__label">ON AIR IN</div>
-          <div class="htk-cd__time">
-            <span>00</span><em>:</em><span>04</span><em>:</em><span>23</span>
-          </div>
-          <div class="htk-cd__sub">EUROVISION - SEMI-FINAL 1</div>
-        </div>`,
-    },
-    {
-      slug: 'quote',
-      label: 'Quote Card',
-      accent: '#87A0DE',
-      html: `
-        <div class="htk-tpl htk--qt">
-          <div class="htk-qt__mark">&ldquo;</div>
-          <div class="htk-qt__text">Open standards already won the web. Now broadcast.</div>
-          <div class="htk-qt__by">- Klaus Weber, EBU</div>
-        </div>`,
-    },
-  ];
+const ALLOWED_THUMBNAIL_EXTENSIONS = new Set(['.gif', '.jpeg', '.jpg', '.png', '.webp']);
+const ROW_COPIES = 4;
 
-  // -- Helpers ----------------------------------------------
-  function cardHtml(t) {
-    return `
-      <div class="htk-card" data-slug="${t.slug}" style="--htk-accent:${t.accent}">
-        <div class="htk-card__head">
-          <span class="htk-card__dot"></span>
-          <span class="htk-card__tag">${t.label}</span>
-          <span class="htk-card__type">graphic.mjs</span>
-        </div>
-        <div class="htk-card__frame">${t.html}</div>
-      </div>`;
-  }
+function isSafeThumbnailPath(path) {
+    if (typeof path !== 'string' || !path || path.startsWith('/')) return false;
+    if (path.split('/').includes('..') || path.includes('\\')) return false;
 
-  // Each row holds COPIES copies of the deck. The keyframes translate by
-  // exactly one deck width (1 / COPIES of total) so the loop is seamless.
-  // 4 copies covers very wide viewports without leaving an empty edge.
-  const COPIES = 4;
+    const extensionIndex = path.lastIndexOf('.');
+    const extension = extensionIndex >= 0 ? path.slice(extensionIndex).toLowerCase() : '';
 
-  function row(items, dir, durationSec) {
-    const inner = Array(COPIES).fill(items).flat().map(cardHtml).join('');
-    const cls = dir === 'right' ? 'htk-row htk-row--right' : 'htk-row htk-row--left';
-    const style = durationSec ? ` style="animation-duration: ${durationSec}s"` : '';
-    return `<div class="${cls}"${style}>${inner}</div>`;
-  }
+    return ALLOWED_THUMBNAIL_EXTENSIONS.has(extension);
+}
 
-  // -- Mount ------------------------------------------------
-  function mount() {
+async function loadJson(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Unable to load ${url.pathname}: ${response.status}`);
+
+    return response.json();
+}
+
+function loadImage(url) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error(`Unable to load ${url.pathname}`));
+        image.src = url.href;
+    });
+}
+
+async function loadHeroExample(example) {
+    const manifestUrl = resolveSitePath(example.manifest);
+    const manifest = await loadJson(manifestUrl);
+    const thumbnail = selectHeroThumbnail(manifest.thumbnails);
+    if (!thumbnail || !isSafeThumbnailPath(thumbnail.file)) {
+        throw new Error(`${example.id} does not define a safe hero thumbnail`);
+    }
+
+    const thumbnailUrl = new URL(thumbnail.file, manifestUrl);
+    if (thumbnailUrl.origin !== window.location.origin) {
+        throw new Error(`${example.id} thumbnail must use the website origin`);
+    }
+
+    await loadImage(thumbnailUrl);
+
+    return {
+        id: example.id,
+        title: example.title,
+        thumbnailUrl
+    };
+}
+
+function createCard(example) {
+    const card = document.createElement('div');
+    card.className = 'htk-card';
+    card.dataset.demoTarget = example.id;
+
+    const heading = document.createElement('div');
+    heading.className = 'htk-card__head';
+
+    const marker = document.createElement('span');
+    marker.className = 'htk-card__dot';
+
+    const title = document.createElement('span');
+    title.className = 'htk-card__tag';
+    title.textContent = example.title;
+
+    const frame = document.createElement('div');
+    frame.className = 'htk-card__frame';
+
+    const image = document.createElement('img');
+    image.className = 'htk-card__image';
+    image.src = example.thumbnailUrl.href;
+    image.alt = '';
+    image.width = 320;
+    image.height = 180;
+    image.decoding = 'async';
+    image.draggable = false;
+
+    heading.append(marker, title);
+    frame.append(image);
+    card.append(heading, frame);
+
+    return card;
+}
+
+function createRow(examples, durationSeconds) {
+    const row = document.createElement('div');
+    row.className = 'htk-row htk-row--right';
+    row.style.animationDuration = `${durationSeconds}s`;
+
+    for (let copyIndex = 0; copyIndex < ROW_COPIES; copyIndex += 1) {
+        for (const example of examples) row.append(createCard(example));
+    }
+
+    return row;
+}
+
+function rotateExamples(examples, offset) {
+    const normalizedOffset = offset % examples.length;
+
+    return examples.slice(normalizedOffset).concat(examples.slice(0, normalizedOffset));
+}
+
+function mountTicker(examples) {
     const hero = document.querySelector('.section-hero');
-    if (!hero) return;
-    if (hero.querySelector('.hero-ticker')) return; // already mounted
+    if (!hero || hero.querySelector('.hero-ticker') || !examples.length) return;
 
-    // Build three rows with offset orders for visual variety
-    const a = TEMPLATES;
-    const b = [...TEMPLATES].reverse();
-    const c = TEMPLATES.slice(4).concat(TEMPLATES.slice(0, 4));
+    const ticker = document.createElement('div');
+    ticker.className = 'hero-ticker';
+    ticker.setAttribute('aria-hidden', 'true');
 
-    const wrap = document.createElement('div');
-    wrap.className = 'hero-ticker';
-    wrap.setAttribute('aria-hidden', 'true');
-    // Three different speeds - 95s is the fastest (matches the original
-     // tempo); others are progressively slower for parallax-like variety.
-    wrap.innerHTML = `
-      <div class="hero-ticker__diag">
-        ${row(a, 'right', 95)}
-        ${row(b, 'right', 135)}
-        ${row(c, 'right', 175)}
-      </div>
-    `;
+    const diagonal = document.createElement('div');
+    diagonal.className = 'hero-ticker__diag';
+    diagonal.append(
+        createRow(examples, 95),
+        createRow([...examples].reverse(), 135),
+        createRow(rotateExamples(examples, 1), 175)
+    );
+    ticker.append(diagonal);
 
     const veil = document.createElement('div');
     veil.className = 'hero-ticker__veil';
+    hero.prepend(veil);
+    hero.prepend(ticker);
+}
 
-    // Insert as the first children so existing ::before glow stays underneath
-    // and existing ::after vignette + .hero__inner stay above.
-    hero.insertBefore(veil, hero.firstChild);
-    hero.insertBefore(wrap, hero.firstChild);
+async function initialiseTicker() {
+    try {
+        const catalogue = await loadDemoCatalog();
+        const results = await Promise.allSettled(catalogue.examples.map(loadHeroExample));
+        const examples = results.flatMap((result, index) => {
+            if (result.status === 'fulfilled') return [result.value];
+            console.warn(`Skipping hero example ${catalogue.examples[index].id}:`, result.reason);
 
-    // Click on a card -> smooth-scroll to #demos.
-    wrap.addEventListener('click', (e) => {
-      const card = e.target.closest('.htk-card');
-      if (!card) return;
-      const target = document.getElementById('demos');
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (target) {
-        target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-      }
-    });
+            return [];
+        });
+        mountTicker(examples);
+    } catch (error) {
+        console.warn('Unable to initialise the OGraf hero ticker:', error);
+    }
+}
 
-    // Hover-pause is intentionally disabled - the CSS animations on the
-    // rows just keep running. Faster, lighter, and avoids any visual
-    // hitch from per-frame JS transform updates.
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mount);
-  } else {
-    mount();
-  }
-})();
+initialiseTicker();
