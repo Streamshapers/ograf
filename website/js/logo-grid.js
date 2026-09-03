@@ -13,7 +13,7 @@
  *
  * The manifest is an array of objects:
  *   [
- *     { "file": "Adobe.svg",       "name": "Adobe",       "url": "https://www.adobe.com/" },
+ *     { "file": "adobe.svg",       "name": "Adobe",       "url": "https://www.adobe.com/" },
  *     { "file": "blackmagic.svg",  "name": "Blackmagic",  "url": "" }
  *   ]
  *
