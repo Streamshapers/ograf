@@ -13,7 +13,11 @@
     "update-manifests": "node scripts/update-manifests.mjs",
     "vendor-assets": "node scripts/vendor-assets.mjs",
     "validate": "node scripts/validate-site.mjs",
-    "test": "npm run validate && playwright test"
+    "test": "npm run test:ci",
+    "test:ci": "npm run validate && npm run test:browsers",
+    "test:browsers": "playwright test",
+    "test:full": "npm run validate && npm run test:browsers:full",
+    "test:browsers:full": "playwright test --config playwright.full.config.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

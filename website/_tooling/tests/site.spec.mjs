@@ -150,7 +150,7 @@ test('social metadata uses the approved preview image', async ({ page }) => {
     await expectCleanPage(monitor);
 });
 
-test('navigation, manifests, and runtime requests work', async ({ page }) => {
+test('@mobile navigation, manifests, and runtime requests work', async ({ page }) => {
     const monitor = await openLandingPage(page);
     const toggle = page.locator('#nav-toggle');
 
@@ -266,7 +266,7 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
     }
 });
 
-test('stage and all carousel example controls run', async ({ page }) => {
+test('@compat stage and all carousel example controls run', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const monitor = await openLandingPage(page);
 
@@ -313,7 +313,7 @@ test('stage and all carousel example controls run', async ({ page }) => {
     await expectCleanPage(monitor);
 });
 
-test('demo carousel adapts and offers valid OGraf packages', async ({ page }) => {
+test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ page }) => {
     const monitor = await openLandingPage(page);
     const carouselViewport = page.locator('.demo-carousel__viewport');
     const activeSlide = page.locator('.demo-carousel__slide.is-active');
@@ -480,7 +480,7 @@ test('scoreboard and responsive lower third keep a stable player height', async 
     await expectCleanPage(monitor);
 });
 
-test('landscape phones retain a complete demo frame', async ({ page }) => {
+test('@mobile landscape phones retain a complete demo frame', async ({ page }) => {
     await page.setViewportSize({ width: 844, height: 390 });
     const monitor = await openLandingPage(page);
     const player = page.locator('.demo-carousel__slide.is-active .demo-player');

@@ -4,8 +4,38 @@ on:
   push:
     branches:
       - "website/**"
+    paths:
+      - ".github/workflows/website-checks.yml"
+      - "_config.yml"
+      - "CHANGELOG.md"
+      - "CNAME"
+      - "docs/logo/**"
+      - "favicon.svg"
+      - "index.html"
+      - "site.webmanifest"
+      - "v1/examples/**"
+      - "v1/specification/**"
+      - "website/**"
   pull_request:
+    paths:
+      - ".github/workflows/website-checks.yml"
+      - "_config.yml"
+      - "CHANGELOG.md"
+      - "CNAME"
+      - "docs/logo/**"
+      - "favicon.svg"
+      - "index.html"
+      - "site.webmanifest"
+      - "v1/examples/**"
+      - "v1/specification/**"
+      - "website/**"
   workflow_dispatch:
+    inputs:
+      full_matrix:
+        description: Run all tests in all five browser and viewport projects
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -48,8 +78,17 @@ jobs:
       - name: Install Playwright browsers
         run: npx --prefix website/_tooling playwright install --with-deps chromium firefox webkit
 
-      - name: Test generated site at root and preview paths
-        run: npm --prefix website/_tooling test
+      - name: Test generated site with the lean browser matrix
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.full_matrix != true }}
+        run: npm --prefix website/_tooling run test:browsers
+        env:
+          CI: true
+          REQUIRE_JEKYLL_OUTPUT: "1"
+          SITE_ROOT: ../../_site
+
+      - name: Test generated site with the full browser matrix
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full_matrix == true }}
+        run: npm --prefix website/_tooling run test:browsers:full
         env:
           CI: true
           REQUIRE_JEKYLL_OUTPUT: "1"

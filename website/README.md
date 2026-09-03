@@ -23,7 +23,14 @@ npm --prefix website/_tooling run update-manifests
 npm --prefix website/_tooling run update-demo-catalog
 npm --prefix website/_tooling run validate
 npm --prefix website/_tooling test
+npm --prefix website/_tooling run test:full
 ```
+
+`test` runs the lean pull-request matrix: full Chromium desktop coverage, focused
+Chromium mobile coverage, a Firefox compatibility check, and WebKit compatibility,
+keyboard, and reduced-motion checks. `test:full` runs every test in all five browser
+and viewport projects for the final pre-release review. The full matrix is also
+available through the `Website checks` workflow's `full_matrix` dispatch option.
 
 `update-manifests` keeps the curated manifest order and metadata, removes missing files, appends new logo files in deterministic order, and rejects invalid JSON. After adding or updating an npm-managed browser dependency, run `vendor-assets` and commit the generated runtime files together with `package-lock.json`.
 

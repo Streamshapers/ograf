@@ -59,7 +59,7 @@ async function expectFocusRing(locator) {
     expect(ring.width).toBeGreaterThanOrEqual(3);
 }
 
-test('visible application states have no WCAG A or AA violations', async ({ page }, testInfo) => {
+test('@mobile visible application states have no WCAG A or AA violations', async ({ page }, testInfo) => {
     await page.route('https://www.youtube-nocookie.com/**', route => route.fulfill({
         status: 200,
         contentType: 'text/html',
@@ -91,7 +91,7 @@ test('visible application states have no WCAG A or AA violations', async ({ page
     await expectNoWcagViolations(page, testInfo, 'video-consented');
 });
 
-test('keyboard users can operate navigation, demos, formats, and code tabs', async ({
+test('@webkit keyboard users can operate navigation, demos, formats, and code tabs', async ({
     browserName,
     page
 }) => {
@@ -200,7 +200,7 @@ test('keyboard users can operate navigation, demos, formats, and code tabs', asy
     expect(invalidFocus).toBe(false);
 });
 
-test('reduced motion stops automatic motion but keeps explicit demo controls', async ({ page }) => {
+test('@webkit reduced motion stops automatic motion but keeps explicit demo controls', async ({ page }) => {
     await openAccessibleLandingPage(page);
 
     expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches))
