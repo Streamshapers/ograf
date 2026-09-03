@@ -461,7 +461,8 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
     await expectCleanPage(monitor);
 });
 
-test('scoreboard and responsive lower third keep a stable player height', async ({ page }) => {
+test('carousel demos share a stable player height on compact laptops', async ({ page }) => {
+    await page.setViewportSize({ width: 1260, height: 802 });
     const monitor = await openLandingPage(page);
     const formats = [
         { ratio: '16/9', width: '1920px', height: '1080px' },
@@ -490,9 +491,23 @@ test('scoreboard and responsive lower third keep a stable player height', async 
     }
 
     await page.locator('#demos').scrollIntoViewIfNeeded();
+
+    const carouselStageHeights = [];
+    const carouselTabs = page.locator('.demo-carousel__dot');
+    const carouselTabCount = await carouselTabs.count();
+    for (let index = 0; index < carouselTabCount; index += 1) {
+        await carouselTabs.nth(index).click();
+        await expect(page.locator('.demo-carousel__slide').nth(index)).toHaveClass(/is-active/);
+        const activeSlide = page.locator('.demo-carousel__slide.is-active');
+        const stageBox = await activeSlide.locator('.demo-player-stage').boundingBox();
+        carouselStageHeights.push(stageBox.height);
+    }
+    expect(Math.max(...carouselStageHeights) - Math.min(...carouselStageHeights)).toBeLessThan(1);
+
+    await carouselTabs.nth(0).click();
     await expectStableHeight(page.locator('.demo-card--scoreboard'));
 
-    await page.locator('.demo-carousel__dot').nth(2).click();
+    await carouselTabs.nth(2).click();
     const responsiveLowerThird = page.locator('[data-demo-controller="responsive-lower-third"]');
     await expect(responsiveLowerThird.locator('[data-demo-action="play"]')).toBeEnabled();
     await expectStableHeight(responsiveLowerThird);
