@@ -464,6 +464,9 @@ test('@compat stage and all carousel example controls run', async ({ page }) => 
     await expect(page.locator('#sb-play')).toBeEnabled();
     await page.locator('#sb-play').click();
     await expect(page.locator('#sb-status')).toHaveAttribute('data-state', 'playing');
+    await page.locator('#sb-next').click();
+    await expect(page.locator('#sb-status')).toHaveText('Live');
+    await expect(page.locator('#sb-next')).toHaveText('Half-Time');
     await page.locator('#sb-home').fill('EBU');
     await page.locator('#sb-update').click();
     await page.locator('#sb-stop').click();
@@ -574,7 +577,6 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
             name: 'ograf-example-scoreboard.zip',
             files: [
                 'README.md',
-                'assets/ograf-logo-colour.svg',
                 'graphic.mjs',
                 'scoreboard.ograf.json',
                 'thumbnail.webp'
@@ -689,7 +691,7 @@ test('carousel demos share a stable player and card height on compact laptops', 
     await expectStableHeight(responsiveLowerThird);
     await expect(
         responsiveLowerThird.locator('.demo-player__iframe').contentFrame().locator('#graphic')
-    ).toHaveAttribute('layout', 'phone');
+    ).toHaveAttribute('data-layout', 'portrait');
 
     await expectCleanPage(monitor);
 });

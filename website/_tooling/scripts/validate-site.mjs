@@ -2,6 +2,7 @@ import { access, readFile, readdir, stat } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import Ajv2020 from 'ajv/dist/2020.js';
 import { HtmlValidate } from 'html-validate';
 import { selectHeroThumbnail } from '../../js/demo-catalog.js';
 
@@ -28,6 +29,8 @@ const RUNTIME_ASSET_BUDGETS = new Map([
 ]);
 const HERO_THUMBNAIL_EXTENSIONS = new Set(['.gif', '.jpeg', '.jpg', '.png', '.webp']);
 const HERO_THUMBNAIL_MAXIMUM_BYTES = 500_000;
+const GRAPHIC_MANIFEST_SCHEMA_ID =
+    'https://ograf.ebu.io/v1/specification/json-schemas/graphics/schema.json';
 const errors = [];
 
 async function exists(path) {
@@ -135,6 +138,40 @@ async function validateJson() {
         } catch (error) {
             report(`${relative(REPOSITORY_ROOT, filePath)} contains invalid JSON: ${error.message}`);
         }
+    }
+}
+
+async function validateExampleManifests() {
+    const schemaRoot = resolve(
+        REPOSITORY_ROOT,
+        'v1/specification/json-schemas'
+    );
+    const schemaFiles = await walk(schemaRoot, path => extname(path) === '.json');
+    const validator = new Ajv2020({ allErrors: true, strict: false });
+
+    for (const schemaPath of schemaFiles) {
+        const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+        if (schema.$id && !validator.getSchema(schema.$id)) validator.addSchema(schema);
+    }
+
+    const validateManifest = validator.getSchema(GRAPHIC_MANIFEST_SCHEMA_ID);
+    if (!validateManifest) {
+        report('Unable to compile the OGraf Graphic manifest schema');
+        return;
+    }
+
+    const catalogue = JSON.parse(
+        await readFile(resolve(WEBSITE_ROOT, 'demo-catalog.json'), 'utf8')
+    );
+    for (const example of catalogue.examples ?? []) {
+        const manifestPath = resolve(REPOSITORY_ROOT, example.manifest);
+        const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+        if (validateManifest(manifest)) continue;
+
+        const validationErrors = (validateManifest.errors ?? [])
+            .map(error => `${error.instancePath || '/'} ${error.message}`)
+            .join('; ');
+        report(`${example.id} manifest is invalid: ${validationErrors}`);
     }
 }
 
@@ -285,6 +322,7 @@ await Promise.all([
     validateHtml(),
     validateCss(),
     validateJson(),
+    validateExampleManifests(),
     validateJavaScript(),
     validateRuntimeDependencies(),
     validateHeroThumbnails(),
