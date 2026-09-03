@@ -39,6 +39,12 @@ their complete file lists and content hashes, and rejects missing manifest entry
 Run it after changing an example. ZIP downloads are generated from those current same-origin
 files in the browser, so no generated archives are committed.
 
+Every example selected for the website must declare at least one thumbnail in its OGraf
+manifest. Thumbnails remain manually maintained package assets. A 16:9 WebP around 1280 x 720
+is recommended, but other resolutions and aspect ratios are supported. The hero chooses the
+closest 16:9 image, prefers the smallest candidate at least 640 pixels wide, and limits the
+selected file to 500 KB. Thumbnail paths must remain relative and same-origin.
+
 When changing a stylesheet or script referenced by `index.html`, increment its `?v=` query
 value so GitHub Pages cannot serve incompatible HTML and cached runtime files together.
 

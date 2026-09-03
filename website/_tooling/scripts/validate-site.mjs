@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { dirname, extname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HtmlValidate } from 'html-validate';
+import { selectHeroThumbnail } from '../../js/demo-catalog.js';
 
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const TOOLING_ROOT = resolve(SCRIPT_DIRECTORY, '..');
@@ -25,6 +26,8 @@ const RUNTIME_ASSET_BUDGETS = new Map([
     ['website/assets/img/ograf-social-preview.png', 280_000],
     ['website/assets/vendor/lucide/lucide.min.js', 10_000]
 ]);
+const HERO_THUMBNAIL_EXTENSIONS = new Set(['.gif', '.jpeg', '.jpg', '.png', '.webp']);
+const HERO_THUMBNAIL_MAXIMUM_BYTES = 500_000;
 const errors = [];
 
 async function exists(path) {
@@ -55,6 +58,16 @@ async function walk(directory, predicate) {
 
 function report(message) {
     errors.push(message);
+}
+
+function isSafeRelativeAssetPath(path) {
+    return typeof path === 'string'
+        && path.length > 0
+        && !path.startsWith('/')
+        && !path.startsWith('//')
+        && !path.includes('\\')
+        && !path.split('/').includes('..')
+        && !/^[a-z][a-z0-9+.-]*:/i.test(path);
 }
 
 function isIgnoredReference(reference) {
@@ -156,6 +169,50 @@ async function validateRuntimeDependencies() {
     }
 }
 
+async function validateHeroThumbnails() {
+    const catalogue = JSON.parse(
+        await readFile(resolve(WEBSITE_ROOT, 'demo-catalog.json'), 'utf8')
+    );
+
+    for (const example of catalogue.examples ?? []) {
+        try {
+            const manifestPath = resolve(REPOSITORY_ROOT, example.manifest);
+            const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+            const thumbnail = selectHeroThumbnail(manifest.thumbnails);
+            if (!thumbnail) {
+                report(`${example.id} does not define a hero thumbnail`);
+                continue;
+            }
+            if (!isSafeRelativeAssetPath(thumbnail.file)) {
+                report(`${example.id} hero thumbnail path is unsafe: ${thumbnail.file}`);
+                continue;
+            }
+            if (!HERO_THUMBNAIL_EXTENSIONS.has(extname(thumbnail.file).toLowerCase())) {
+                report(`${example.id} hero thumbnail uses an unsupported image format`);
+                continue;
+            }
+
+            const thumbnailPath = resolve(dirname(manifestPath), thumbnail.file);
+            if (!await exists(thumbnailPath)) {
+                report(`${example.id} hero thumbnail is missing: ${thumbnail.file}`);
+                continue;
+            }
+
+            const thumbnailStats = await stat(thumbnailPath);
+            if (thumbnailStats.size > HERO_THUMBNAIL_MAXIMUM_BYTES) {
+                report(`${example.id} hero thumbnail exceeds the 500 KB performance budget`);
+            }
+
+            const repositoryPath = relative(REPOSITORY_ROOT, thumbnailPath).split('\\').join('/');
+            if (!example.files?.some(file => file.source === repositoryPath)) {
+                report(`${example.id} hero thumbnail is missing from the generated catalogue`);
+            }
+        } catch (error) {
+            report(`${example.id ?? 'Unknown example'} thumbnail validation failed: ${error.message}`);
+        }
+    }
+}
+
 async function validateRepositoryContract() {
     const cname = (await readFile(resolve(REPOSITORY_ROOT, 'CNAME'), 'utf8')).trim();
     if (cname !== 'ograf.ebu.io') report(`CNAME must remain ograf.ebu.io, got ${cname}`);
@@ -230,6 +287,7 @@ await Promise.all([
     validateJson(),
     validateJavaScript(),
     validateRuntimeDependencies(),
+    validateHeroThumbnails(),
     validateRepositoryContract()
 ]);
 
