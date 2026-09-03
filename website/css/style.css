@@ -1270,11 +1270,10 @@ a:hover {
   z-index: 1;
 }
 
-/* ---- Broadcast canvas --------------------------------------------------------------
-   Fixed 1920x1080 logical viewport - same dimensions OGraf graphics
-   are designed against. JS scales this to fill the device's screen
-   container, so the graphic inside renders at native pixel sizes
-   (60px headers etc.) and stays proportional across all three devices. */
+/* ---- Logical renderer output -------------------------------------------------------
+   JavaScript matches this canvas to each device's aspect ratio and
+   scales it to the physical mockup. The Graphic receives the same
+   logical dimensions through renderCharacteristics. */
 .stage-device__canvas {
   position: absolute;
   top: 0;

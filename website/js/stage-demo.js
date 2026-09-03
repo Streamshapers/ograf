@@ -2,12 +2,10 @@
  * Multi-device stage demo
  * -------------------------------------------------------------
  * Drives the three <ograf-lower-third> instances inside the stage
- * composition (TV, Tablet, Phone). Each instance lives in a
- * 1920x1080 logical "broadcast canvas" wrapper (the same dimensions
- * OGraf graphics are designed against) which we CSS-scale to fill
- * each device's visible screen - so the LT renders at its native
- * pixel sizes (60px headers etc.) and stays proportionally identical
- * across all three devices.
+ * composition (TV, Tablet, Phone). Each instance lives in a logical
+ * output canvas with the same aspect ratio as its device. The canvas
+ * is scaled to the visible screen while the Graphic derives its own
+ * responsive layout from the output dimensions.
  *
  * The LT is the OGraf graphic. Everything else on each screen - the
  * background video, the dark scrim, the device frame - is demo
@@ -15,10 +13,10 @@
  * part of the OGraf spec or template.
  *
  * Architecture (post-iframe migration):
- *   <div .stage-device__screen data-focus-x>
+ *   <div .stage-device__screen>
  *     <video .stage-device__bg-video>            <- demo content
  *     <div   .stage-device__bg-overlay>          <- demo content
- *     <div   .stage-device__canvas>              <- 1920x1080, JS-scaled
+ *     <div   .stage-device__canvas>              <- logical output, JS-scaled
  *       <ograf-lower-third>                      <- the actual OGraf graphic
  *
  * We talk to the graphic via direct method calls on the custom
@@ -97,8 +95,8 @@
   const syncDetail = sync ? sync.querySelector('.stage__sync-detail') : null;
   let isPlaying   = false;
 
-  // -- Broadcast canvas resolution ---------------------------
-  const CANVAS = { w: 1920, h: 1080 };
+  // -- Logical output resolution ------------------------------
+  const LOGICAL_OUTPUT_HEIGHT = 1080;
 
   function setSync(state, status, detail = 'All devices') {
     if (!sync) return;
@@ -122,57 +120,37 @@
     };
   }
 
-  // -- Per-device focus point --------------------------------
-  // Each screen carries data-focus-x="0..1" indicating which point
-  // of the 16:9 source video should land at the centre of the
-  // visible (potentially-cropped) screen. CSS declares the matching
-  // `--focus-x` custom property for the demo video/object-position;
-  // JS reads dataset.focusX directly for the canvas-position math.
-
   // -- Canvas scaling ----------------------------------------
-  // For each screen, scale the 1920x1080 canvas so it FILLS the
-  // visible area (cover, not contain - slight overflow is clipped
-  // by the screen's overflow:hidden). Then position it so that
-  // (focus-x x 1920, 0.5 x 1080) lands at the screen's centre, so
-  // narrow crops (e.g. 9:16 phone over a 16:9 source) keep the
-  // subject and the LT inside the visible window.
+  // Give every Graphic a real output aspect ratio instead of cropping
+  // a 16:9 canvas. A constant logical height keeps typography scaled
+  // consistently across the three physical device mockups.
   function scaleCanvas(screen) {
     const canvas = screen.querySelector('.stage-device__canvas');
-    const lt     = screen.querySelector('ograf-lower-third');
     if (!canvas) return;
-    const sw = screen.clientWidth;
-    const sh = screen.clientHeight;
-    const s  = Math.max(sw / CANVAS.w, sh / CANVAS.h);
-    if (!(s > 0) || !isFinite(s)) return;
-    const fx = parseFloat(screen.dataset.focusX) || 0.5;
-    const fy = 0.5;
+    const screenWidth = screen.clientWidth;
+    const screenHeight = screen.clientHeight;
+    if (!(screenWidth > 0) || !(screenHeight > 0)) return;
 
-    // Snap the canvas wrapper's screen position to an integer pixel.
-    // Float values (e.g. -94.122) introduce subpixel rendering drift
-    // that scales differently per device (heavier on phones with
-    // small scale, lighter on tablets), causing inconsistent gap/clip
-    // results on the visible left edge. The cost of rounding is a
-    // focal-point off-centering of up to half a screen pixel - visually
-    // imperceptible.
-    const X = Math.round(sw / 2 - fx * CANVAS.w * s);
-    const Y = Math.round(sh / 2 - fy * CANVAS.h * s);
-    canvas.style.left      = X + 'px';
-    canvas.style.top       = Y + 'px';
-    canvas.style.transform = `scale(${s})`;
+    const logicalWidth = Math.round(
+      LOGICAL_OUTPUT_HEIGHT * screenWidth / screenHeight
+    );
+    const scale = screenHeight / LOGICAL_OUTPUT_HEIGHT;
+    canvas.style.width = `${logicalWidth}px`;
+    canvas.style.height = `${LOGICAL_OUTPUT_HEIGHT}px`;
+    canvas.style.left = '0';
+    canvas.style.top = '0';
+    canvas.style.transform = `scale(${scale})`;
+  }
 
-    if (lt) {
-      // Derive visible-left from the rounded X so that
-      //   screen_x = X + visible_left * s
-      // resolves to exactly 0 (canvas-edge math is float-symbolic;
-      // a single multiplication can't introduce drift). The LT thus
-      // lands precisely at the visible left edge on every device, no
-      // bias or hand-tuning needed.
-      const visibleWidth = sw / s;
-      let visibleLeft    = -X / s;
-      visibleLeft        = Math.max(0, Math.min(CANVAS.w - visibleWidth, visibleLeft));
-      lt.style.setProperty('--visible-left',  visibleLeft  + 'px');
-      lt.style.setProperty('--visible-width', visibleWidth + 'px');
-    }
+  function renderCharacteristics(graphic) {
+    const canvas = graphic.closest('.stage-device__canvas');
+
+    return {
+      resolution: {
+        width: Number.parseFloat(canvas.style.width),
+        height: Number.parseFloat(canvas.style.height)
+      }
+    };
   }
   function scaleAll() { screens.forEach(scaleCanvas); }
   scaleAll();
@@ -192,7 +170,7 @@
     await Promise.all(lts.map(el => el.load({
       data: ltData(),
       renderType: 'realtime',
-      renderCharacteristics: { resolution: { width: CANVAS.w, height: CANVAS.h } }
+      renderCharacteristics: renderCharacteristics(el)
     })));
     if (btnToggle) btnToggle.disabled = false;
     setSync('ready', 'Ready');

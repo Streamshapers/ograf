@@ -12,7 +12,6 @@ const canvas = document.getElementById('graphic-canvas');
 let example;
 let graphic;
 let backgroundVideo;
-let focusX = 0.5;
 
 function notifyParent(message) {
     window.parent.postMessage(message, MESSAGE_ORIGIN);
@@ -91,19 +90,12 @@ function fitCanvas() {
     );
     if (!(scale > 0) || !Number.isFinite(scale)) return;
 
-    const left = Math.round(viewportWidth / 2 - focusX * canvasSize.width * scale);
+    const left = Math.round((viewportWidth - canvasSize.width * scale) / 2);
     const top = Math.round(viewportHeight / 2 - canvasSize.height * scale / 2);
     canvas.style.left = `${left}px`;
     canvas.style.top = `${top}px`;
     canvas.style.transform = `scale(${scale})`;
 
-    const visibleWidth = viewportWidth / scale;
-    const visibleLeft = Math.max(
-        0,
-        Math.min(canvasSize.width - visibleWidth, -left / scale)
-    );
-    graphic.style.setProperty('--visible-left', `${visibleLeft}px`);
-    graphic.style.setProperty('--visible-width', `${visibleWidth}px`);
 }
 
 function setupCanvas() {
@@ -113,15 +105,6 @@ function setupCanvas() {
     canvas.classList.add('graphic-canvas--fixed');
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
-}
-
-function applyFormat({ layout, focusX: nextFocusX } = {}) {
-    if (layout) graphic.setAttribute('layout', layout);
-    else graphic.removeAttribute('layout');
-
-    focusX = Number.isFinite(Number(nextFocusX)) ? Number(nextFocusX) : 0.5;
-    document.documentElement.style.setProperty('--focus-x', focusX);
-    fitCanvas();
 }
 
 function renderCharacteristics() {
@@ -148,9 +131,22 @@ async function handleMessage({ data, origin, source }) {
             if (payload && Object.keys(payload).length) {
                 await graphic.updateAction({ data: payload, skipAnimation: true });
             }
-            await graphic.playAction({ goto: 0, skipAnimation: false });
+            {
+                const result = await graphic.playAction({ goto: 0, skipAnimation: false });
+                notifyParent({ event: 'state', state: result?.result });
+            }
             notifyParent({ event: 'playing' });
             break;
+        case 'step': {
+            const result = await graphic.playAction({
+                goto: payload?.goto,
+                delta: payload?.delta,
+                skipAnimation: false
+            });
+            notifyParent({ event: 'state', state: result?.result });
+            if (result?.currentStep === undefined) notifyParent({ event: 'stopped' });
+            break;
+        }
         case 'stop':
             await graphic.stopAction({ skipAnimation: false });
             notifyParent({ event: 'stopped' });
@@ -167,9 +163,6 @@ async function handleMessage({ data, origin, source }) {
             notifyParent({ event: 'state', state: result?.result });
             break;
         }
-        case 'format':
-            applyFormat(payload);
-            break;
     }
 }
 
@@ -200,7 +193,7 @@ async function initialisePlayer() {
         renderType: 'realtime',
         renderCharacteristics: renderCharacteristics()
     });
-    applyFormat({});
+    fitCanvas();
     document.title = `OGraf Example — ${example.title}`;
     notifyParent({ event: 'ready' });
 }

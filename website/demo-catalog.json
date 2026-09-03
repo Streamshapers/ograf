@@ -6,12 +6,6 @@
             "title": "Live Scoreboard",
             "manifest": "v1/examples/scoreboard/scoreboard.ograf.json",
             "archiveName": "ograf-example-scoreboard.zip",
-            "packageExtras": [
-                {
-                    "source": "docs/logo/ograf-logo-colour.svg",
-                    "archive": "assets/ograf-logo-colour.svg"
-                }
-            ],
             "presentation": {
                 "renderer": "viewport",
                 "background": {
@@ -24,22 +18,17 @@
                 {
                     "source": "v1/examples/scoreboard/README.md",
                     "archive": "README.md",
-                    "sha256": "1519d05253c8245eeaeb50e83d3123166d038adf354b534b78fa0c61f4be3a6e"
-                },
-                {
-                    "source": "docs/logo/ograf-logo-colour.svg",
-                    "archive": "assets/ograf-logo-colour.svg",
-                    "sha256": "4c4d7bcb24e9ad33e8f9396a2d55dd5e0a98a8a938c8a2b1e507345e301ca294"
+                    "sha256": "d6fdcb289c324cccba4bcb846883f462fe095190402d6116f717c6da2f2deac0"
                 },
                 {
                     "source": "v1/examples/scoreboard/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "73ac17da9a07b98f1ad04deb4b736dad8d19017c564fa47c037b13417be1123f"
+                    "sha256": "2cc2e1c855a43ece121bb718d5c3bad7fbff6aa7b24297d5a0f3bfa8f50b09d7"
                 },
                 {
                     "source": "v1/examples/scoreboard/scoreboard.ograf.json",
                     "archive": "scoreboard.ograf.json",
-                    "sha256": "d2e7ce44b39b8efaddf732afc3ff64630b83f512e2b4ad5a1fe1c451bb300140"
+                    "sha256": "ab835f78f4697af6c59753b9b4c8bc93c0d2076465c108d64d045524967f6f1c"
                 },
                 {
                     "source": "v1/examples/scoreboard/thumbnail.webp",
@@ -54,11 +43,7 @@
             "manifest": "v1/examples/responsive-lower-third/responsive-lower-third.ograf.json",
             "archiveName": "ograf-example-responsive-lower-third.zip",
             "presentation": {
-                "renderer": "fixed-canvas",
-                "canvas": {
-                    "width": 1920,
-                    "height": 1080
-                },
+                "renderer": "viewport",
                 "background": {
                     "type": "image",
                     "src": "website/assets/img/bg-interview.webp",
@@ -69,17 +54,17 @@
                 {
                     "source": "v1/examples/responsive-lower-third/README.md",
                     "archive": "README.md",
-                    "sha256": "1474c0bd00ff724cb7c2104a36d45867c4c0cd16c740b0e346f30c5dc3855720"
+                    "sha256": "509a6944963e52be23a4b68ce329f76e2fcfa881413e00d6df23143bb0063c45"
                 },
                 {
                     "source": "v1/examples/responsive-lower-third/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "e7f1ff99d30187dd1f77430494f236c70768cddc067f787bcaf2f4c02a0f8dd6"
+                    "sha256": "899c4b18aa0583281e682aa4ac538d64d9eae621c94ca04281aa59b9253ac035"
                 },
                 {
                     "source": "v1/examples/responsive-lower-third/responsive-lower-third.ograf.json",
                     "archive": "responsive-lower-third.ograf.json",
-                    "sha256": "154701cbfd504e3557f1912be07c524371fbe3bc51cbf421a4216c0c833c51c4"
+                    "sha256": "6b7544adf92f3a3f58cfa67062b9aeeb9b0b3892d624d9a8ae7d98ee4124a13f"
                 },
                 {
                     "source": "v1/examples/responsive-lower-third/thumbnail.webp",

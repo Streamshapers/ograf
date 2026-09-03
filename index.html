@@ -55,7 +55,7 @@
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=19">
+    <link rel="stylesheet" href="website/css/style.css?v=20">
     <link rel="stylesheet" href="website/css/hero-ticker.css?v=2">
 </head>
 <body>
@@ -231,14 +231,13 @@
                                        -> dark scrim for LT contrast (also
                                           a demo concern)
                        3. <div class="stage-device__canvas">
-                                       -> 1920x1080 logical "broadcast canvas",
-                                          CSS-scaled by JS to fill the screen.
+                                       -> logical renderer output matching the
+                                          device aspect ratio, scaled by JS.
                                           Holds <ograf-lower-third>, which is
                                           the actual OGraf graphic and the
                                           only real-spec asset on the page.
-                     The LT renders at native pixel sizes (60px headers etc.)
-                     inside its 1920x1080 canvas, then everything scales as
-                     one unit - same proportional appearance on every device.
+                     The LT selects its responsive layout from the actual
+                     logical output dimensions supplied by the renderer.
                 ---------------------------------------------------------------------------------------------- -->
 
                 <!-- TV - large landscape, hero tile -->
@@ -282,8 +281,7 @@
                                 </video>
                                 <div class="stage-device__bg-overlay"></div>
                                 <div class="stage-device__canvas">
-                                    <ograf-lower-third class="stage-device__graphic"
-                                                       layout="tablet"></ograf-lower-third>
+                                    <ograf-lower-third class="stage-device__graphic"></ograf-lower-third>
                                 </div>
                             </div>
                         </div>
@@ -306,7 +304,7 @@
                                 </video>
                                 <div class="stage-device__bg-overlay"></div>
                                 <div class="stage-device__canvas">
-                                    <ograf-lower-third class="stage-device__graphic" layout="phone"></ograf-lower-third>
+                                    <ograf-lower-third class="stage-device__graphic"></ograf-lower-third>
                                 </div>
                             </div>
                         </div>
@@ -1574,10 +1572,10 @@
 <script src="website/js/animations.js?v=7"></script>
 
 <!-- Demo control panel -->
-<script src="website/js/demo-lower-third.js?v=10"></script>
+<script src="website/js/demo-lower-third.js?v=11"></script>
 
 <!-- Demo 2: Scoreboard control panel -->
-<script src="website/js/demo-scoreboard.js?v=10"></script>
+<script src="website/js/demo-scoreboard.js?v=11"></script>
 
 <!-- Demo carousel -->
     <script src="website/js/demo-carousel.js?v=13"></script>
@@ -1594,7 +1592,7 @@
     customElements.define('ograf-lower-third', ResponsiveLowerThird);
 </script>
 
-<script src="website/js/stage-demo.js?v=3"></script>
+<script src="website/js/stage-demo.js?v=4"></script>
 
 <!-- Vendor logo ticker (auto-discovers logos in assets/img/vendor-logos/vendors/) -->
 <script src="website/js/vendor-ticker.js?v=2"></script>

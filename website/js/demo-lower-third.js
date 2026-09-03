@@ -3,10 +3,10 @@
     const READY_PING_INTERVAL_MS = 250;
     const READY_PING_TIMEOUT_MS = 10_000;
     const FORMATS = {
-        '16/9': { width: 1920, height: 1080, layout: null, focusX: 0.5 },
-        '4/3': { width: 1440, height: 1080, layout: null, focusX: 0.54 },
-        '1/1': { width: 1080, height: 1080, layout: 'tablet', focusX: 0.58 },
-        '9/16': { width: 1080, height: 1920, layout: 'phone', focusX: 0.6 }
+        '16/9': { width: 1920, height: 1080 },
+        '4/3': { width: 1440, height: 1080 },
+        '1/1': { width: 1080, height: 1080 },
+        '9/16': { width: 1080, height: 1920 }
     };
 
     function initialiseController(controller) {
@@ -52,14 +52,6 @@
             iframe.style.transform = `scale(${scale})`;
         }
 
-        function sendCurrentFormat() {
-            if (aspectButtons.length < 2) return;
-            send('format', {
-                layout: currentFormat.layout,
-                focusX: currentFormat.focusX
-            });
-        }
-
         function setFormat(ratio, moveFocus = false) {
             currentFormat = FORMATS[ratio];
             player.dataset.ratio = ratio;
@@ -70,7 +62,6 @@
                 button.tabIndex = isSelected ? 0 : -1;
             });
             scaleIframe();
-            sendCurrentFormat();
             if (moveFocus) {
                 aspectButtons.find(button => button.dataset.ratio === ratio)?.focus();
             }
@@ -78,7 +69,6 @@
 
         iframe.addEventListener('load', () => {
             requestReady();
-            sendCurrentFormat();
         });
         aspectButtons.forEach(button => {
             button.addEventListener('click', () => setFormat(button.dataset.ratio));
