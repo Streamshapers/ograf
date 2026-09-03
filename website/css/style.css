@@ -1887,8 +1887,7 @@ a:hover {
   }
 
   .stage-device__label {
-    display: block;
-    margin-top: var(--space-2);
+    display: none;
   }
 
   .stage-bento__row--bottom .stage-device--tablet {

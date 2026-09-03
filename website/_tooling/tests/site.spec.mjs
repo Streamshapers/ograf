@@ -235,8 +235,11 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
         const tv = page.locator('.stage-device--tv');
         const tablet = page.locator('.stage-device--tablet');
         const controls = page.locator('.stage__controls');
+        const deviceLabels = page.locator('.stage-device__label');
 
         await section.scrollIntoViewIfNeeded();
+        await expect(deviceLabels).toHaveCount(3);
+        await expect(deviceLabels.first()).toBeHidden();
 
         const sectionBox = await section.boundingBox();
         const headerBox = await siteHeader.boundingBox();
