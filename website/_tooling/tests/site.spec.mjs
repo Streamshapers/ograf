@@ -176,6 +176,35 @@ test('hero thumbnail selection prefers a suitable 16:9 source', async ({ page })
     expect(selected.unspecified).toEqual({ file: 'first.webp' });
 });
 
+test('hero ticker covers ultrawide viewports throughout its loop', async ({ page }) => {
+    await page.setViewportSize({ width: 3840, height: 1440 });
+    const monitor = await openLandingPage(page);
+    const rows = page.locator('.htk-row');
+    await expect(rows).toHaveCount(3);
+    await expect.poll(() => rows.first().locator('.htk-card').count())
+        .toBeGreaterThanOrEqual(27);
+
+    const coverageByPhase = await page.evaluate(() => [0, 0.5, 0.999].map(phase => (
+        [...document.querySelectorAll('.htk-row')].map(row => {
+            const animation = row.getAnimations()[0];
+            const duration = Number(animation.effect.getTiming().duration);
+            animation.pause();
+            animation.currentTime = duration * phase;
+            const bounds = row.getBoundingClientRect();
+
+            return { left: bounds.left, right: bounds.right };
+        })
+    )));
+
+    for (const phaseCoverage of coverageByPhase) {
+        for (const rowCoverage of phaseCoverage) {
+            expect(rowCoverage.left).toBeLessThanOrEqual(0);
+            expect(rowCoverage.right).toBeGreaterThanOrEqual(3840);
+        }
+    }
+    await expectCleanPage(monitor);
+});
+
 test('@mobile hero uses example thumbnails and stable demo deep links', async ({ page }) => {
     const monitor = await openLandingPage(page);
     await expect(page.locator('.hero-ticker')).toHaveAttribute('aria-hidden', 'true');
