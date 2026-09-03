@@ -221,6 +221,51 @@ test('heavy demo media loads only when requested', async ({ page }) => {
     await expectCleanPage(monitor);
 });
 
+test('multi-device stage fits compact landscape viewports', async ({ page }) => {
+    const compactViewports = [
+        { width: 1260, height: 802 },
+        { width: 1024, height: 768 }
+    ];
+
+    for (const viewport of compactViewports) {
+        await page.setViewportSize(viewport);
+        const monitor = await openLandingPage(page);
+        const section = page.locator('.section-stage');
+        const siteHeader = page.locator('.site-header');
+        const tv = page.locator('.stage-device--tv');
+        const tablet = page.locator('.stage-device--tablet');
+        const controls = page.locator('.stage__controls');
+
+        await section.scrollIntoViewIfNeeded();
+
+        const sectionBox = await section.boundingBox();
+        const headerBox = await siteHeader.boundingBox();
+        const tvBox = await tv.boundingBox();
+        const tabletBox = await tablet.boundingBox();
+        const controlsBox = await controls.boundingBox();
+
+        expect(sectionBox).not.toBeNull();
+        expect(headerBox).not.toBeNull();
+        expect(tvBox).not.toBeNull();
+        expect(tabletBox).not.toBeNull();
+        expect(controlsBox).not.toBeNull();
+        expect(sectionBox.height).toBeLessThanOrEqual(viewport.height - headerBox.height + 1);
+        expect(controlsBox.y + controlsBox.height)
+            .toBeLessThanOrEqual(sectionBox.y + sectionBox.height + 1);
+
+        const tabletOverlap = tabletBox.x + tabletBox.width - tvBox.x;
+        expect(tabletOverlap).toBeGreaterThan(0);
+        expect(tabletOverlap).toBeLessThanOrEqual(16);
+
+        const pageWidth = await page.evaluate(() => ({
+            clientWidth: document.documentElement.clientWidth,
+            scrollWidth: document.documentElement.scrollWidth
+        }));
+        expect(pageWidth.scrollWidth).toBe(pageWidth.clientWidth);
+        await expectCleanPage(monitor);
+    }
+});
+
 test('stage and all carousel example controls run', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const monitor = await openLandingPage(page);
