@@ -5,7 +5,9 @@ import {
 } from './demo-catalog.js';
 
 const ALLOWED_THUMBNAIL_EXTENSIONS = new Set(['.gif', '.jpeg', '.jpg', '.png', '.webp']);
-const ROW_COPIES = 4;
+const CARD_WIDTH_PIXELS = 320;
+const MINIMUM_ROW_COPIES = 4;
+const ROW_VIEWPORT_COVERAGE = 2.25;
 
 function isSafeThumbnailPath(path) {
     if (typeof path !== 'string' || !path || path.startsWith('/')) return false;
@@ -89,14 +91,29 @@ function createCard(example) {
     return card;
 }
 
-function createRow(examples, durationSeconds) {
+function requiredRowCopies(examples, viewportWidth) {
+    const estimatedCopyWidth = examples.length * CARD_WIDTH_PIXELS;
+    if (!estimatedCopyWidth) return MINIMUM_ROW_COPIES;
+
+    return Math.max(
+        MINIMUM_ROW_COPIES,
+        Math.ceil(viewportWidth * ROW_VIEWPORT_COVERAGE / estimatedCopyWidth)
+    );
+}
+
+function appendRowCopies(row, examples, copyCount) {
+    const currentCopyCount = Number(row.dataset.copyCount) || 0;
+    for (let copyIndex = currentCopyCount; copyIndex < copyCount; copyIndex += 1) {
+        for (const example of examples) row.append(createCard(example));
+    }
+    row.dataset.copyCount = String(Math.max(currentCopyCount, copyCount));
+}
+
+function createRow(examples, durationSeconds, copyCount) {
     const row = document.createElement('div');
     row.className = 'htk-row htk-row--right';
     row.style.animationDuration = `${durationSeconds}s`;
-
-    for (let copyIndex = 0; copyIndex < ROW_COPIES; copyIndex += 1) {
-        for (const example of examples) row.append(createCard(example));
-    }
+    appendRowCopies(row, examples, copyCount);
 
     return row;
 }
@@ -117,17 +134,33 @@ function mountTicker(examples) {
 
     const diagonal = document.createElement('div');
     diagonal.className = 'hero-ticker__diag';
-    diagonal.append(
-        createRow(examples, 95),
-        createRow([...examples].reverse(), 135),
-        createRow(rotateExamples(examples, 1), 175)
-    );
+    const rowDefinitions = [
+        { examples, durationSeconds: 95 },
+        { examples: [...examples].reverse(), durationSeconds: 135 },
+        { examples: rotateExamples(examples, 1), durationSeconds: 175 }
+    ];
+    const copyCount = requiredRowCopies(examples, hero.clientWidth);
+    const rows = rowDefinitions.map(definition => ({
+        ...definition,
+        row: createRow(definition.examples, definition.durationSeconds, copyCount)
+    }));
+    diagonal.append(...rows.map(definition => definition.row));
     ticker.append(diagonal);
 
     const veil = document.createElement('div');
     veil.className = 'hero-ticker__veil';
     hero.prepend(veil);
     hero.prepend(ticker);
+
+    if ('ResizeObserver' in window) {
+        const resizeObserver = new ResizeObserver(() => {
+            const nextCopyCount = requiredRowCopies(examples, hero.clientWidth);
+            for (const definition of rows) {
+                appendRowCopies(definition.row, definition.examples, nextCopyCount);
+            }
+        });
+        resizeObserver.observe(hero);
+    }
 }
 
 async function initialiseTicker() {
