@@ -1189,6 +1189,10 @@ a:hover {
   margin-bottom: var(--space-12);
 }
 
+.stage__header .eyebrow {
+  color: var(--color-brand-periwinkle);
+}
+
 .stage__header .heading-section {
   color: white;
 }
