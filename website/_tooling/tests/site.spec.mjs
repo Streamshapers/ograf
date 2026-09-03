@@ -183,8 +183,31 @@ test('heavy demo media loads only when requested', async ({ page }) => {
     const monitor = await openLandingPage(page);
     const stageSources = page.locator('.stage-device__bg-video source');
     const deferredFrames = page.locator('.demo-player__iframe[data-src]');
+    const carouselBackgrounds = await page.evaluate(async () => {
+        const response = await fetch('website/demo-catalog.json');
+        const catalogue = await response.json();
+
+        return catalogue.examples.map(example => example.presentation.background);
+    });
 
     await expect(stageSources).toHaveCount(6);
+    expect(carouselBackgrounds).toEqual([
+        {
+            type: 'image',
+            src: 'website/assets/img/bg-stadium.webp',
+            overlay: 'rgba(4, 7, 18, 0.6)'
+        },
+        {
+            type: 'image',
+            src: 'website/assets/img/bg-interview.webp',
+            overlay: 'rgba(4, 7, 18, 0.18)'
+        },
+        {
+            type: 'image',
+            src: 'website/assets/img/bg-interview.webp',
+            overlay: 'rgba(4, 7, 18, 0.18)'
+        }
+    ]);
     for (const source of await stageSources.all()) {
         await expect(source).not.toHaveAttribute('src');
         await expect(source).toHaveAttribute('data-src', /Background-Interview-Video-720/);
