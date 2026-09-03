@@ -150,6 +150,107 @@ test('social metadata uses the approved preview image', async ({ page }) => {
     await expectCleanPage(monitor);
 });
 
+test('hero thumbnail selection prefers a suitable 16:9 source', async ({ page }) => {
+    await page.goto('./');
+    const selected = await page.evaluate(async () => {
+        const { selectHeroThumbnail } = await import('./website/js/demo-catalog.js');
+
+        return {
+            sized: selectHeroThumbnail([
+                { file: 'portrait.webp', resolution: { width: 1080, height: 1920 } },
+                { file: 'full-hd.webp', resolution: { width: 1920, height: 1080 } },
+                { file: 'hd.webp', resolution: { width: 1280, height: 720 } },
+                { file: 'small.webp', resolution: { width: 480, height: 270 } }
+            ]),
+            unspecified: selectHeroThumbnail([
+                { file: 'first.webp' },
+                { file: 'second.webp' }
+            ])
+        };
+    });
+
+    expect(selected.sized).toEqual({
+        file: 'hd.webp',
+        resolution: { width: 1280, height: 720 }
+    });
+    expect(selected.unspecified).toEqual({ file: 'first.webp' });
+});
+
+test('@mobile hero uses example thumbnails and stable demo deep links', async ({ page }) => {
+    const monitor = await openLandingPage(page);
+    await expect(page.locator('.hero-ticker')).toHaveAttribute('aria-hidden', 'true');
+
+    const heroExamples = await page.evaluate(async () => {
+        const {
+            loadDemoCatalog,
+            resolveSitePath,
+            selectHeroThumbnail: selectThumbnail
+        } = await import('./website/js/demo-catalog.js');
+        const catalogue = await loadDemoCatalog();
+
+        return Promise.all(catalogue.examples.map(async example => {
+            const manifestUrl = resolveSitePath(example.manifest);
+            const manifest = await fetch(manifestUrl).then(response => response.json());
+            const thumbnail = selectThumbnail(manifest.thumbnails);
+
+            return {
+                id: example.id,
+                title: example.title,
+                url: new URL(thumbnail.file, manifestUrl).href,
+                resolution: thumbnail.resolution ?? null
+            };
+        }));
+    });
+
+    await expect(page.locator('.htk-card')).toHaveCount(heroExamples.length * 12);
+    for (const example of heroExamples) {
+        const cards = page.locator(`.htk-card[data-demo-target="${example.id}"]`);
+        await expect(cards).toHaveCount(12);
+        await expect(cards.first().locator('.htk-card__tag')).toHaveText(example.title);
+
+        const image = cards.first().locator('.htk-card__image');
+        await expect(image).toHaveAttribute('src', example.url);
+        await expect.poll(() => image.evaluate(element => element.complete)).toBe(true);
+        const dimensions = await image.evaluate(element => ({
+            width: element.naturalWidth,
+            height: element.naturalHeight
+        }));
+        if (example.resolution) expect(dimensions).toEqual(example.resolution);
+
+        const response = await page.request.get(example.url);
+        expect(response.ok()).toBeTruthy();
+        expect(response.headers()['content-type']).toMatch(/^image\//);
+        expect((await response.body()).byteLength).toBeLessThanOrEqual(500_000);
+    }
+
+    for (const exampleId of ['l3rd-name', 'responsive-lower-third', 'scoreboard']) {
+        await page.locator(`[data-demo-target="${exampleId}"]`).first()
+            .evaluate(element => element.click());
+        await expect(page).toHaveURL(new RegExp(`#demo-${exampleId}$`));
+        await expect(page.locator('.demo-carousel__slide.is-active'))
+            .toHaveAttribute('data-example-id', exampleId);
+    }
+
+    await page.evaluate(() => history.back());
+    await expect(page).toHaveURL(/#demo-responsive-lower-third$/);
+    await expect(page.locator('.demo-carousel__slide.is-active'))
+        .toHaveAttribute('data-example-id', 'responsive-lower-third');
+
+    await page.evaluate(() => history.forward());
+    await expect(page).toHaveURL(/#demo-scoreboard$/);
+    await expect(page.locator('.demo-carousel__slide.is-active'))
+        .toHaveAttribute('data-example-id', 'scoreboard');
+
+    await page.goto('./#demo-l3rd-name');
+    await expect(page.locator('.demo-carousel__slide.is-active'))
+        .toHaveAttribute('data-example-id', 'l3rd-name');
+    await expect(page.locator('#demo-slide-1 .demo-player__iframe')).toHaveAttribute(
+        'data-loaded-src',
+        'website/demo-player/index.html?example=l3rd-name'
+    );
+    await expectCleanPage(monitor);
+});
+
 test('@mobile navigation, manifests, and runtime requests work', async ({ page }) => {
     const monitor = await openLandingPage(page);
     const toggle = page.locator('#nav-toggle');
@@ -215,8 +316,13 @@ test('heavy demo media loads only when requested', async ({ page }) => {
     await expect(deferredFrames).toHaveCount(3);
     expect(sameOriginRequests.some(path => path.includes('Background-Interview-Video-720')))
         .toBe(false);
-    expect(sameOriginRequests.some(path => path.includes('/v1/examples/l3rd-name/')))
-        .toBe(false);
+    expect(sameOriginRequests.some(
+        path => path.endsWith('/v1/examples/l3rd-name/graphic.mjs')
+            || path.includes('/v1/examples/l3rd-name/lib/')
+    )).toBe(false);
+    expect(sameOriginRequests.some(
+        path => path.endsWith('/website/demo-player/index.html')
+    )).toBe(false);
 
     await page.locator('.section-stage').scrollIntoViewIfNeeded();
     await expect.poll(() => sameOriginRequests.some(
@@ -225,7 +331,7 @@ test('heavy demo media loads only when requested', async ({ page }) => {
 
     await page.locator('#demos').scrollIntoViewIfNeeded();
     await expect(page.locator('#sb-iframe')).toHaveAttribute(
-        'src',
+        'data-loaded-src',
         'website/demo-player/index.html?example=scoreboard'
     );
     await expect(page.locator('#sb-play')).toBeEnabled();
@@ -233,11 +339,12 @@ test('heavy demo media loads only when requested', async ({ page }) => {
     await page.locator('#demo-tab-1').click();
     const l3rdFrame = page.locator('#demo-slide-1 .demo-player__iframe');
     await expect(l3rdFrame).toHaveAttribute(
-        'src',
+        'data-loaded-src',
         'website/demo-player/index.html?example=l3rd-name'
     );
     await expect(page.locator('#demo-slide-1 [data-demo-action="play"]')).toBeEnabled();
-    await expect(page.locator('#demo-slide-2 .demo-player__iframe')).not.toHaveAttribute('src');
+    await expect(page.locator('#demo-slide-2 .demo-player__iframe'))
+        .not.toHaveAttribute('data-loaded-src');
 
     await expect(page.locator('[data-lucide]')).not.toHaveCount(0);
     await expect(page.locator('i[data-lucide]')).toHaveCount(0);
@@ -440,7 +547,8 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
                 'README.md',
                 'assets/ograf-logo-colour.svg',
                 'graphic.mjs',
-                'scoreboard.ograf.json'
+                'scoreboard.ograf.json',
+                'thumbnail.webp'
             ]
         },
         {
@@ -454,7 +562,8 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
                 'lib/gsap-core.js',
                 'lib/gsap.min.js',
                 'lib/ograf-logo-app.svg',
-                'lib/utils/strings.js'
+                'lib/utils/strings.js',
+                'thumbnail.webp'
             ]
         },
         {
@@ -462,7 +571,8 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
             files: [
                 'README.md',
                 'graphic.mjs',
-                'responsive-lower-third.ograf.json'
+                'responsive-lower-third.ograf.json',
+                'thumbnail.webp'
             ]
         }
     ];

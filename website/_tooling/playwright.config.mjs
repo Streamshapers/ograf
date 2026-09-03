@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 const PORT = Number(process.env.PORT) || 4173;
 const ROOT_BASE_URL = `http://127.0.0.1:${PORT}`;
-const PREVIEW_BASE_URL = `${ROOT_BASE_URL}/ograf`;
+const PREVIEW_BASE_URL = `${ROOT_BASE_URL}/ograf/`;
 const MOBILE_TESTS = /@mobile/;
 const COMPATIBILITY_TESTS = /@compat/;
 const WEBKIT_TESTS = /@(compat|webkit)/;

@@ -226,7 +226,22 @@ test('@webkit reduced motion stops automatic motion but keeps explicit demo cont
     expect(await page.evaluate(() => window.ScrollTrigger?.getAll().length ?? 0)).toBe(0);
     expect(await page.evaluate(() => document.getAnimations()
         .filter(animation => animation.playState === 'running').length)).toBe(0);
+    await expect(page.locator('.hero-ticker')).toHaveAttribute('aria-hidden', 'true');
+    await expect(page.locator('.htk-row').first()).toHaveCSS('animation-name', 'none');
     await expect(page.locator('.demo-carousel__track')).toHaveCSS('transition-duration', '0s');
+
+    await page.evaluate(() => {
+        const scrollIntoView = Element.prototype.scrollIntoView;
+        window.__demoScrollBehavior = null;
+        Element.prototype.scrollIntoView = function (options) {
+            if (this.id === 'demos') window.__demoScrollBehavior = options?.behavior ?? null;
+            return scrollIntoView.call(this, options);
+        };
+    });
+    await page.locator('[data-demo-target="l3rd-name"]').first()
+        .evaluate(element => element.click());
+    await expect(page).toHaveURL(/#demo-l3rd-name$/);
+    expect(await page.evaluate(() => window.__demoScrollBehavior)).toBe('auto');
 
     await page.locator('.section-stage').scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
