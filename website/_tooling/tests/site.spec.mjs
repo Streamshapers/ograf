@@ -562,10 +562,15 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
     const firstSlideBox = await page.locator('.demo-carousel__slide').nth(0).boundingBox();
     const secondSlideBox = await page.locator('.demo-carousel__slide').nth(1).boundingBox();
     const minimumVisibleNeighbour = viewportSize.width <= 640
-        ? 24
+        ? 12
         : viewportSize.width <= 900 ? 60 : 80;
     expect(viewportBox).not.toBeNull();
     expect(firstSlideBox.x).toBeGreaterThan(viewportBox.x);
+    if (viewportSize.width <= 640) {
+        expect(firstSlideBox.width).toBeGreaterThanOrEqual(viewportSize.width - 48);
+        const navigationBox = await page.locator('.demo-carousel__dots').boundingBox();
+        expect(navigationBox.y + navigationBox.height).toBeLessThanOrEqual(viewportBox.y);
+    }
     expect(viewportBox.x + viewportBox.width - secondSlideBox.x)
         .toBeGreaterThanOrEqual(minimumVisibleNeighbour);
     const maskImages = await carouselViewport.evaluate(element => {
@@ -598,6 +603,22 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
     expect(playerBox).not.toBeNull();
     expect(controlsBox).not.toBeNull();
     expect(cardBox).not.toBeNull();
+
+    if (viewportSize.width <= 640) {
+        expect(Math.abs(viewportBox.height - cardBox.height)).toBeLessThan(1);
+        const formatOptionsBox = await activeSlide.locator(
+            '.demo-aspect-bar__options'
+        ).boundingBox();
+        expect(formatOptionsBox.x).toBeGreaterThanOrEqual(cardBox.x);
+        expect(formatOptionsBox.x + formatOptionsBox.width)
+            .toBeLessThanOrEqual(cardBox.x + cardBox.width);
+
+        const actionButtons = activeSlide.locator('.demo-controls__actions .btn');
+        const firstActionBox = await actionButtons.nth(0).boundingBox();
+        const secondActionBox = await actionButtons.nth(1).boundingBox();
+        expect(Math.abs(firstActionBox.y - secondActionBox.y)).toBeLessThan(1);
+        expect(secondActionBox.x).toBeGreaterThan(firstActionBox.x);
+    }
 
     const hasSideControls = viewportSize.width >= 901;
     if (hasSideControls) {
