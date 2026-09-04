@@ -116,6 +116,12 @@
       btnPlay.disabled = true;
       liveButtons.forEach(b => b.disabled = false);
     }
+    if (event === 'resetting') {
+      isPlaying = false;
+      setStatus('loading', 'Resetting...');
+      btnPlay.disabled = true;
+      liveButtons.forEach(b => b.disabled = true);
+    }
     if (event === 'stopped') {
       isPlaying = false;
       setStatus('ready', 'Ready');

@@ -540,6 +540,72 @@ test('@compat stage and carousel example controls run', async ({ browserName, pa
     await expectCleanPage(monitor);
 });
 
+test('stopping a demo disposes and recreates its graphic for replay', async ({ page }) => {
+    const monitor = await openLandingPage(page);
+    await page.locator('#demos').scrollIntoViewIfNeeded();
+
+    const demoCases = [
+        {
+            tabIndex: 0,
+            controller: '.demo-card--scoreboard',
+            play: '#sb-play',
+            stop: '#sb-stop',
+            status: '#sb-status'
+        },
+        {
+            tabIndex: 4,
+            controller: '[data-demo-controller="headline"]',
+            play: '[data-demo-action="play"]',
+            stop: '[data-demo-action="stop"]',
+            status: '[data-demo-status]'
+        }
+    ];
+
+    for (const demoCase of demoCases) {
+        await page.locator('.demo-carousel__dot').nth(demoCase.tabIndex).click();
+        const controller = page.locator(demoCase.controller);
+        const iframe = controller.locator('[data-demo-iframe], #sb-iframe');
+        const playButton = controller.locator(demoCase.play);
+        const stopButton = controller.locator(demoCase.stop);
+        const status = controller.locator(demoCase.status);
+
+        await expect(playButton).toBeEnabled();
+        await playButton.click();
+        await expect(status).toHaveAttribute('data-state', 'playing');
+        await iframe.evaluate(frame => {
+            const graphic = frame.contentWindow.document.querySelector('#graphic');
+            const dispose = graphic.dispose.bind(graphic);
+            frame.contentWindow.__stoppedGraphic = graphic;
+            frame.contentWindow.__disposeCalls = 0;
+            graphic.dispose = async (...args) => {
+                frame.contentWindow.__disposeCalls += 1;
+
+                return dispose(...args);
+            };
+        });
+
+        await stopButton.click();
+        await expect(status).toHaveAttribute('data-state', 'ready');
+        await expect.poll(() => iframe.evaluate(frame => ({
+            disposeCalls: frame.contentWindow.__disposeCalls,
+            replaced: frame.contentWindow.document.querySelector('#graphic')
+                !== frame.contentWindow.__stoppedGraphic,
+            previousDisconnected: !frame.contentWindow.__stoppedGraphic.isConnected
+        }))).toEqual({
+            disposeCalls: 1,
+            replaced: true,
+            previousDisconnected: true
+        });
+
+        await playButton.click();
+        await expect(status).toHaveAttribute('data-state', 'playing');
+        await stopButton.click();
+        await expect(status).toHaveAttribute('data-state', 'ready');
+    }
+
+    await expectCleanPage(monitor);
+});
+
 test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ page }) => {
     const monitor = await openLandingPage(page);
     const carouselViewport = page.locator('.demo-carousel__viewport');
