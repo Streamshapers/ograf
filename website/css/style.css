@@ -3571,20 +3571,22 @@ a:hover {
   }
 
   .demo-aspect-bar {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-2);
     padding-inline: var(--space-4);
   }
 
   .demo-aspect-bar__label {
-    flex-basis: 100%;
+    min-width: 0;
   }
 
   .demo-aspect-bar__options[role="radiogroup"] {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-1);
-    width: 100%;
+    min-width: 0;
+    width: auto;
   }
 
   .demo-aspect-btn {
