@@ -62,10 +62,10 @@
   ],
   "thumbnails": [
     {
-      "file": "thumbnail.png",
+      "file": "thumbnail.jpg",
       "resolution": {
-        "width": 1920,
-        "height": 1080
+        "width": 1280,
+        "height": 720
       }
     }
   ]

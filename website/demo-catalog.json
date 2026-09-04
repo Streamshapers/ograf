@@ -214,12 +214,12 @@
                 {
                     "source": "v1/examples/headline/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "46aff6baba89c1d26f7a5800430eb1cc97d7823e7db07e128a09e644c17ad1f6"
+                    "sha256": "ca1056a3759c57fb22341a23290c8c823f8071b9054a9edc4b775ee3367898b5"
                 },
                 {
                     "source": "v1/examples/headline/headline.ograf.json",
                     "archive": "headline.ograf.json",
-                    "sha256": "ff5fd16d2643297192c0b9691da40e3717c5dd8119aba3616136880a4768e269"
+                    "sha256": "66ecb00baf3ec567a16fbde8d464e40a566918fcc5d6935a8a01925f827150c3"
                 },
                 {
                     "source": "v1/examples/headline/lib/animation.json",
@@ -232,9 +232,9 @@
                     "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
                 },
                 {
-                    "source": "v1/examples/headline/thumbnail.png",
-                    "archive": "thumbnail.png",
-                    "sha256": "1b4cee159e2811ad8a4cc6f4319e27a77b3321d67e346e09fe7b81126276d9d6"
+                    "source": "v1/examples/headline/thumbnail.jpg",
+                    "archive": "thumbnail.jpg",
+                    "sha256": "817e31a7859384e35f7cc6d312504541538889ba685762bd946d803f4b353dca"
                 }
             ]
         },

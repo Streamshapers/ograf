@@ -667,7 +667,7 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
                 'headline.ograf.json',
                 'lib/animation.json',
                 'lib/lottie-web.esm.mjs',
-                'thumbnail.png'
+                'thumbnail.jpg'
             ]
         },
         {
