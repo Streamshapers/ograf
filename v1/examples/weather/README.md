@@ -9,3 +9,6 @@ and non-real-time rendering and exposes one play step.
 The package was exported with StreamShapers OGraf Export. All runtime assets,
 including the local Lottie player and default image, are included in this
 directory.
+
+The photographic background is stored once as an external JPEG asset. The
+Lottie animation references that file instead of embedding a duplicate copy.

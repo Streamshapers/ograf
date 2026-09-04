@@ -1,7 +1,7 @@
 {
   "$schema": "https://ograf.ebu.io/v1/specification/json-schemas/graphics/schema.json",
   "id": "Weather_Ver05",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "name": "Weatherdisplay",
   "main": "graphic.mjs",
   "supportsRealTime": true,
@@ -64,7 +64,7 @@
       "_image": {
         "type": "string",
         "label": "image",
-        "default": "./lib/images/image_0.png",
+        "default": "./lib/images/image_0.jpg",
         "gddType": "file-path/image-path",
         "gddOptions": {
           "extensions": [
@@ -117,10 +117,10 @@
   ],
   "thumbnails": [
     {
-      "file": "thumbnail.png",
+      "file": "thumbnail.jpg",
       "resolution": {
-        "width": 1920,
-        "height": 1080
+        "width": 1280,
+        "height": 720
       }
     }
   ]
