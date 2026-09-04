@@ -23,6 +23,7 @@ const FORBIDDEN_RUNTIME_HOSTS = [
 ];
 const RUNTIME_ASSET_BUDGETS = new Map([
     ['website/assets/img/bg-interview.webp', 100_000],
+    ['website/assets/img/bg-newsroom.jpg', 250_000],
     ['website/assets/img/bg-stadium.webp', 350_000],
     ['website/assets/img/ograf-social-preview.png', 280_000],
     ['website/assets/vendor/lucide/lucide.min.js', 10_000]
@@ -268,6 +269,7 @@ async function validateRepositoryContract() {
         'website/assets/vendor/gsap/ScrollTrigger.min.js',
         'website/assets/vendor/lucide/lucide.min.js',
         'website/assets/img/bg-interview.webp',
+        'website/assets/img/bg-newsroom.jpg',
         'website/assets/img/bg-stadium.webp',
         'website/assets/img/ograf-social-preview.png',
         'website/demo-catalog.json',

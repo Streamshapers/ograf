@@ -345,8 +345,8 @@ test('heavy demo media loads only when requested', async ({ page }) => {
             id: 'l3rd-name',
             background: {
                 type: 'image',
-                src: 'website/assets/img/bg-interview.webp',
-                overlay: 'rgba(4, 7, 18, 0.18)'
+                src: 'website/assets/img/bg-newsroom.jpg',
+                overlay: 'rgba(4, 7, 18, 0.12)'
             }
         },
         { id: 'bar-chart', background: null },

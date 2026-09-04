@@ -86,8 +86,8 @@
                 },
                 "background": {
                     "type": "image",
-                    "src": "website/assets/img/bg-interview.webp",
-                    "overlay": "rgba(4, 7, 18, 0.18)"
+                    "src": "website/assets/img/bg-newsroom.jpg",
+                    "overlay": "rgba(4, 7, 18, 0.12)"
                 }
             },
             "files": [
@@ -139,7 +139,7 @@
                 {
                     "source": "v1/examples/l3rd-name/thumbnail.webp",
                     "archive": "thumbnail.webp",
-                    "sha256": "1e3d3545e9aca35e296212361cfd6264ccae7977113a1fcbd846c7b14e55b6d4"
+                    "sha256": "8855edf0a1264b68006124a10a0b6117dc59ae5ad6e07d6978b965af8463e09c"
                 }
             ]
         },
