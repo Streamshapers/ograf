@@ -169,7 +169,7 @@
                 {
                     "source": "v1/examples/bar-chart/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "de0cc4b9731bc5cce1414b1cdc7a4c081abab99c2669a66ee9708aa11c351508"
+                    "sha256": "1abe4f4cd5aafd3973ea8507218e35e5dcaa02b868030f6dac2e62488b376447"
                 },
                 {
                     "source": "v1/examples/bar-chart/lib/animation.json",
@@ -214,7 +214,7 @@
                 {
                     "source": "v1/examples/headline/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "ca1056a3759c57fb22341a23290c8c823f8071b9054a9edc4b775ee3367898b5"
+                    "sha256": "cd3b871e77537e4b0a7d238ad8ef4fb0350b49e3d659580b432323833c91e9f7"
                 },
                 {
                     "source": "v1/examples/headline/headline.ograf.json",
@@ -259,7 +259,7 @@
                 {
                     "source": "v1/examples/weather/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "a1bf49000f8ee9f32cc06ac68da936208b9dd12ec21b3198d74500b52e8ddcc1"
+                    "sha256": "4f0e5ea07dc03c95736cfbb6cfc5df44daffea0bf2021b55391e7e4339661188"
                 },
                 {
                     "source": "v1/examples/weather/lib/animation.json",

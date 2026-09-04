@@ -49,7 +49,7 @@
           stopwatches: "[]",
           stepCount: 1,
         };
-        
+
 
 const FALLBACK_NON_REALTIME_FRAME_RATE = 30;
 const OGRAF_IMAGES_PATH_PREFIX = "lib/images/";

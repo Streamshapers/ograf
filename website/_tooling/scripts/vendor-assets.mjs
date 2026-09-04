@@ -1,4 +1,4 @@
-import { copyFile, mkdir } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -42,10 +42,23 @@ const COPIES = [
         'fonts/caveat/caveat-latin-700-normal.woff2']
 ];
 
+const NORMALIZED_TEXT_DESTINATIONS = new Set([
+    'vendor/gsap/gsap.min.js',
+    'vendor/gsap/ScrollTrigger.min.js'
+]);
+
 for (const [sourcePath, destinationPath] of COPIES) {
+    const resolvedSource = resolve(NODE_MODULES, sourcePath);
     const resolvedDestination = resolve(ASSET_ROOT, destinationPath);
     await mkdir(dirname(resolvedDestination), { recursive: true });
-    await copyFile(resolve(NODE_MODULES, sourcePath), resolvedDestination);
+
+    if (NORMALIZED_TEXT_DESTINATIONS.has(destinationPath)) {
+        const source = await readFile(resolvedSource, 'utf8');
+        const normalizedSource = `${source.replace(/[ \t]+$/gm, '').trimEnd()}\n`;
+        await writeFile(resolvedDestination, normalizedSource, 'utf8');
+    } else {
+        await copyFile(resolvedSource, resolvedDestination);
+    }
 }
 
 const lucideBundlePath = resolve(ASSET_ROOT, 'vendor/lucide/lucide.min.js');
