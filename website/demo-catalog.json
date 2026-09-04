@@ -179,7 +179,7 @@
                 {
                     "source": "v1/examples/bar-chart/lib/lottie-web.esm.mjs",
                     "archive": "lib/lottie-web.esm.mjs",
-                    "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
+                    "sha256": "48a3f1ed37e969d2bb5b32ebfdf09d13bac1b757623f691de61a8c4ac1f57e92"
                 },
                 {
                     "source": "v1/examples/bar-chart/thumbnail.png",
@@ -229,7 +229,7 @@
                 {
                     "source": "v1/examples/headline/lib/lottie-web.esm.mjs",
                     "archive": "lib/lottie-web.esm.mjs",
-                    "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
+                    "sha256": "48a3f1ed37e969d2bb5b32ebfdf09d13bac1b757623f691de61a8c4ac1f57e92"
                 },
                 {
                     "source": "v1/examples/headline/thumbnail.jpg",
@@ -274,7 +274,7 @@
                 {
                     "source": "v1/examples/weather/lib/lottie-web.esm.mjs",
                     "archive": "lib/lottie-web.esm.mjs",
-                    "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
+                    "sha256": "48a3f1ed37e969d2bb5b32ebfdf09d13bac1b757623f691de61a8c4ac1f57e92"
                 },
                 {
                     "source": "v1/examples/weather/thumbnail.jpg",
