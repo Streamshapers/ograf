@@ -99,7 +99,7 @@
                 {
                     "source": "v1/examples/l3rd-name/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "2b7091c3db659380e90c6a2de388866b6dba08ec1ee3cdd8aacc246e2b61f619"
+                    "sha256": "2c6440e4b1fd040316f89b9536df5772abc9a6a769fe98a32824991f901ccf42"
                 },
                 {
                     "source": "v1/examples/l3rd-name/l3rd.ograf.json",

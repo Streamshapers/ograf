@@ -158,3 +158,66 @@ test('responsive lower third follows the one-step lifecycle', async ({ page }) =
         disposed: true
     });
 });
+
+test('single-step examples return a currentStep payload', async ({ page }) => {
+    const examples = [
+        {
+            manifest: './v1/examples/l3rd-name/l3rd.ograf.json',
+            tag: 'test-ograf-l3rd-name',
+            renderType: 'realtime',
+            data: { name: 'John Doe', title: 'OGraf expert' }
+        },
+        {
+            manifest: './v1/examples/l3rd-name/l3rd.ograf.json',
+            tag: 'test-ograf-l3rd-name',
+            renderType: 'non-realtime',
+            data: { name: 'John Doe', title: 'OGraf expert' }
+        },
+        {
+            manifest: './v1/examples/minimal/minimal.ograf.json',
+            tag: 'test-ograf-minimal',
+            renderType: 'realtime',
+            data: { message: 'Hello World!' }
+        },
+        {
+            manifest: './v1/examples/ograf-logo/logo.ograf.json',
+            tag: 'test-ograf-logo',
+            renderType: 'realtime',
+            data: {}
+        }
+    ];
+
+    for (const example of examples) {
+        await page.goto(example.manifest);
+        const result = await page.evaluate(async ({ tag, renderType, data }) => {
+            const Graphic = (await import('./graphic.mjs')).default;
+            customElements.define(tag, Graphic);
+            const graphic = document.createElement(tag);
+            document.body.append(graphic);
+            await graphic.load({
+                data,
+                renderType,
+                renderCharacteristics: {
+                    resolution: { width: 1920, height: 1080 }
+                }
+            });
+
+            const firstPlay = await graphic.playAction({ goto: 0, skipAnimation: true });
+            const end = await graphic.playAction({ goto: 1, skipAnimation: true });
+
+            return {
+                firstStep: firstPlay.currentStep,
+                firstHasCurrentStep: Object.hasOwn(firstPlay, 'currentStep'),
+                endStep: end.currentStep ?? null,
+                endHasCurrentStep: Object.hasOwn(end, 'currentStep')
+            };
+        }, example);
+
+        expect(result).toEqual({
+            firstStep: 0,
+            firstHasCurrentStep: true,
+            endStep: null,
+            endHasCurrentStep: true
+        });
+    }
+});
