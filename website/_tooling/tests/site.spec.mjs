@@ -94,7 +94,7 @@ async function openLandingPage(page) {
     const monitor = monitorPage(page);
     await page.goto('./');
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'index,follow');
     await expect(page.locator('.logo-grid__item')).not.toHaveCount(0);
     await expect(page.locator('.hero__badge')).toHaveCount(2);
     await expect(page.locator('.hero__badge').nth(1)).toContainText('v1');

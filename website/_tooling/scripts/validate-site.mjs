@@ -14,6 +14,10 @@ const HTML_FILES = [
     resolve(REPOSITORY_ROOT, 'index.html'),
     resolve(WEBSITE_ROOT, 'demo-player/index.html')
 ];
+const ROBOTS_POLICIES = new Map([
+    [resolve(REPOSITORY_ROOT, 'index.html'), 'index,follow'],
+    [resolve(WEBSITE_ROOT, 'demo-player/index.html'), 'noindex,nofollow']
+]);
 const FORBIDDEN_RUNTIME_HOSTS = [
     'fonts.googleapis.com',
     'fonts.gstatic.com',
@@ -111,8 +115,15 @@ async function validateHtml() {
             }
         }
 
-        if (!/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow["']/i.test(contents)) {
-            report(`${relative(REPOSITORY_ROOT, filePath)} is missing noindex,nofollow`);
+        const expectedRobotsPolicy = ROBOTS_POLICIES.get(filePath);
+        const robotsPolicyPattern = new RegExp(
+            `<meta\\s+name=["']robots["']\\s+content=["']${expectedRobotsPolicy}["']`,
+            'i'
+        );
+        if (!robotsPolicyPattern.test(contents)) {
+            report(
+                `${relative(REPOSITORY_ROOT, filePath)} is missing ${expectedRobotsPolicy}`
+            );
         }
 
         await validateLocalReferences(
@@ -257,8 +268,12 @@ async function validateRepositoryContract() {
 
     const requiredPaths = [
         'index.html',
-        'favicon.svg',
+        'robots.txt',
+        'sitemap.xml',
         'site.webmanifest',
+        'website/assets/icons/favicon.svg',
+        'website/assets/icons/favicon-96x96.png',
+        'website/assets/icons/apple-touch-icon.png',
         'docs/logo/ograf-logo-colour.svg',
         'v1/specification/docs/Specification.md',
         'v1/specification/docs/Specification_Server_API.md',
@@ -285,6 +300,30 @@ async function validateRepositoryContract() {
     for (const requiredPath of requiredPaths) {
         if (!await exists(resolve(REPOSITORY_ROOT, requiredPath))) {
             report(`Required path is missing: ${requiredPath}`);
+        }
+    }
+
+    const robotsContents = await readFile(resolve(REPOSITORY_ROOT, 'robots.txt'), 'utf8');
+    if (!robotsContents.includes('User-agent: *') || !robotsContents.includes('Allow: /')) {
+        report('robots.txt must allow public crawling');
+    }
+    if (!robotsContents.includes('Sitemap: https://ograf.ebu.io/sitemap.xml')) {
+        report('robots.txt must reference the production sitemap');
+    }
+
+    const sitemapContents = await readFile(resolve(REPOSITORY_ROOT, 'sitemap.xml'), 'utf8');
+    if (sitemapContents.includes('/website/demo-player/')) {
+        report('sitemap.xml must not include the non-indexable demo player');
+    }
+    for (const publicUrl of [
+        'https://ograf.ebu.io/',
+        'https://ograf.ebu.io/v1/specification/docs/Specification.html',
+        'https://ograf.ebu.io/v1/specification/docs/Specification_Server_API.html',
+        'https://ograf.ebu.io/v1/specification/open-api/docs/',
+        'https://ograf.ebu.io/CHANGELOG.html'
+    ]) {
+        if (!sitemapContents.includes(`<loc>${publicUrl}</loc>`)) {
+            report(`sitemap.xml is missing ${publicUrl}`);
         }
     }
 
