@@ -274,7 +274,10 @@ async function validateRepositoryContract() {
         'website/demo-player/index.html',
         'v1/examples/scoreboard/scoreboard.ograf.json',
         'v1/examples/responsive-lower-third/responsive-lower-third.ograf.json',
-        'v1/examples/l3rd-name/l3rd.ograf.json'
+        'v1/examples/l3rd-name/l3rd.ograf.json',
+        'v1/examples/bar-chart/bar-chart.ograf.json',
+        'v1/examples/headline/headline.ograf.json',
+        'v1/examples/weather/weather.ograf.json'
     ];
 
     for (const requiredPath of requiredPaths) {

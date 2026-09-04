@@ -36,7 +36,13 @@
 
         function getFieldData() {
             return Object.fromEntries(
-                Object.entries(fields).map(([name, field]) => [name, field.value])
+                Object.entries(fields).map(([name, field]) => {
+                    const value = field.dataset.demoValueType === 'number'
+                        ? Number(field.value)
+                        : field.value;
+
+                    return [name, value];
+                })
             );
         }
 

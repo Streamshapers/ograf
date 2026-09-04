@@ -142,6 +142,151 @@
                     "sha256": "1e3d3545e9aca35e296212361cfd6264ccae7977113a1fcbd846c7b14e55b6d4"
                 }
             ]
+        },
+        {
+            "id": "bar-chart",
+            "title": "Bar Chart",
+            "manifest": "v1/examples/bar-chart/bar-chart.ograf.json",
+            "archiveName": "ograf-example-bar-chart.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                }
+            },
+            "files": [
+                {
+                    "source": "v1/examples/bar-chart/README.md",
+                    "archive": "README.md",
+                    "sha256": "b224bda3953cd4776fb2f93ed57ebf7f010420c87baf4db894cfb47fd0b6a810"
+                },
+                {
+                    "source": "v1/examples/bar-chart/bar-chart.ograf.json",
+                    "archive": "bar-chart.ograf.json",
+                    "sha256": "5d9fa51fd176e9744281c894f69010c14b49a5e90bb83ed6f54eff6a98b7f594"
+                },
+                {
+                    "source": "v1/examples/bar-chart/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "77c3c5f2f9c4d7cbb08690b42ca037d0d5b5d932ffac38a19e41b22269b5b962"
+                },
+                {
+                    "source": "v1/examples/bar-chart/lib/animation.json",
+                    "archive": "lib/animation.json",
+                    "sha256": "83da1c6565e61bd9b1be3a03bd549ca4dd9cc559461344f6b10adcec6dafd88b"
+                },
+                {
+                    "source": "v1/examples/bar-chart/lib/lottie-web.esm.mjs",
+                    "archive": "lib/lottie-web.esm.mjs",
+                    "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
+                },
+                {
+                    "source": "v1/examples/bar-chart/thumbnail.png",
+                    "archive": "thumbnail.png",
+                    "sha256": "ad61555eeda9068fe7faeadb3eb7b67c6b6963c36b11350d733994d7b6a3b1a0"
+                }
+            ]
+        },
+        {
+            "id": "headline",
+            "title": "Headline",
+            "manifest": "v1/examples/headline/headline.ograf.json",
+            "archiveName": "ograf-example-headline.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                },
+                "background": {
+                    "type": "image",
+                    "src": "website/assets/img/bg-interview.webp",
+                    "overlay": "rgba(4, 7, 18, 0.18)"
+                }
+            },
+            "files": [
+                {
+                    "source": "v1/examples/headline/README.md",
+                    "archive": "README.md",
+                    "sha256": "2678e6d9412edcdff1495b2b699a60ed05eea06e65fc87c389c8153a03760345"
+                },
+                {
+                    "source": "v1/examples/headline/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "46aff6baba89c1d26f7a5800430eb1cc97d7823e7db07e128a09e644c17ad1f6"
+                },
+                {
+                    "source": "v1/examples/headline/headline.ograf.json",
+                    "archive": "headline.ograf.json",
+                    "sha256": "ff5fd16d2643297192c0b9691da40e3717c5dd8119aba3616136880a4768e269"
+                },
+                {
+                    "source": "v1/examples/headline/lib/animation.json",
+                    "archive": "lib/animation.json",
+                    "sha256": "cf3f26a94c0d1fad1d38f5694f830b2d71bc002884280ca326e3ce668795628c"
+                },
+                {
+                    "source": "v1/examples/headline/lib/lottie-web.esm.mjs",
+                    "archive": "lib/lottie-web.esm.mjs",
+                    "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
+                },
+                {
+                    "source": "v1/examples/headline/thumbnail.png",
+                    "archive": "thumbnail.png",
+                    "sha256": "1b4cee159e2811ad8a4cc6f4319e27a77b3321d67e346e09fe7b81126276d9d6"
+                }
+            ]
+        },
+        {
+            "id": "weather",
+            "title": "Weather",
+            "manifest": "v1/examples/weather/weather.ograf.json",
+            "archiveName": "ograf-example-weather.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                }
+            },
+            "files": [
+                {
+                    "source": "v1/examples/weather/README.md",
+                    "archive": "README.md",
+                    "sha256": "e5c0897d70074e0bbbef1db5ba64cc0ce3f5ee7ff50c609b08d5e5847b6cd5f5"
+                },
+                {
+                    "source": "v1/examples/weather/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "a1bf49000f8ee9f32cc06ac68da936208b9dd12ec21b3198d74500b52e8ddcc1"
+                },
+                {
+                    "source": "v1/examples/weather/lib/animation.json",
+                    "archive": "lib/animation.json",
+                    "sha256": "3ef153207543f97e3eee176b2200d7fff762d429a24d64e8ec1ab8734a53c698"
+                },
+                {
+                    "source": "v1/examples/weather/lib/images/image_0.jpg",
+                    "archive": "lib/images/image_0.jpg",
+                    "sha256": "0af1ccbbf90e138c34bdf1c344905764b7ae7081761891d08f1c8f81d83417e8"
+                },
+                {
+                    "source": "v1/examples/weather/lib/lottie-web.esm.mjs",
+                    "archive": "lib/lottie-web.esm.mjs",
+                    "sha256": "23ed98e8e84487c93ca70c223a6a7d85b1c1c2481791875ce18e5bad47c93ddb"
+                },
+                {
+                    "source": "v1/examples/weather/thumbnail.jpg",
+                    "archive": "thumbnail.jpg",
+                    "sha256": "f8e15fea2630c8169afa925612913b33e2f72b318d19d6ccd30ee1e6bc4fd91f"
+                },
+                {
+                    "source": "v1/examples/weather/weather.ograf.json",
+                    "archive": "weather.ograf.json",
+                    "sha256": "79a3958e2e2c8990660ee7bc2a28a2e4bcda52a9f4e5daf31f87ace6ba74000c"
+                }
+            ]
         }
     ]
 }

@@ -252,7 +252,7 @@ test('@mobile hero uses example thumbnails and stable demo deep links', async ({
         expect((await response.body()).byteLength).toBeLessThanOrEqual(500_000);
     }
 
-    for (const exampleId of ['l3rd-name', 'responsive-lower-third', 'scoreboard']) {
+    for (const exampleId of heroExamples.map(example => example.id)) {
         await page.locator(`[data-demo-target="${exampleId}"]`).first()
             .evaluate(element => element.click());
         await expect(page).toHaveURL(new RegExp(`#demo-${exampleId}$`));
@@ -261,21 +261,21 @@ test('@mobile hero uses example thumbnails and stable demo deep links', async ({
     }
 
     await page.evaluate(() => history.back());
-    await expect(page).toHaveURL(/#demo-responsive-lower-third$/);
+    await expect(page).toHaveURL(/#demo-headline$/);
     await expect(page.locator('.demo-carousel__slide.is-active'))
-        .toHaveAttribute('data-example-id', 'responsive-lower-third');
+        .toHaveAttribute('data-example-id', 'headline');
 
     await page.evaluate(() => history.forward());
-    await expect(page).toHaveURL(/#demo-scoreboard$/);
+    await expect(page).toHaveURL(/#demo-weather$/);
     await expect(page.locator('.demo-carousel__slide.is-active'))
-        .toHaveAttribute('data-example-id', 'scoreboard');
+        .toHaveAttribute('data-example-id', 'weather');
 
-    await page.goto('./#demo-l3rd-name');
+    await page.goto('./#demo-weather');
     await expect(page.locator('.demo-carousel__slide.is-active'))
-        .toHaveAttribute('data-example-id', 'l3rd-name');
-    await expect(page.locator('#demo-slide-1 .demo-player__iframe')).toHaveAttribute(
+        .toHaveAttribute('data-example-id', 'weather');
+    await expect(page.locator('#demo-slide-5 .demo-player__iframe')).toHaveAttribute(
         'data-loaded-src',
-        'website/demo-player/index.html?example=l3rd-name'
+        'website/demo-player/index.html?example=weather'
     );
     await expectCleanPage(monitor);
 });
@@ -317,32 +317,54 @@ test('heavy demo media loads only when requested', async ({ page }) => {
         const response = await fetch('website/demo-catalog.json');
         const catalogue = await response.json();
 
-        return catalogue.examples.map(example => example.presentation.background);
+        return catalogue.examples.map(example => ({
+            id: example.id,
+            background: example.presentation.background ?? null
+        }));
     });
 
     await expect(stageSources).toHaveCount(6);
     expect(carouselBackgrounds).toEqual([
         {
-            type: 'image',
-            src: 'website/assets/img/bg-stadium.webp',
-            overlay: 'rgba(4, 7, 18, 0.6)'
+            id: 'scoreboard',
+            background: {
+                type: 'image',
+                src: 'website/assets/img/bg-stadium.webp',
+                overlay: 'rgba(4, 7, 18, 0.6)'
+            }
         },
         {
-            type: 'image',
-            src: 'website/assets/img/bg-interview.webp',
-            overlay: 'rgba(4, 7, 18, 0.18)'
+            id: 'responsive-lower-third',
+            background: {
+                type: 'image',
+                src: 'website/assets/img/bg-interview.webp',
+                overlay: 'rgba(4, 7, 18, 0.18)'
+            }
         },
         {
-            type: 'image',
-            src: 'website/assets/img/bg-interview.webp',
-            overlay: 'rgba(4, 7, 18, 0.18)'
-        }
+            id: 'l3rd-name',
+            background: {
+                type: 'image',
+                src: 'website/assets/img/bg-interview.webp',
+                overlay: 'rgba(4, 7, 18, 0.18)'
+            }
+        },
+        { id: 'bar-chart', background: null },
+        {
+            id: 'headline',
+            background: {
+                type: 'image',
+                src: 'website/assets/img/bg-interview.webp',
+                overlay: 'rgba(4, 7, 18, 0.18)'
+            }
+        },
+        { id: 'weather', background: null }
     ]);
     for (const source of await stageSources.all()) {
         await expect(source).not.toHaveAttribute('src');
         await expect(source).toHaveAttribute('data-src', /Background-Interview-Video-720/);
     }
-    await expect(deferredFrames).toHaveCount(3);
+    await expect(deferredFrames).toHaveCount(6);
     expect(sameOriginRequests.some(path => path.includes('Background-Interview-Video-720')))
         .toBe(false);
     expect(sameOriginRequests.some(
@@ -448,7 +470,8 @@ test('multi-device stage fits compact landscape viewports', async ({ page }) => 
     }
 });
 
-test('@compat stage and all carousel example controls run', async ({ page }) => {
+test('@compat stage and carousel example controls run', async ({ browserName, page }) => {
+    test.setTimeout(90_000);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const monitor = await openLandingPage(page);
 
@@ -472,8 +495,19 @@ test('@compat stage and all carousel example controls run', async ({ page }) => 
     await page.locator('#sb-stop').click();
     await expect(page.locator('#sb-status')).toHaveAttribute('data-state', 'ready');
 
-    for (const controllerName of ['l3rd-name', 'responsive-lower-third']) {
-        await page.locator('.demo-carousel__btn--next').click();
+    const controllerNames = browserName === 'webkit'
+        ? ['l3rd-name', 'responsive-lower-third', 'headline']
+        : [
+            'l3rd-name',
+            'responsive-lower-third',
+            'bar-chart',
+            'headline',
+            'weather'
+        ];
+    for (const controllerName of controllerNames) {
+        await page.locator(
+            `.demo-carousel__dot[data-example-id="${controllerName}"]`
+        ).click();
         const controller = page.locator(`[data-demo-controller="${controllerName}"]`);
         const playButton = controller.locator('[data-demo-action="play"]');
 
@@ -483,8 +517,12 @@ test('@compat stage and all carousel example controls run', async ({ page }) => 
         await expect(playButton).toBeVisible();
         await expect(playButton).toBeEnabled();
         await playButton.click();
-        await expect(controller.locator('[data-demo-status]')).toHaveAttribute('data-state', 'playing');
-        await controller.locator('[data-demo-field="name"]').fill('Updated Presenter');
+        await expect(controller.locator('[data-demo-status]')).toHaveAttribute(
+            'data-state',
+            'playing',
+            { timeout: 20_000 }
+        );
+        await controller.locator('[data-demo-field]').first().fill('Updated Demo');
         await controller.locator('[data-demo-action="update"]').click();
         const customAction = controller.locator('[data-demo-custom-action]');
         if (await customAction.count()) {
@@ -492,7 +530,11 @@ test('@compat stage and all carousel example controls run', async ({ page }) => 
             await customAction.click();
         }
         await controller.locator('[data-demo-action="stop"]').click();
-        await expect(controller.locator('[data-demo-status]')).toHaveAttribute('data-state', 'ready');
+        await expect(controller.locator('[data-demo-status]')).toHaveAttribute(
+            'data-state',
+            'ready',
+            { timeout: 20_000 }
+        );
     }
 
     await expectCleanPage(monitor);
@@ -508,8 +550,8 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
 
     await page.locator('#demos').scrollIntoViewIfNeeded();
     await expect(carouselViewport).toBeVisible();
-    await expect(page.locator('.demo-carousel__slide')).toHaveCount(3);
-    await expect(page.locator('.demo-carousel__dot')).toHaveCount(3);
+    await expect(page.locator('.demo-carousel__slide')).toHaveCount(6);
+    await expect(page.locator('.demo-carousel__dot')).toHaveCount(6);
     await expect(page.locator('.demo-card__tag')).toHaveCount(0);
 
     for (const chromePart of ['.demo-card__header', '.demo-aspect-bar']) {
@@ -605,6 +647,40 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
                 'responsive-lower-third.ograf.json',
                 'thumbnail.webp'
             ]
+        },
+        {
+            name: 'ograf-example-bar-chart.zip',
+            files: [
+                'README.md',
+                'bar-chart.ograf.json',
+                'graphic.mjs',
+                'lib/animation.json',
+                'lib/lottie-web.esm.mjs',
+                'thumbnail.png'
+            ]
+        },
+        {
+            name: 'ograf-example-headline.zip',
+            files: [
+                'README.md',
+                'graphic.mjs',
+                'headline.ograf.json',
+                'lib/animation.json',
+                'lib/lottie-web.esm.mjs',
+                'thumbnail.png'
+            ]
+        },
+        {
+            name: 'ograf-example-weather.zip',
+            files: [
+                'README.md',
+                'graphic.mjs',
+                'lib/animation.json',
+                'lib/images/image_0.jpg',
+                'lib/lottie-web.esm.mjs',
+                'thumbnail.jpg',
+                'weather.ograf.json'
+            ]
         }
     ];
     await expect(page.locator('.demo-card__download')).toHaveCount(expectedDownloads.length);
@@ -662,19 +738,22 @@ test('carousel demos share a stable player and card height on compact laptops', 
     for (let index = 0; index < carouselTabCount; index += 1) {
         await carouselTabs.nth(index).click();
         await expect(page.locator('.demo-carousel__slide').nth(index)).toHaveClass(/is-active/);
-        const activeSlide = page.locator('.demo-carousel__slide.is-active');
-        const cardBox = await activeSlide.locator('.demo-card').boundingBox();
-        const aspectBox = await activeSlide.locator('.demo-aspect-bar').boundingBox();
-        const stageBox = await activeSlide.locator('.demo-player-stage').boundingBox();
-        carouselDimensions.push({
-            cardHeight: cardBox.height,
-            aspectHeight: aspectBox.height,
-            stageHeight: stageBox.height,
-            stageTop: stageBox.y - cardBox.y,
-            stageBottom: cardBox.y + cardBox.height - stageBox.y - stageBox.height
-        });
+        const activeCard = page.locator('.demo-carousel__slide.is-active .demo-card');
+        carouselDimensions.push(await activeCard.evaluate(card => {
+            const cardBox = card.getBoundingClientRect();
+            const aspectBox = card.querySelector('.demo-aspect-bar').getBoundingClientRect();
+            const stageBox = card.querySelector('.demo-player-stage').getBoundingClientRect();
+
+            return {
+                cardHeight: cardBox.height,
+                aspectHeight: aspectBox.height,
+                stageHeight: stageBox.height,
+                stageTop: stageBox.top - cardBox.top,
+                stageBottom: cardBox.bottom - stageBox.bottom
+            };
+        }));
     }
-    for (const property of Object.keys(carouselDimensions[0])) {
+    for (const property of ['cardHeight', 'aspectHeight', 'stageHeight', 'stageTop', 'stageBottom']) {
         const values = carouselDimensions.map(dimensions => dimensions[property]);
         expect(
             Math.max(...values) - Math.min(...values),

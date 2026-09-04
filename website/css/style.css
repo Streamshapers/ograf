@@ -3399,6 +3399,7 @@ a:hover {
   .demo-card__body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(300px, 320px);
+    grid-template-rows: auto minmax(0, 1fr);
     grid-template-areas:
       "aspect controls"
       "player controls";
@@ -3416,6 +3417,7 @@ a:hover {
 
   .demo-controls {
     grid-area: controls;
+    contain: size;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -3424,12 +3426,22 @@ a:hover {
     padding: var(--space-5);
     border-top: 0;
     border-left: 1px solid var(--color-border);
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .demo-controls__fields {
     display: grid;
     flex: 0 0 auto;
     gap: var(--space-3);
+  }
+
+  .demo-controls__fields--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .demo-field--wide {
+    grid-column: 1 / -1;
   }
 
   .demo-field {

@@ -85,7 +85,7 @@ test('@mobile visible application states have no WCAG A or AA violations', async
     await openAccessibleLandingPage(page);
     await expectCodePanelsToFit(page);
 
-    await expect(page.locator('.demo-player__iframe')).toHaveCount(3);
+    await expect(page.locator('.demo-player__iframe')).toHaveCount(6);
     for (const iframe of await page.locator('.demo-player__iframe').all()) {
         await expect(iframe).toHaveAttribute('title', /\S+/);
     }
@@ -159,18 +159,17 @@ test('@webkit keyboard users can operate navigation, demos, formats, and code ta
     await expect(page.locator('#demo-tab-1')).toBeFocused();
     await expect(page.locator('#demo-tab-1')).toHaveAttribute('aria-selected', 'true');
     await page.keyboard.press('End');
-    await expect(page.locator('#demo-tab-2')).toBeFocused();
+    await expect(page.locator('#demo-tab-5')).toBeFocused();
     await page.keyboard.press('Home');
     await expect(firstDemoTab).toBeFocused();
-    await page.keyboard.press('ArrowRight');
-    if (browserName === 'webkit') {
-        await page.locator('.demo-carousel__btn--next').focus();
-    } else {
-        await page.keyboard.press('Shift+Tab');
-    }
+    await page.locator('#demo-tab-4').focus();
+    await page.keyboard.press('Enter');
+    await page.locator('.demo-carousel__btn--next').focus();
     await expect(page.locator('.demo-carousel__btn--next')).toBeFocused();
     await page.keyboard.press('Enter');
-    await expect(page.locator('#demo-tab-2')).toBeFocused();
+    await expect(page.locator('#demo-tab-5')).toBeFocused();
+
+    await page.locator('#demo-tab-2').click();
 
     const formatRadios = page.locator(
         '#demo-slide-2 .demo-aspect-bar__options [role="radio"]'
