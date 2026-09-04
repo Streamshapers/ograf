@@ -1,6 +1,6 @@
 /* -----------------------------------------------------------
    OGRAF WEBSITE - ANIMATIONS
-   Requires: GSAP + ScrollTrigger + Lenis
+   Requires: GSAP + ScrollTrigger
 ----------------------------------------------------------- */
 
 gsap.registerPlugin(ScrollTrigger);
