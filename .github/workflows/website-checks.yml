@@ -3,16 +3,17 @@ name: Website checks
 on:
   push:
     branches:
-      - "website/**"
+      - main
     paths:
       - ".github/workflows/website-checks.yml"
       - "_config.yml"
       - "CHANGELOG.md"
       - "CNAME"
       - "docs/logo/**"
-      - "favicon.svg"
       - "index.html"
+      - "robots.txt"
       - "site.webmanifest"
+      - "sitemap.xml"
       - "v1/examples/**"
       - "v1/specification/**"
       - "website/**"
@@ -23,9 +24,10 @@ on:
       - "CHANGELOG.md"
       - "CNAME"
       - "docs/logo/**"
-      - "favicon.svg"
       - "index.html"
+      - "robots.txt"
       - "site.webmanifest"
+      - "sitemap.xml"
       - "v1/examples/**"
       - "v1/specification/**"
       - "website/**"
