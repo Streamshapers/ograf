@@ -159,22 +159,22 @@
                 {
                     "source": "v1/examples/bar-chart/README.md",
                     "archive": "README.md",
-                    "sha256": "b224bda3953cd4776fb2f93ed57ebf7f010420c87baf4db894cfb47fd0b6a810"
+                    "sha256": "4379b6cf46afacd1dc13c9d799164308138543ebdd7f5c34ebdbfc33bb95d458"
                 },
                 {
                     "source": "v1/examples/bar-chart/bar-chart.ograf.json",
                     "archive": "bar-chart.ograf.json",
-                    "sha256": "5d9fa51fd176e9744281c894f69010c14b49a5e90bb83ed6f54eff6a98b7f594"
+                    "sha256": "b049df58911e2cc6ef93738403bbf738c97af78c3b4b8d19624c3b8be39b93fd"
                 },
                 {
                     "source": "v1/examples/bar-chart/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "77c3c5f2f9c4d7cbb08690b42ca037d0d5b5d932ffac38a19e41b22269b5b962"
+                    "sha256": "de0cc4b9731bc5cce1414b1cdc7a4c081abab99c2669a66ee9708aa11c351508"
                 },
                 {
                     "source": "v1/examples/bar-chart/lib/animation.json",
                     "archive": "lib/animation.json",
-                    "sha256": "83da1c6565e61bd9b1be3a03bd549ca4dd9cc559461344f6b10adcec6dafd88b"
+                    "sha256": "2d8664eea2954e6c8996ec127ee8705108b92a46b6e497ecd79b1fcbbe8c11f7"
                 },
                 {
                     "source": "v1/examples/bar-chart/lib/lottie-web.esm.mjs",
@@ -184,7 +184,7 @@
                 {
                     "source": "v1/examples/bar-chart/thumbnail.png",
                     "archive": "thumbnail.png",
-                    "sha256": "ad61555eeda9068fe7faeadb3eb7b67c6b6963c36b11350d733994d7b6a3b1a0"
+                    "sha256": "603dc2e48b5a63e20a32d4e072fd33be423ade070af8eba7f4798769b8e96bae"
                 }
             ]
         },

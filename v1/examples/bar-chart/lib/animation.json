@@ -2209,14 +2209,14 @@
         },
         "helper": {},
         "cache": {
-          "0": 0.5720975112915039,
-          "1": 0.5720975112915039,
-          "2": 0.5720975112915039,
-          "5": 0.5720975112915039,
-          "6": 0.5720975112915039,
-          "7": 0.5720975112915039,
-          "8": 0.5720975112915039,
-          "9": 0.5720975112915039
+          "0": 0.572674789428711,
+          "1": 0.572674789428711,
+          "2": 0.572674789428711,
+          "5": 0.572674789428711,
+          "6": 0.572674789428711,
+          "7": 0.572674789428711,
+          "8": 0.572674789428711,
+          "9": 0.572674789428711
         }
       },
       {
@@ -2242,16 +2242,16 @@
         "helper": {},
         "cache": {
           "B": 0.671969223022461,
-          "a": 0.6044259262084961,
-          "r": 0.454329719543457,
+          "a": 0.6050032424926758,
+          "r": 0.45490699768066406,
           " ": 0.25978195190429687,
           "C": 0.637331657409668,
-          "h": 0.6575369262695312,
+          "h": 0.6581141662597656,
           "t": 0.43412445068359373,
-          "G": 0.7245028686523437,
+          "G": 0.7250801849365235,
           "p": 0.6327132797241211,
-          "i": 0.305388069152832,
-          "c": 0.5143682098388672
+          "i": 0.3059653663635254,
+          "c": 0.5149454879760742
         }
       }
     ]
@@ -2261,7 +2261,7 @@
       "ddd": 0,
       "ind": 1,
       "ty": 5,
-      "nm": "_TITLE",
+      "nm": "_Title",
       "sr": 1,
       "ks": {
         "o": {
@@ -2446,8 +2446,8 @@
                 "finalLineHeight": 60.0000038146973,
                 "l": [
                   {
-                    "l": 33.59918212890625,
-                    "an": 33.59918212890625,
+                    "l": 33.591064453125,
+                    "an": 33.591064453125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2458,8 +2458,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 30.204498291015625,
-                    "an": 30.204498291015625,
+                    "l": 30.20618438720703,
+                    "an": 30.20618438720703,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2470,8 +2470,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 22.709609985351562,
-                    "an": 22.709609985351562,
+                    "l": 22.71477699279785,
+                    "an": 22.71477699279785,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2482,8 +2482,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 12.98568344116211,
-                    "an": 12.98568344116211,
+                    "l": 12.989688873291016,
+                    "an": 12.989688873291016,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2494,8 +2494,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 31.860939025878903,
-                    "an": 31.860939025878903,
+                    "l": 31.85566902160645,
+                    "an": 31.85566902160645,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2506,8 +2506,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 32.86298370361328,
-                    "an": 32.86298370361328,
+                    "l": 32.869415283203125,
+                    "an": 32.869415283203125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2518,8 +2518,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 30.204498291015625,
-                    "an": 30.204498291015625,
+                    "l": 30.20618438720703,
+                    "an": 30.20618438720703,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2530,8 +2530,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 22.709609985351562,
-                    "an": 22.709609985351562,
+                    "l": 22.71477699279785,
+                    "an": 22.71477699279785,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2542,8 +2542,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 21.707565307617188,
-                    "an": 21.707565307617188,
+                    "l": 21.701030731201172,
+                    "an": 21.701030731201172,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2554,8 +2554,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 12.98568344116211,
-                    "an": 12.98568344116211,
+                    "l": 12.989688873291016,
+                    "an": 12.989688873291016,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2566,8 +2566,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 36.20654296875,
-                    "an": 36.20654296875,
+                    "l": 36.2027473449707,
+                    "an": 36.2027473449707,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2578,8 +2578,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 22.709609985351562,
-                    "an": 22.709609985351562,
+                    "l": 22.71477699279785,
+                    "an": 22.71477699279785,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2590,8 +2590,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 30.204498291015625,
-                    "an": 30.204498291015625,
+                    "l": 30.20618438720703,
+                    "an": 30.20618438720703,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2602,8 +2602,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 31.646215438842773,
-                    "an": 31.646215438842773,
+                    "l": 31.649484634399418,
+                    "an": 31.649484634399418,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2614,8 +2614,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 32.86298370361328,
-                    "an": 32.86298370361328,
+                    "l": 32.869415283203125,
+                    "an": 32.869415283203125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2626,8 +2626,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 15.265848159790037,
-                    "an": 15.265848159790037,
+                    "l": 15.257731437683105,
+                    "an": 15.257731437683105,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2638,8 +2638,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 25.71574592590332,
-                    "an": 25.71574592590332,
+                    "l": 25.7044677734375,
+                    "an": 25.7044677734375,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2650,10 +2650,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 446.4416980743408,
+                "boxWidth": 446.44328784942627,
                 "justifyOffset": 0,
                 "lineWidths": [
-                  446.4416980743408
+                  446.44328784942627
                 ],
                 "yOffset": 60.0000038146973,
                 "ascent": 37.9997253417969
@@ -2687,7 +2687,7 @@
       "ddd": 0,
       "ind": 2,
       "ty": 5,
-      "nm": "_val01",
+      "nm": "_Value 1",
       "sr": 1,
       "ks": {
         "o": {
@@ -2730,15 +2730,38 @@
           "ix": 10
         },
         "p": {
-          "a": 0,
+          "a": 1,
           "k": [
-            451,
-            256.222,
-            0
+            {
+              "i": {
+                "x": 0.667,
+                "y": 1
+              },
+              "o": {
+                "x": 0.167,
+                "y": 0.167
+              },
+              "t": 50,
+              "s": [
+                451,
+                0,
+                0
+              ],
+              "to": null,
+              "ti": null
+            },
+            {
+              "t": 100,
+              "s": [
+                451,
+                100,
+                0
+              ]
+            }
           ],
           "ix": 2,
           "l": 2,
-          "x": "var $bm_rt;\nvar bar, rect, topY;\nbar = thisComp.layer('bar01');\nrect = bar.sourceRectAtTime(time, false);\ntopY = bar.toComp([\n    0,\n    rect.top\n])[1];\n$bm_rt = [\n    value[0],\n    topY - 20\n];"
+          "x": "var $bm_rt;\nvar myVal, myBar, maxVal, factor, animFactor;\nmyVal = parseFloat(thisComp.layer('_Value 1').text.sourceText);\nmyBar = thisComp.layer('bar01');\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\nanimFactor = myBar.transform.scale[1];\n$bm_rt = [\n    value[0],\n    660 - 400 * factor / 100 * value[1]\n];"
         },
         "a": {
           "a": 0,
@@ -2792,8 +2815,8 @@
                 "finalLineHeight": 38.4000015258789,
                 "l": [
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2804,8 +2827,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2816,8 +2839,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -2828,10 +2851,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 54.89079711914063,
-                "justifyOffset": -27.445398559570314,
+                "boxWidth": 54.89484374999999,
+                "justifyOffset": -27.447421874999996,
                 "lineWidths": [
-                  54.89079711914063
+                  54.89484374999999
                 ],
                 "yOffset": 38.4000015258789,
                 "ascent": 24.319824218750018
@@ -2944,7 +2967,7 @@
           ],
           "ix": 6,
           "l": 2,
-          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_val01').text.sourceText), parseFloat(thisComp.layer('_val02').text.sourceText), parseFloat(thisComp.layer('_val03').text.sourceText), parseFloat(thisComp.layer('_val04').text.sourceText), parseFloat(thisComp.layer('_val05').text.sourceText), parseFloat(thisComp.layer('_val06').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_val01').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
+          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_Value 1').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
         }
       },
       "ao": 0,
@@ -2961,7 +2984,7 @@
       "ddd": 0,
       "ind": 4,
       "ty": 5,
-      "nm": "_txt01",
+      "nm": "_Text 1",
       "sr": 1,
       "ks": {
         "o": {
@@ -3066,8 +3089,8 @@
                 "finalLineHeight": 30.0000019073486,
                 "l": [
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3078,8 +3101,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3090,8 +3113,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3102,8 +3125,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3114,10 +3137,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 57.177913665771484,
-                "justifyOffset": -28.588956832885742,
+                "boxWidth": 57.18212890624999,
+                "justifyOffset": -28.591064453124996,
                 "lineWidths": [
-                  57.177913665771484
+                  57.18212890624999
                 ],
                 "yOffset": 30.0000019073486,
                 "ascent": 18.99986267089845
@@ -3151,7 +3174,7 @@
       "ddd": 0,
       "ind": 5,
       "ty": 5,
-      "nm": "_val02",
+      "nm": "_Value 2",
       "sr": 1,
       "ks": {
         "o": {
@@ -3194,15 +3217,38 @@
           "ix": 10
         },
         "p": {
-          "a": 0,
+          "a": 1,
           "k": [
-            656.2,
-            256.222,
-            0
+            {
+              "i": {
+                "x": 0.667,
+                "y": 1
+              },
+              "o": {
+                "x": 0.167,
+                "y": 0.167
+              },
+              "t": 70,
+              "s": [
+                656.2,
+                0,
+                0
+              ],
+              "to": null,
+              "ti": null
+            },
+            {
+              "t": 120,
+              "s": [
+                656.2,
+                100,
+                0
+              ]
+            }
           ],
           "ix": 2,
           "l": 2,
-          "x": "var $bm_rt;\nvar bar, rect, topY;\nbar = thisComp.layer('bar02');\nrect = bar.sourceRectAtTime(time, false);\ntopY = bar.toComp([\n    0,\n    rect.top\n])[1];\n$bm_rt = [\n    value[0],\n    topY - 20\n];"
+          "x": "var $bm_rt;\nvar myVal, myBar, maxVal, factor, animFactor;\nmyVal = parseFloat(thisComp.layer('_Value 2').text.sourceText);\nmyBar = thisComp.layer('bar02');\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\nanimFactor = myBar.transform.scale[1];\n$bm_rt = [\n    value[0],\n    660 - 400 * factor / 100 * value[1]\n];"
         },
         "a": {
           "a": 0,
@@ -3256,8 +3302,8 @@
                 "finalLineHeight": 38.4000015258789,
                 "l": [
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3268,8 +3314,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3280,8 +3326,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3292,10 +3338,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 54.89079711914063,
-                "justifyOffset": -27.445398559570314,
+                "boxWidth": 54.89484374999999,
+                "justifyOffset": -27.447421874999996,
                 "lineWidths": [
-                  54.89079711914063
+                  54.89484374999999
                 ],
                 "yOffset": 38.4000015258789,
                 "ascent": 24.319824218750018
@@ -3408,7 +3454,7 @@
           ],
           "ix": 6,
           "l": 2,
-          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_val01').text.sourceText), parseFloat(thisComp.layer('_val02').text.sourceText), parseFloat(thisComp.layer('_val03').text.sourceText), parseFloat(thisComp.layer('_val04').text.sourceText), parseFloat(thisComp.layer('_val05').text.sourceText), parseFloat(thisComp.layer('_val06').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_val02').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
+          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_Value 2').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
         }
       },
       "ao": 0,
@@ -3425,7 +3471,7 @@
       "ddd": 0,
       "ind": 7,
       "ty": 5,
-      "nm": "_txt02",
+      "nm": "_Text 2",
       "sr": 1,
       "ks": {
         "o": {
@@ -3530,8 +3576,8 @@
                 "finalLineHeight": 30.0000019073486,
                 "l": [
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3542,8 +3588,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3554,8 +3600,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3566,8 +3612,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3578,10 +3624,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 57.177913665771484,
-                "justifyOffset": -28.588956832885742,
+                "boxWidth": 57.18212890624999,
+                "justifyOffset": -28.591064453124996,
                 "lineWidths": [
-                  57.177913665771484
+                  57.18212890624999
                 ],
                 "yOffset": 30.0000019073486,
                 "ascent": 18.99986267089845
@@ -3615,7 +3661,7 @@
       "ddd": 0,
       "ind": 8,
       "ty": 5,
-      "nm": "_val03",
+      "nm": "_Value 3",
       "sr": 1,
       "ks": {
         "o": {
@@ -3658,15 +3704,38 @@
           "ix": 10
         },
         "p": {
-          "a": 0,
+          "a": 1,
           "k": [
-            861.4,
-            256.222,
-            0
+            {
+              "i": {
+                "x": 0.667,
+                "y": 1
+              },
+              "o": {
+                "x": 0.167,
+                "y": 0.167
+              },
+              "t": 90,
+              "s": [
+                861.4,
+                0,
+                0
+              ],
+              "to": null,
+              "ti": null
+            },
+            {
+              "t": 140,
+              "s": [
+                861.4,
+                100,
+                0
+              ]
+            }
           ],
           "ix": 2,
           "l": 2,
-          "x": "var $bm_rt;\nvar bar, rect, topY;\nbar = thisComp.layer('bar03');\nrect = bar.sourceRectAtTime(time, false);\ntopY = bar.toComp([\n    0,\n    rect.top\n])[1];\n$bm_rt = [\n    value[0],\n    topY - 20\n];"
+          "x": "var $bm_rt;\nvar myVal, myBar, maxVal, factor, animFactor;\nmyVal = parseFloat(thisComp.layer('_Value 3').text.sourceText);\nmyBar = thisComp.layer('bar03');\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\nanimFactor = myBar.transform.scale[1];\n$bm_rt = [\n    value[0],\n    660 - 400 * factor / 100 * value[1]\n];"
         },
         "a": {
           "a": 0,
@@ -3720,8 +3789,8 @@
                 "finalLineHeight": 38.4000015258789,
                 "l": [
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3732,8 +3801,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3744,8 +3813,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -3756,10 +3825,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 54.89079711914063,
-                "justifyOffset": -27.445398559570314,
+                "boxWidth": 54.89484374999999,
+                "justifyOffset": -27.447421874999996,
                 "lineWidths": [
-                  54.89079711914063
+                  54.89484374999999
                 ],
                 "yOffset": 38.4000015258789,
                 "ascent": 24.319824218750018
@@ -3872,7 +3941,7 @@
           ],
           "ix": 6,
           "l": 2,
-          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_val01').text.sourceText), parseFloat(thisComp.layer('_val02').text.sourceText), parseFloat(thisComp.layer('_val03').text.sourceText), parseFloat(thisComp.layer('_val04').text.sourceText), parseFloat(thisComp.layer('_val05').text.sourceText), parseFloat(thisComp.layer('_val06').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_val03').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
+          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_Value 3').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
         }
       },
       "ao": 0,
@@ -3889,7 +3958,7 @@
       "ddd": 0,
       "ind": 10,
       "ty": 5,
-      "nm": "_txt03",
+      "nm": "_Text 3",
       "sr": 1,
       "ks": {
         "o": {
@@ -3994,8 +4063,8 @@
                 "finalLineHeight": 30.0000019073486,
                 "l": [
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4006,8 +4075,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4018,8 +4087,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4030,8 +4099,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4042,10 +4111,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 57.177913665771484,
-                "justifyOffset": -28.588956832885742,
+                "boxWidth": 57.18212890624999,
+                "justifyOffset": -28.591064453124996,
                 "lineWidths": [
-                  57.177913665771484
+                  57.18212890624999
                 ],
                 "yOffset": 30.0000019073486,
                 "ascent": 18.99986267089845
@@ -4079,7 +4148,7 @@
       "ddd": 0,
       "ind": 11,
       "ty": 5,
-      "nm": "_val04",
+      "nm": "_Value 4",
       "sr": 1,
       "ks": {
         "o": {
@@ -4122,15 +4191,38 @@
           "ix": 10
         },
         "p": {
-          "a": 0,
+          "a": 1,
           "k": [
-            1066.6,
-            256.222,
-            0
+            {
+              "i": {
+                "x": 0.667,
+                "y": 1
+              },
+              "o": {
+                "x": 0.167,
+                "y": 0.167
+              },
+              "t": 110,
+              "s": [
+                1066.6,
+                0,
+                0
+              ],
+              "to": null,
+              "ti": null
+            },
+            {
+              "t": 160,
+              "s": [
+                1066.6,
+                100,
+                0
+              ]
+            }
           ],
           "ix": 2,
           "l": 2,
-          "x": "var $bm_rt;\nvar bar, rect, topY;\nbar = thisComp.layer('bar04');\nrect = bar.sourceRectAtTime(time, false);\ntopY = bar.toComp([\n    0,\n    rect.top\n])[1];\n$bm_rt = [\n    value[0],\n    topY - 20\n];"
+          "x": "var $bm_rt;\nvar myVal, myBar, maxVal, factor, animFactor;\nmyVal = parseFloat(thisComp.layer('_Value 4').text.sourceText);\nmyBar = thisComp.layer('bar04');\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\nanimFactor = myBar.transform.scale[1];\n$bm_rt = [\n    value[0],\n    660 - 400 * factor / 100 * value[1]\n];"
         },
         "a": {
           "a": 0,
@@ -4185,8 +4277,8 @@
                 "finalLineHeight": 38.4000015258789,
                 "l": [
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4197,8 +4289,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4209,8 +4301,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4221,8 +4313,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4233,10 +4325,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 73.1877294921875,
-                "justifyOffset": -36.59386474609375,
+                "boxWidth": 73.193125,
+                "justifyOffset": -36.5965625,
                 "lineWidths": [
-                  73.1877294921875
+                  73.193125
                 ],
                 "yOffset": 38.4000015258789,
                 "ascent": 24.319824218750018
@@ -4349,7 +4441,7 @@
           ],
           "ix": 6,
           "l": 2,
-          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_val01').text.sourceText), parseFloat(thisComp.layer('_val02').text.sourceText), parseFloat(thisComp.layer('_val03').text.sourceText), parseFloat(thisComp.layer('_val04').text.sourceText), parseFloat(thisComp.layer('_val05').text.sourceText), parseFloat(thisComp.layer('_val06').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_val04').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
+          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_Value 4').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
         }
       },
       "ao": 0,
@@ -4366,7 +4458,7 @@
       "ddd": 0,
       "ind": 13,
       "ty": 5,
-      "nm": "_txt04",
+      "nm": "_Text 4",
       "sr": 1,
       "ks": {
         "o": {
@@ -4471,8 +4563,8 @@
                 "finalLineHeight": 30.0000019073486,
                 "l": [
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4483,8 +4575,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4495,8 +4587,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4507,8 +4599,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4519,10 +4611,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 57.177913665771484,
-                "justifyOffset": -28.588956832885742,
+                "boxWidth": 57.18212890624999,
+                "justifyOffset": -28.591064453124996,
                 "lineWidths": [
-                  57.177913665771484
+                  57.18212890624999
                 ],
                 "yOffset": 30.0000019073486,
                 "ascent": 18.99986267089845
@@ -4556,7 +4648,7 @@
       "ddd": 0,
       "ind": 14,
       "ty": 5,
-      "nm": "_val05",
+      "nm": "_Value 5",
       "sr": 1,
       "ks": {
         "o": {
@@ -4599,15 +4691,38 @@
           "ix": 10
         },
         "p": {
-          "a": 0,
+          "a": 1,
           "k": [
-            1271.8,
-            256.222,
-            0
+            {
+              "i": {
+                "x": 0.667,
+                "y": 1
+              },
+              "o": {
+                "x": 0.167,
+                "y": 0.167
+              },
+              "t": 130,
+              "s": [
+                1271.8,
+                0,
+                0
+              ],
+              "to": null,
+              "ti": null
+            },
+            {
+              "t": 180,
+              "s": [
+                1271.8,
+                100,
+                0
+              ]
+            }
           ],
           "ix": 2,
           "l": 2,
-          "x": "var $bm_rt;\nvar bar, rect, topY;\nbar = thisComp.layer('bar05');\nrect = bar.sourceRectAtTime(time, false);\ntopY = bar.toComp([\n    0,\n    rect.top\n])[1];\n$bm_rt = [\n    value[0],\n    topY - 20\n];"
+          "x": "var $bm_rt;\nvar myVal, myBar, maxVal, factor, animFactor;\nmyVal = parseFloat(thisComp.layer('_Value 5').text.sourceText);\nmyBar = thisComp.layer('bar05');\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\nanimFactor = myBar.transform.scale[1];\n$bm_rt = [\n    value[0],\n    660 - 400 * factor / 100 * value[1]\n];"
         },
         "a": {
           "a": 0,
@@ -4638,7 +4753,7 @@
               "s": {
                 "s": 32,
                 "f": "OpenSans-SemiBold",
-                "t": "160",
+                "t": "290",
                 "ca": 0,
                 "j": 2,
                 "tr": 0,
@@ -4654,39 +4769,39 @@
                 "fStyle": "normal",
                 "finalSize": 32,
                 "finalText": [
-                  "1",
-                  "6",
+                  "2",
+                  "9",
                   "0"
                 ],
                 "finalLineHeight": 38.4000015258789,
                 "l": [
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
-                    "val": "1",
+                    "val": "2",
                     "line": 0,
                     "animatorJustifyOffset": 0,
                     "ind": 0,
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
-                    "val": "6",
+                    "val": "9",
                     "line": 0,
                     "animatorJustifyOffset": 0,
                     "ind": 1,
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4697,10 +4812,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 54.89079711914063,
-                "justifyOffset": -27.445398559570314,
+                "boxWidth": 54.89484374999999,
+                "justifyOffset": -27.447421874999996,
                 "lineWidths": [
-                  54.89079711914063
+                  54.89484374999999
                 ],
                 "yOffset": 38.4000015258789,
                 "ascent": 24.319824218750018
@@ -4813,7 +4928,7 @@
           ],
           "ix": 6,
           "l": 2,
-          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_val01').text.sourceText), parseFloat(thisComp.layer('_val02').text.sourceText), parseFloat(thisComp.layer('_val03').text.sourceText), parseFloat(thisComp.layer('_val04').text.sourceText), parseFloat(thisComp.layer('_val05').text.sourceText), parseFloat(thisComp.layer('_val06').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_val05').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
+          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_Value 5').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
         }
       },
       "ao": 0,
@@ -4830,7 +4945,7 @@
       "ddd": 0,
       "ind": 16,
       "ty": 5,
-      "nm": "_txt05",
+      "nm": "_Text 5",
       "sr": 1,
       "ks": {
         "o": {
@@ -4935,8 +5050,8 @@
                 "finalLineHeight": 30.0000019073486,
                 "l": [
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4947,8 +5062,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4959,8 +5074,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4971,8 +5086,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -4983,10 +5098,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 57.177913665771484,
-                "justifyOffset": -28.588956832885742,
+                "boxWidth": 57.18212890624999,
+                "justifyOffset": -28.591064453124996,
                 "lineWidths": [
-                  57.177913665771484
+                  57.18212890624999
                 ],
                 "yOffset": 30.0000019073486,
                 "ascent": 18.99986267089845
@@ -5020,7 +5135,7 @@
       "ddd": 0,
       "ind": 17,
       "ty": 5,
-      "nm": "_val06",
+      "nm": "_Value 6",
       "sr": 1,
       "ks": {
         "o": {
@@ -5063,15 +5178,38 @@
           "ix": 10
         },
         "p": {
-          "a": 0,
+          "a": 1,
           "k": [
-            1477,
-            256.222,
-            0
+            {
+              "i": {
+                "x": 0.667,
+                "y": 1
+              },
+              "o": {
+                "x": 0.167,
+                "y": 0.167
+              },
+              "t": 150,
+              "s": [
+                1477,
+                0,
+                0
+              ],
+              "to": null,
+              "ti": null
+            },
+            {
+              "t": 200,
+              "s": [
+                1477,
+                100,
+                0
+              ]
+            }
           ],
           "ix": 2,
           "l": 2,
-          "x": "var $bm_rt;\nvar bar, rect, topY;\nbar = thisComp.layer('bar06');\nrect = bar.sourceRectAtTime(time, false);\ntopY = bar.toComp([\n    0,\n    rect.top\n])[1];\n$bm_rt = [\n    value[0],\n    topY - 20\n];"
+          "x": "var $bm_rt;\nvar myVal, myBar, maxVal, factor, animFactor;\nmyVal = parseFloat(thisComp.layer('_Value 6').text.sourceText);\nmyBar = thisComp.layer('bar06');\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\nanimFactor = myBar.transform.scale[1];\n$bm_rt = [\n    value[0],\n    660 - 400 * factor / 100 * value[1]\n];"
         },
         "a": {
           "a": 0,
@@ -5125,8 +5263,8 @@
                 "finalLineHeight": 38.4000015258789,
                 "l": [
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5137,8 +5275,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5149,8 +5287,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 18.296932373046875,
-                    "an": 18.296932373046875,
+                    "l": 18.29828125,
+                    "an": 18.29828125,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5161,10 +5299,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 54.89079711914063,
-                "justifyOffset": -27.445398559570314,
+                "boxWidth": 54.89484374999999,
+                "justifyOffset": -27.447421874999996,
                 "lineWidths": [
-                  54.89079711914063
+                  54.89484374999999
                 ],
                 "yOffset": 38.4000015258789,
                 "ascent": 24.319824218750018
@@ -5277,7 +5415,7 @@
           ],
           "ix": 6,
           "l": 2,
-          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_val01').text.sourceText), parseFloat(thisComp.layer('_val02').text.sourceText), parseFloat(thisComp.layer('_val03').text.sourceText), parseFloat(thisComp.layer('_val04').text.sourceText), parseFloat(thisComp.layer('_val05').text.sourceText), parseFloat(thisComp.layer('_val06').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_val06').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
+          "x": "var $bm_rt;\nvar maxVal, myVal, factor;\nmaxVal = Math.max(parseFloat(thisComp.layer('_Value 1').text.sourceText), parseFloat(thisComp.layer('_Value 2').text.sourceText), parseFloat(thisComp.layer('_Value 3').text.sourceText), parseFloat(thisComp.layer('_Value 4').text.sourceText), parseFloat(thisComp.layer('_Value 5').text.sourceText), parseFloat(thisComp.layer('_Value 6').text.sourceText));\nmyVal = parseFloat(thisComp.layer('_Value 6').text.sourceText);\nfactor = maxVal > 0 ? $bm_div(myVal, maxVal) : 0;\n$bm_rt = [\n    value[0],\n    value[1] * factor\n];"
         }
       },
       "ao": 0,
@@ -5294,7 +5432,7 @@
       "ddd": 0,
       "ind": 19,
       "ty": 5,
-      "nm": "_txt06",
+      "nm": "_Text 6",
       "sr": 1,
       "ks": {
         "o": {
@@ -5399,8 +5537,8 @@
                 "finalLineHeight": 30.0000019073486,
                 "l": [
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5411,8 +5549,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5423,8 +5561,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5435,8 +5573,8 @@
                     "extra": 0
                   },
                   {
-                    "l": 14.294478416442871,
-                    "an": 14.294478416442871,
+                    "l": 14.295532226562498,
+                    "an": 14.295532226562498,
                     "add": 0,
                     "n": false,
                     "anIndexes": [],
@@ -5447,10 +5585,10 @@
                     "extra": 0
                   }
                 ],
-                "boxWidth": 57.177913665771484,
-                "justifyOffset": -28.588956832885742,
+                "boxWidth": 57.18212890624999,
+                "justifyOffset": -28.591064453124996,
                 "lineWidths": [
-                  57.177913665771484
+                  57.18212890624999
                 ],
                 "yOffset": 30.0000019073486,
                 "ascent": 18.99986267089845
@@ -5817,7 +5955,7 @@
                 "k": 0,
                 "ix": 5
               },
-              "nm": "Transformieren",
+              "nm": "Transform",
               "_render": true
             }
           ],
