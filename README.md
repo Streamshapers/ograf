@@ -44,4 +44,6 @@ Useful resources:
 
 ### Website
 
-The landing page is served from the repository root by GitHub Pages. See [website/README.md](./website/README.md) for local development, validation, asset maintenance, and the production checklist.
+The landing page is served from the repository root by GitHub Pages. See
+[website/README.md](./website/README.md) for local development and instructions for
+maintaining website examples and logos.

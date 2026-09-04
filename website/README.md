@@ -14,8 +14,7 @@ npm --prefix website/_tooling run validate
 npm --prefix website/_tooling test
 ```
 
-The development server exposes the production layout at `http://127.0.0.1:3000/` and the
-GitHub Pages preview layout at `http://127.0.0.1:3000/ograf/`.
+The development server exposes the website at `http://127.0.0.1:3000/`.
 
 ## Add an example to the website
 
