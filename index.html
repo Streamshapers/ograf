@@ -6,7 +6,6 @@
     <title>OGraf - Open HTML Graphics for Broadcast</title>
     <meta name="description"
           content="OGraf is the EBU's open specification for HTML broadcast graphics. Build graphics once and run them across compatible broadcast, web, and mobile workflows.">
-    <!-- SEO TODO: switch to index,follow for production launch once the site is ready to be indexed. -->
     <meta name="robots" content="noindex,nofollow">
     <meta name="theme-color" content="#87A0DE">
 
@@ -50,12 +49,15 @@
       }
     }
     </script>
-    <!-- TODO: add PNG/ICO/apple-touch-icon fallbacks once the final icon export pipeline is settled. -->
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="website/assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="website/assets/icons/favicon-96x96.png"
+          type="image/png" sizes="96x96">
+    <link rel="apple-touch-icon" href="website/assets/icons/apple-touch-icon.png"
+          sizes="180x180">
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=21">
+    <link rel="stylesheet" href="website/css/style.css?v=23">
     <link rel="stylesheet" href="website/css/hero-ticker.css?v=2">
 </head>
 <body>
@@ -1846,10 +1848,10 @@
 <script src="website/js/animations.js?v=7"></script>
 
 <!-- Demo control panel -->
-<script src="website/js/demo-controls.js?v=1"></script>
+<script src="website/js/demo-controls.js?v=2"></script>
 
 <!-- Demo 2: Scoreboard control panel -->
-<script src="website/js/demo-scoreboard.js?v=11"></script>
+<script src="website/js/demo-scoreboard.js?v=12"></script>
 
 <!-- Demo carousel -->
     <script src="website/js/demo-carousel.js?v=13"></script>

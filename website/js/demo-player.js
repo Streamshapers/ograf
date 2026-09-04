@@ -11,7 +11,9 @@ const canvas = document.getElementById('graphic-canvas');
 
 let example;
 let graphic;
+let manifest;
 let backgroundVideo;
+let isResetting = false;
 
 function notifyParent(message) {
     window.parent.postMessage(message, MESSAGE_ORIGIN);
@@ -118,14 +120,48 @@ function renderCharacteristics() {
     };
 }
 
+async function createGraphic() {
+    const nextGraphic = document.createElement(GRAPHIC_TAG);
+    nextGraphic.id = 'graphic';
+    canvas.append(nextGraphic);
+
+    try {
+        await nextGraphic.load({
+            data: getDefaultData(manifest.schema),
+            renderType: 'realtime',
+            renderCharacteristics: renderCharacteristics()
+        });
+        graphic = nextGraphic;
+    } catch (error) {
+        nextGraphic.remove();
+        throw error;
+    }
+}
+
+async function recreateGraphic() {
+    const previousGraphic = graphic;
+    graphic = null;
+
+    try {
+        await previousGraphic?.dispose({});
+    } catch (error) {
+        console.error('Unable to dispose the previous OGraf graphic.', error);
+    } finally {
+        previousGraphic?.remove();
+    }
+
+    await createGraphic();
+}
+
 async function handleMessage({ data, origin, source }) {
     if (source !== window.parent || origin !== MESSAGE_ORIGIN) return;
     const { action, data: payload } = data ?? {};
     if (!action) return;
+    if (isResetting && action !== 'ping') return;
 
     switch (action) {
         case 'ping':
-            notifyParent({ event: 'ready' });
+            if (graphic) notifyParent({ event: 'ready' });
             break;
         case 'play':
             if (payload && Object.keys(payload).length) {
@@ -148,8 +184,20 @@ async function handleMessage({ data, origin, source }) {
             break;
         }
         case 'stop':
-            await graphic.stopAction({ skipAnimation: false });
-            notifyParent({ event: 'stopped' });
+            if (isResetting) break;
+            isResetting = true;
+            notifyParent({ event: 'resetting' });
+            try {
+                try {
+                    await graphic.stopAction({ skipAnimation: false });
+                } catch (error) {
+                    console.error('Unable to stop the current OGraf graphic.', error);
+                }
+                await recreateGraphic();
+                notifyParent({ event: 'stopped' });
+            } finally {
+                isResetting = false;
+            }
             break;
         case 'update':
             await graphic.updateAction({ data: payload ?? {}, skipAnimation: false });
@@ -172,7 +220,7 @@ async function initialisePlayer() {
     example = findDemoExample(catalogue, requestedId);
 
     const manifestUrl = resolveSitePath(example.manifest);
-    const manifest = await loadJson(manifestUrl);
+    manifest = await loadJson(manifestUrl);
     const moduleUrl = new URL(manifest.main, manifestUrl);
     const graphicModule = await import(moduleUrl.href);
     if (typeof graphicModule.default !== 'function') {
@@ -182,17 +230,10 @@ async function initialisePlayer() {
     setupBackground(example.presentation.background);
     setupCanvas();
     customElements.define(GRAPHIC_TAG, graphicModule.default);
-    graphic = document.createElement(GRAPHIC_TAG);
-    graphic.id = 'graphic';
-    canvas.append(graphic);
 
     window.addEventListener('resize', fitCanvas);
     window.addEventListener('message', handleMessage);
-    await graphic.load({
-        data: getDefaultData(manifest.schema),
-        renderType: 'realtime',
-        renderCharacteristics: renderCharacteristics()
-    });
+    await createGraphic();
     fitCanvas();
     document.title = `OGraf Example — ${example.title}`;
     notifyParent({ event: 'ready' });

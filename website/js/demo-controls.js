@@ -121,6 +121,13 @@
                 btnStop.disabled = false;
                 customActionButtons.forEach(button => { button.disabled = false; });
             }
+            if (event === 'resetting') {
+                setStatus('loading', 'Resetting...');
+                btnPlay.disabled = true;
+                btnUpdate.disabled = true;
+                btnStop.disabled = true;
+                customActionButtons.forEach(button => { button.disabled = true; });
+            }
             if (event === 'stopped') {
                 setStatus('ready', 'Ready');
                 btnPlay.disabled = false;
