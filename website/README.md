@@ -1,8 +1,6 @@
 # OGraf website
 
-This directory contains the runtime assets and maintenance tooling for the OGraf website.
-The landing page itself is `/index.html`; official OGraf example packages live in
-`/v1/examples`.
+This is the website for OGraf. It is published at <https://ograf.ebu.io/>.
 
 ## Local development
 
