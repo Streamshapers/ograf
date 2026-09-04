@@ -609,6 +609,7 @@ test('stopping a demo disposes and recreates its graphic for replay', async ({ p
 test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ page }) => {
     const monitor = await openLandingPage(page);
     const carouselViewport = page.locator('.demo-carousel__viewport');
+    const carouselTrack = page.locator('.demo-carousel__track');
     const activeSlide = page.locator('.demo-carousel__slide.is-active');
     const player = activeSlide.locator('.demo-player');
     const controls = activeSlide.locator('.demo-controls');
@@ -660,6 +661,11 @@ test('@mobile demo carousel adapts and offers valid OGraf packages', async ({ pa
     await page.locator('.demo-carousel__dot').nth(0).click();
     await expect(activeSlide).toHaveAttribute('aria-hidden', 'false');
     await expect(page.locator('.demo-carousel__slide').nth(1)).toHaveAttribute('aria-hidden', 'true');
+    await carouselTrack.evaluate(async element => {
+        const animations = element.getAnimations();
+
+        await Promise.allSettled(animations.map(animation => animation.finished));
+    });
 
     const playerBox = await player.boundingBox();
     const controlsBox = await controls.boundingBox();
