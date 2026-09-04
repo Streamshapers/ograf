@@ -6,12 +6,6 @@
             "title": "Live Scoreboard",
             "manifest": "website/examples/scoreboard/scoreboard.ograf.json",
             "archiveName": "ograf-example-scoreboard.zip",
-            "packageExtras": [
-                {
-                    "source": "docs/logo/ograf-logo-colour.svg",
-                    "archive": "assets/ograf-logo-colour.svg"
-                }
-            ],
             "presentation": {
                 "renderer": "viewport",
                 "background": {
@@ -24,22 +18,17 @@
                 {
                     "source": "website/examples/scoreboard/README.md",
                     "archive": "README.md",
-                    "sha256": "1519d05253c8245eeaeb50e83d3123166d038adf354b534b78fa0c61f4be3a6e"
-                },
-                {
-                    "source": "docs/logo/ograf-logo-colour.svg",
-                    "archive": "assets/ograf-logo-colour.svg",
-                    "sha256": "4c4d7bcb24e9ad33e8f9396a2d55dd5e0a98a8a938c8a2b1e507345e301ca294"
+                    "sha256": "d6fdcb289c324cccba4bcb846883f462fe095190402d6116f717c6da2f2deac0"
                 },
                 {
                     "source": "website/examples/scoreboard/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "73ac17da9a07b98f1ad04deb4b736dad8d19017c564fa47c037b13417be1123f"
+                    "sha256": "2cc2e1c855a43ece121bb718d5c3bad7fbff6aa7b24297d5a0f3bfa8f50b09d7"
                 },
                 {
                     "source": "website/examples/scoreboard/scoreboard.ograf.json",
                     "archive": "scoreboard.ograf.json",
-                    "sha256": "d2e7ce44b39b8efaddf732afc3ff64630b83f512e2b4ad5a1fe1c451bb300140"
+                    "sha256": "ab835f78f4697af6c59753b9b4c8bc93c0d2076465c108d64d045524967f6f1c"
                 },
                 {
                     "source": "website/examples/scoreboard/thumbnail.webp",
@@ -54,11 +43,7 @@
             "manifest": "website/examples/responsive-lower-third/responsive-lower-third.ograf.json",
             "archiveName": "ograf-example-responsive-lower-third.zip",
             "presentation": {
-                "renderer": "fixed-canvas",
-                "canvas": {
-                    "width": 1920,
-                    "height": 1080
-                },
+                "renderer": "viewport",
                 "background": {
                     "type": "image",
                     "src": "website/assets/img/bg-interview.webp",
@@ -69,17 +54,17 @@
                 {
                     "source": "website/examples/responsive-lower-third/README.md",
                     "archive": "README.md",
-                    "sha256": "1474c0bd00ff724cb7c2104a36d45867c4c0cd16c740b0e346f30c5dc3855720"
+                    "sha256": "509a6944963e52be23a4b68ce329f76e2fcfa881413e00d6df23143bb0063c45"
                 },
                 {
                     "source": "website/examples/responsive-lower-third/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "e7f1ff99d30187dd1f77430494f236c70768cddc067f787bcaf2f4c02a0f8dd6"
+                    "sha256": "899c4b18aa0583281e682aa4ac538d64d9eae621c94ca04281aa59b9253ac035"
                 },
                 {
                     "source": "website/examples/responsive-lower-third/responsive-lower-third.ograf.json",
                     "archive": "responsive-lower-third.ograf.json",
-                    "sha256": "154701cbfd504e3557f1912be07c524371fbe3bc51cbf421a4216c0c833c51c4"
+                    "sha256": "6b7544adf92f3a3f58cfa67062b9aeeb9b0b3892d624d9a8ae7d98ee4124a13f"
                 },
                 {
                     "source": "website/examples/responsive-lower-third/thumbnail.webp",
@@ -101,8 +86,8 @@
                 },
                 "background": {
                     "type": "image",
-                    "src": "website/assets/img/bg-interview.webp",
-                    "overlay": "rgba(4, 7, 18, 0.18)"
+                    "src": "website/assets/img/bg-newsroom.jpg",
+                    "overlay": "rgba(4, 7, 18, 0.12)"
                 }
             },
             "files": [
@@ -114,7 +99,7 @@
                 {
                     "source": "website/examples/l3rd-name/graphic.mjs",
                     "archive": "graphic.mjs",
-                    "sha256": "2b7091c3db659380e90c6a2de388866b6dba08ec1ee3cdd8aacc246e2b61f619"
+                    "sha256": "2c6440e4b1fd040316f89b9536df5772abc9a6a769fe98a32824991f901ccf42"
                 },
                 {
                     "source": "website/examples/l3rd-name/l3rd.ograf.json",
@@ -154,7 +139,152 @@
                 {
                     "source": "website/examples/l3rd-name/thumbnail.webp",
                     "archive": "thumbnail.webp",
-                    "sha256": "1e3d3545e9aca35e296212361cfd6264ccae7977113a1fcbd846c7b14e55b6d4"
+                    "sha256": "8855edf0a1264b68006124a10a0b6117dc59ae5ad6e07d6978b965af8463e09c"
+                }
+            ]
+        },
+        {
+            "id": "bar-chart",
+            "title": "Bar Chart",
+            "manifest": "website/examples/bar-chart/bar-chart.ograf.json",
+            "archiveName": "ograf-example-bar-chart.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                }
+            },
+            "files": [
+                {
+                    "source": "website/examples/bar-chart/README.md",
+                    "archive": "README.md",
+                    "sha256": "4379b6cf46afacd1dc13c9d799164308138543ebdd7f5c34ebdbfc33bb95d458"
+                },
+                {
+                    "source": "website/examples/bar-chart/bar-chart.ograf.json",
+                    "archive": "bar-chart.ograf.json",
+                    "sha256": "b049df58911e2cc6ef93738403bbf738c97af78c3b4b8d19624c3b8be39b93fd"
+                },
+                {
+                    "source": "website/examples/bar-chart/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "de0cc4b9731bc5cce1414b1cdc7a4c081abab99c2669a66ee9708aa11c351508"
+                },
+                {
+                    "source": "website/examples/bar-chart/lib/animation.json",
+                    "archive": "lib/animation.json",
+                    "sha256": "2d8664eea2954e6c8996ec127ee8705108b92a46b6e497ecd79b1fcbbe8c11f7"
+                },
+                {
+                    "source": "website/examples/bar-chart/lib/lottie-web.esm.mjs",
+                    "archive": "lib/lottie-web.esm.mjs",
+                    "sha256": "48a3f1ed37e969d2bb5b32ebfdf09d13bac1b757623f691de61a8c4ac1f57e92"
+                },
+                {
+                    "source": "website/examples/bar-chart/thumbnail.png",
+                    "archive": "thumbnail.png",
+                    "sha256": "603dc2e48b5a63e20a32d4e072fd33be423ade070af8eba7f4798769b8e96bae"
+                }
+            ]
+        },
+        {
+            "id": "headline",
+            "title": "Headline",
+            "manifest": "website/examples/headline/headline.ograf.json",
+            "archiveName": "ograf-example-headline.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                },
+                "background": {
+                    "type": "image",
+                    "src": "website/assets/img/bg-interview.webp",
+                    "overlay": "rgba(4, 7, 18, 0.18)"
+                }
+            },
+            "files": [
+                {
+                    "source": "website/examples/headline/README.md",
+                    "archive": "README.md",
+                    "sha256": "2678e6d9412edcdff1495b2b699a60ed05eea06e65fc87c389c8153a03760345"
+                },
+                {
+                    "source": "website/examples/headline/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "ca1056a3759c57fb22341a23290c8c823f8071b9054a9edc4b775ee3367898b5"
+                },
+                {
+                    "source": "website/examples/headline/headline.ograf.json",
+                    "archive": "headline.ograf.json",
+                    "sha256": "66ecb00baf3ec567a16fbde8d464e40a566918fcc5d6935a8a01925f827150c3"
+                },
+                {
+                    "source": "website/examples/headline/lib/animation.json",
+                    "archive": "lib/animation.json",
+                    "sha256": "cf3f26a94c0d1fad1d38f5694f830b2d71bc002884280ca326e3ce668795628c"
+                },
+                {
+                    "source": "website/examples/headline/lib/lottie-web.esm.mjs",
+                    "archive": "lib/lottie-web.esm.mjs",
+                    "sha256": "48a3f1ed37e969d2bb5b32ebfdf09d13bac1b757623f691de61a8c4ac1f57e92"
+                },
+                {
+                    "source": "website/examples/headline/thumbnail.jpg",
+                    "archive": "thumbnail.jpg",
+                    "sha256": "817e31a7859384e35f7cc6d312504541538889ba685762bd946d803f4b353dca"
+                }
+            ]
+        },
+        {
+            "id": "weather",
+            "title": "Weather",
+            "manifest": "website/examples/weather/weather.ograf.json",
+            "archiveName": "ograf-example-weather.zip",
+            "presentation": {
+                "renderer": "fixed-canvas",
+                "canvas": {
+                    "width": 1920,
+                    "height": 1080
+                }
+            },
+            "files": [
+                {
+                    "source": "website/examples/weather/README.md",
+                    "archive": "README.md",
+                    "sha256": "e5c0897d70074e0bbbef1db5ba64cc0ce3f5ee7ff50c609b08d5e5847b6cd5f5"
+                },
+                {
+                    "source": "website/examples/weather/graphic.mjs",
+                    "archive": "graphic.mjs",
+                    "sha256": "a1bf49000f8ee9f32cc06ac68da936208b9dd12ec21b3198d74500b52e8ddcc1"
+                },
+                {
+                    "source": "website/examples/weather/lib/animation.json",
+                    "archive": "lib/animation.json",
+                    "sha256": "3ef153207543f97e3eee176b2200d7fff762d429a24d64e8ec1ab8734a53c698"
+                },
+                {
+                    "source": "website/examples/weather/lib/images/image_0.jpg",
+                    "archive": "lib/images/image_0.jpg",
+                    "sha256": "0af1ccbbf90e138c34bdf1c344905764b7ae7081761891d08f1c8f81d83417e8"
+                },
+                {
+                    "source": "website/examples/weather/lib/lottie-web.esm.mjs",
+                    "archive": "lib/lottie-web.esm.mjs",
+                    "sha256": "48a3f1ed37e969d2bb5b32ebfdf09d13bac1b757623f691de61a8c4ac1f57e92"
+                },
+                {
+                    "source": "website/examples/weather/thumbnail.jpg",
+                    "archive": "thumbnail.jpg",
+                    "sha256": "f8e15fea2630c8169afa925612913b33e2f72b318d19d6ccd30ee1e6bc4fd91f"
+                },
+                {
+                    "source": "website/examples/weather/weather.ograf.json",
+                    "archive": "weather.ograf.json",
+                    "sha256": "79a3958e2e2c8990660ee7bc2a28a2e4bcda52a9f4e5daf31f87ace6ba74000c"
                 }
             ]
         }

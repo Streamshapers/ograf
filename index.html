@@ -55,7 +55,7 @@
     <link rel="manifest" href="site.webmanifest">
 
     <link rel="stylesheet" href="website/css/fonts.css">
-    <link rel="stylesheet" href="website/css/style.css?v=19">
+    <link rel="stylesheet" href="website/css/style.css?v=21">
     <link rel="stylesheet" href="website/css/hero-ticker.css?v=2">
 </head>
 <body>
@@ -231,14 +231,13 @@
                                        -> dark scrim for LT contrast (also
                                           a demo concern)
                        3. <div class="stage-device__canvas">
-                                       -> 1920x1080 logical "broadcast canvas",
-                                          CSS-scaled by JS to fill the screen.
+                                       -> logical renderer output matching the
+                                          device aspect ratio, scaled by JS.
                                           Holds <ograf-lower-third>, which is
                                           the actual OGraf graphic and the
                                           only real-spec asset on the page.
-                     The LT renders at native pixel sizes (60px headers etc.)
-                     inside its 1920x1080 canvas, then everything scales as
-                     one unit - same proportional appearance on every device.
+                     The LT selects its responsive layout from the actual
+                     logical output dimensions supplied by the renderer.
                 ---------------------------------------------------------------------------------------------- -->
 
                 <!-- TV - large landscape, hero tile -->
@@ -282,8 +281,7 @@
                                 </video>
                                 <div class="stage-device__bg-overlay"></div>
                                 <div class="stage-device__canvas">
-                                    <ograf-lower-third class="stage-device__graphic"
-                                                       layout="tablet"></ograf-lower-third>
+                                    <ograf-lower-third class="stage-device__graphic"></ograf-lower-third>
                                 </div>
                             </div>
                         </div>
@@ -306,7 +304,7 @@
                                 </video>
                                 <div class="stage-device__bg-overlay"></div>
                                 <div class="stage-device__canvas">
-                                    <ograf-lower-third class="stage-device__graphic" layout="phone"></ograf-lower-third>
+                                    <ograf-lower-third class="stage-device__graphic"></ograf-lower-third>
                                 </div>
                             </div>
                         </div>
@@ -740,6 +738,17 @@
                             </div>
 
                             <div class="demo-controls">
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" id="sb-play" type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" id="sb-next" type="button" disabled>Next Step</button>
+                                    <button class="btn btn--ghost demo-btn" id="sb-goal-home" type="button" disabled>Goal Home
+                                    </button>
+                                    <button class="btn btn--ghost demo-btn" id="sb-goal-away" type="button" disabled>Goal Away
+                                    </button>
+                                    <button class="btn btn--ghost demo-btn" id="sb-update" type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" id="sb-stop" type="button" disabled>Stop</button>
+                                </div>
+
                                 <div class="demo-controls__fields">
 
                                     <label class="demo-field">
@@ -755,18 +764,6 @@
                                     </label>
 
                                 </div>
-
-                                <div class="demo-controls__actions">
-                                    <button class="btn btn--primary demo-btn" id="sb-play" type="button" disabled>Play In</button>
-                                    <button class="btn btn--ghost demo-btn" id="sb-next" type="button" disabled>Next Step</button>
-                                    <button class="btn btn--ghost demo-btn" id="sb-goal-home" type="button" disabled>Goal Home
-                                    </button>
-                                    <button class="btn btn--ghost demo-btn" id="sb-goal-away" type="button" disabled>Goal Away
-                                    </button>
-                                    <button class="btn btn--ghost demo-btn" id="sb-update" type="button" disabled>Update</button>
-                                    <button class="btn btn--ghost demo-btn" id="sb-stop" type="button" disabled>Stop</button>
-                                </div>
-
                                 <div class="demo-controls__status">
                                     <span class="demo-status" id="sb-status" data-state="loading"
                                           role="status" aria-live="polite" aria-atomic="true">Loading...</span>
@@ -825,6 +822,14 @@
                             </div>
 
                             <div class="demo-controls">
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-custom-action="highlight"
+                                            type="button" disabled>Highlight</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
+                                </div>
+
                                 <div class="demo-controls__fields">
 
                                     <label class="demo-field">
@@ -840,15 +845,6 @@
                                     </label>
 
                                 </div>
-
-                                <div class="demo-controls__actions">
-                                    <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
-                                    <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
-                                    <button class="btn btn--ghost demo-btn" data-demo-custom-action="highlight"
-                                            type="button" disabled>Highlight</button>
-                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
-                                </div>
-
                                 <div class="demo-controls__status">
                                     <span class="demo-status" data-demo-status data-state="loading"
                                           role="status" aria-live="polite" aria-atomic="true">Loading...</span>
@@ -938,6 +934,12 @@
                             </div>
 
                             <div class="demo-controls">
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
+                                </div>
+
                                 <div class="demo-controls__fields">
 
                                     <label class="demo-field">
@@ -959,13 +961,6 @@
                                     </label>
 
                                 </div>
-
-                                <div class="demo-controls__actions">
-                                    <button class="btn btn--primary demo-btn" data-demo-action="play" type="button" disabled>Play In</button>
-                                    <button class="btn btn--ghost demo-btn" data-demo-action="update" type="button" disabled>Update</button>
-                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop" type="button" disabled>Stop</button>
-                                </div>
-
                                 <div class="demo-controls__status">
                                     <span class="demo-status" data-demo-status data-state="loading"
                                           role="status" aria-live="polite" aria-atomic="true">Loading...</span>
@@ -974,6 +969,274 @@
 
                         </div><!-- /.demo-card__body -->
                     </div><!-- /.demo-card -->
+                </div><!-- /.demo-carousel__slide -->
+
+                <!-- Slide 4: Bar Chart -->
+                <div class="demo-carousel__slide" id="demo-slide-3" role="tabpanel"
+                     data-example-id="bar-chart"
+                     aria-labelledby="demo-tab-3" aria-hidden="true" inert tabindex="0">
+                    <div class="demo-card" data-demo-controller="bar-chart">
+
+                        <div class="demo-card__header">
+                            <h3 class="demo-card__title">Bar Chart</h3>
+                            <div class="demo-card__header-actions">
+                                <span class="demo-card__badge">Full screen</span>
+                                <a class="demo-card__download"
+                                   href="https://github.com/ebu/ograf/tree/main/v1/examples/bar-chart"
+                                   data-example-download="bar-chart"
+                                   aria-label="Download the Bar Chart OGraf package as a ZIP file">
+                                    <i data-lucide="download" aria-hidden="true"></i>
+                                    <span>Download OGraf (.zip)</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="demo-card__body">
+                            <div class="demo-aspect-bar">
+                                <span class="demo-aspect-bar__label">Format</span>
+                                <div class="demo-aspect-bar__options">
+                                    <span class="demo-aspect-fixed">
+                                        <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
+                                            <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>16:9 fixed</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="demo-player-stage">
+                                <div class="demo-player" data-demo-player>
+                                    <iframe class="demo-player__iframe" data-demo-iframe
+                                            data-src="website/demo-player/index.html?example=bar-chart"
+                                            title="OGraf Bar Chart Demo"
+                                            sandbox="allow-scripts allow-same-origin"
+                                            tabindex="-1"></iframe>
+                                </div>
+                            </div>
+
+                            <div class="demo-controls">
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play"
+                                            type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update"
+                                            type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop"
+                                            type="button" disabled>Stop</button>
+                                </div>
+
+                                <div class="demo-controls__fields demo-controls__fields--compact">
+                                    <label class="demo-field demo-field--wide">
+                                        <span class="demo-field__label">Title</span>
+                                        <input class="demo-field__input" data-demo-field="_Title" type="text"
+                                               value="Bar Chart Graphic" autocomplete="off">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Value 1</span>
+                                        <input class="demo-field__input" data-demo-field="_Value 1"
+                                               data-demo-value-type="number" type="number" value="205">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Value 2</span>
+                                        <input class="demo-field__input" data-demo-field="_Value 2"
+                                               data-demo-value-type="number" type="number" value="600">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Value 3</span>
+                                        <input class="demo-field__input" data-demo-field="_Value 3"
+                                               data-demo-value-type="number" type="number" value="807">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Value 4</span>
+                                        <input class="demo-field__input" data-demo-field="_Value 4"
+                                               data-demo-value-type="number" type="number" value="1200">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Value 5</span>
+                                        <input class="demo-field__input" data-demo-field="_Value 5"
+                                               data-demo-value-type="number" type="number" value="290">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Value 6</span>
+                                        <input class="demo-field__input" data-demo-field="_Value 6"
+                                               data-demo-value-type="number" type="number" value="102">
+                                    </label>
+                                </div>
+                                <div class="demo-controls__status">
+                                    <span class="demo-status" data-demo-status data-state="loading"
+                                          role="status" aria-live="polite" aria-atomic="true">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.demo-carousel__slide -->
+
+                <!-- Slide 5: Headline -->
+                <div class="demo-carousel__slide" id="demo-slide-4" role="tabpanel"
+                     data-example-id="headline"
+                     aria-labelledby="demo-tab-4" aria-hidden="true" inert tabindex="0">
+                    <div class="demo-card" data-demo-controller="headline">
+
+                        <div class="demo-card__header">
+                            <h3 class="demo-card__title">Headline</h3>
+                            <div class="demo-card__header-actions">
+                                <span class="demo-card__badge">Lower third</span>
+                                <a class="demo-card__download"
+                                   href="https://github.com/ebu/ograf/tree/main/v1/examples/headline"
+                                   data-example-download="headline"
+                                   aria-label="Download the Headline OGraf package as a ZIP file">
+                                    <i data-lucide="download" aria-hidden="true"></i>
+                                    <span>Download OGraf (.zip)</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="demo-card__body">
+                            <div class="demo-aspect-bar">
+                                <span class="demo-aspect-bar__label">Format</span>
+                                <div class="demo-aspect-bar__options">
+                                    <span class="demo-aspect-fixed">
+                                        <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
+                                            <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>16:9 fixed</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="demo-player-stage">
+                                <div class="demo-player" data-demo-player>
+                                    <iframe class="demo-player__iframe" data-demo-iframe
+                                            data-src="website/demo-player/index.html?example=headline"
+                                            title="OGraf Headline Demo"
+                                            sandbox="allow-scripts allow-same-origin"
+                                            tabindex="-1"></iframe>
+                                </div>
+                            </div>
+
+                            <div class="demo-controls">
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play"
+                                            type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update"
+                                            type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop"
+                                            type="button" disabled>Stop</button>
+                                </div>
+
+                                <div class="demo-controls__fields">
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Tag</span>
+                                        <input class="demo-field__input" data-demo-field="_headlineTagText"
+                                               type="text" value="Breaking News" autocomplete="off">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Headline</span>
+                                        <input class="demo-field__input" data-demo-field="_headlineText"
+                                               type="text" value="Breaking News - OGraf" autocomplete="off">
+                                    </label>
+                                </div>
+                                <div class="demo-controls__status">
+                                    <span class="demo-status" data-demo-status data-state="loading"
+                                          role="status" aria-live="polite" aria-atomic="true">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.demo-carousel__slide -->
+
+                <!-- Slide 6: Weather -->
+                <div class="demo-carousel__slide" id="demo-slide-5" role="tabpanel"
+                     data-example-id="weather"
+                     aria-labelledby="demo-tab-5" aria-hidden="true" inert tabindex="0">
+                    <div class="demo-card" data-demo-controller="weather">
+
+                        <div class="demo-card__header">
+                            <h3 class="demo-card__title">Weather</h3>
+                            <div class="demo-card__header-actions">
+                                <span class="demo-card__badge">Full screen</span>
+                                <a class="demo-card__download"
+                                   href="https://github.com/ebu/ograf/tree/main/v1/examples/weather"
+                                   data-example-download="weather"
+                                   aria-label="Download the Weather OGraf package as a ZIP file">
+                                    <i data-lucide="download" aria-hidden="true"></i>
+                                    <span>Download OGraf (.zip)</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="demo-card__body">
+                            <div class="demo-aspect-bar">
+                                <span class="demo-aspect-bar__label">Format</span>
+                                <div class="demo-aspect-bar__options">
+                                    <span class="demo-aspect-fixed">
+                                        <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true">
+                                            <rect x="0.5" y="0.5" width="19" height="13" rx="2" fill="none"
+                                                  stroke="currentColor" stroke-width="1"/>
+                                        </svg>
+                                        <span>16:9 fixed</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="demo-player-stage">
+                                <div class="demo-player" data-demo-player>
+                                    <iframe class="demo-player__iframe" data-demo-iframe
+                                            data-src="website/demo-player/index.html?example=weather"
+                                            title="OGraf Weather Demo"
+                                            sandbox="allow-scripts allow-same-origin"
+                                            tabindex="-1"></iframe>
+                                </div>
+                            </div>
+
+                            <div class="demo-controls">
+                                <div class="demo-controls__actions">
+                                    <button class="btn btn--primary demo-btn" data-demo-action="play"
+                                            type="button" disabled>Play In</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="update"
+                                            type="button" disabled>Update</button>
+                                    <button class="btn btn--ghost demo-btn" data-demo-action="stop"
+                                            type="button" disabled>Stop</button>
+                                </div>
+
+                                <div class="demo-controls__fields demo-controls__fields--compact">
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">City</span>
+                                        <input class="demo-field__input" data-demo-field="_city" type="text"
+                                               value="Hannover" autocomplete="off">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Temperature</span>
+                                        <input class="demo-field__input" data-demo-field="_temperature"
+                                               type="text" value="25" autocomplete="off">
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">Weather</span>
+                                        <select class="demo-field__input" data-demo-field="_sun-lightning-rain-snow"
+                                                data-demo-value-type="number">
+                                            <option value="0" selected>Sun</option>
+                                            <option value="1">Storm</option>
+                                            <option value="2">Rain</option>
+                                            <option value="3">Snow</option>
+                                        </select>
+                                    </label>
+                                    <label class="demo-field">
+                                        <span class="demo-field__label">City color</span>
+                                        <select class="demo-field__input" data-demo-field="_darkText"
+                                                data-demo-value-type="number">
+                                            <option value="0" selected>Light</option>
+                                            <option value="1">Dark</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="demo-controls__status">
+                                    <span class="demo-status" data-demo-status data-state="loading"
+                                          role="status" aria-live="polite" aria-atomic="true">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div><!-- /.demo-carousel__slide -->
 
                 </div><!-- /.demo-carousel__track -->
@@ -999,6 +1262,15 @@
                         aria-selected="false" aria-controls="demo-slide-2" tabindex="-1" data-index="2"
                         data-example-id="responsive-lower-third"
                         aria-label="Responsive Lower Third"></button>
+                <button class="demo-carousel__dot" id="demo-tab-3" type="button" role="tab"
+                        aria-selected="false" aria-controls="demo-slide-3" tabindex="-1" data-index="3"
+                        data-example-id="bar-chart" aria-label="Bar Chart"></button>
+                <button class="demo-carousel__dot" id="demo-tab-4" type="button" role="tab"
+                        aria-selected="false" aria-controls="demo-slide-4" tabindex="-1" data-index="4"
+                        data-example-id="headline" aria-label="Headline"></button>
+                <button class="demo-carousel__dot" id="demo-tab-5" type="button" role="tab"
+                        aria-selected="false" aria-controls="demo-slide-5" tabindex="-1" data-index="5"
+                        data-example-id="weather" aria-label="Weather"></button>
             </div>
 
         </div><!-- /.demo-carousel -->
@@ -1574,10 +1846,10 @@
 <script src="website/js/animations.js?v=7"></script>
 
 <!-- Demo control panel -->
-<script src="website/js/demo-lower-third.js?v=10"></script>
+<script src="website/js/demo-controls.js?v=1"></script>
 
 <!-- Demo 2: Scoreboard control panel -->
-<script src="website/js/demo-scoreboard.js?v=10"></script>
+<script src="website/js/demo-scoreboard.js?v=11"></script>
 
 <!-- Demo carousel -->
     <script src="website/js/demo-carousel.js?v=13"></script>
@@ -1594,7 +1866,7 @@
     customElements.define('ograf-lower-third', ResponsiveLowerThird);
 </script>
 
-<script src="website/js/stage-demo.js?v=3"></script>
+<script src="website/js/stage-demo.js?v=4"></script>
 
 <!-- Vendor logo ticker (auto-discovers logos in assets/img/vendor-logos/vendors/) -->
 <script src="website/js/vendor-ticker.js?v=2"></script>

@@ -1,37 +1,49 @@
 /**
- * OGraf Demo — Live Scoreboard
- * Compliant with OGraf Graphics Specification v1
+ * OGraf Example — Live Scoreboard
+ * https://ograf.ebu.io/v1/specification/docs/Specification.html
  *
- * Steps: pre-match → live → half-time → full-time
- * Responsive: uses vmin-based sizing, works at any aspect ratio
+ * Steps: pre-match → live → half-time → second-half → full-time
  *
  * Layout mirrors real broadcast scoreboards:
  *   [crest] FCZ  0 : 0  AJX [crest]
  *   Single horizontal row — compact, always readable.
  */
 
-const STEPS = ['pre-match', 'live', 'half-time', 'second-half', 'full-time'];
-const IS_REPOSITORY_DEMO = new URL(import.meta.url).pathname.endsWith(
-  '/v1/examples/scoreboard/graphic.mjs'
-);
-const OGRAF_LOGO_PATH = IS_REPOSITORY_DEMO
-  ? '../../../docs/logo/ograf-logo-colour.svg'
-  : './assets/ograf-logo-colour.svg';
-const OGRAF_LOGO_URL = new URL(OGRAF_LOGO_PATH, import.meta.url).href;
+const MATCH_PHASES = Object.freeze([
+    'pre-match',
+    'live',
+    'half-time',
+    'second-half',
+    'full-time'
+]);
+const MATCH_PHASE_START_MINUTES = Object.freeze([0, 0, 45, 45, 90]);
+const SCORE_FLASH_DURATION_MS = 600;
+const STEP_TRANSITION_DURATION_MS = 400;
+const PLAY_TRANSITION_DURATION_MS = 600;
+const STOP_TRANSITION_DURATION_MS = 400;
+const MAX_MATCH_MINUTE = 90;
 
-const DEFAULT_STATE = {
-  step:      'pre-match',
-  homeTeam:  'FC Zürich',
-  awayTeam:  'Ajax Amsterdam',
-  homeShort: 'FCZ',
-  awayShort: 'AJX',
-  homeScore: 0,
-  awayScore: 0,
-  minute:    0,
-  seconds:   0,
-  homeColor: '#005ca9',
-  awayColor: '#d4192c',
-};
+const DEFAULT_STATE = Object.freeze({
+    homeShort: 'FCZ',
+    awayShort: 'AJX',
+    homeScore: 0,
+    awayScore: 0,
+    minute: 0,
+    seconds: 0,
+    homeColor: '#005ca9',
+    awayColor: '#d4192c'
+});
+
+function resolveTargetStep(currentStep, { goto, delta } = {}) {
+    const requestedStep = Number.isInteger(goto) && goto >= 0
+        ? goto
+        : (currentStep ?? -1) + (Number.isInteger(delta) ? delta : 1);
+
+    if (requestedStep < 0) return 0;
+    if (requestedStep >= MATCH_PHASES.length) return undefined;
+
+    return requestedStep;
+}
 
 const CSS = `
   :host {
@@ -199,6 +211,31 @@ const CSS = `
     line-height: 1;
   }
 
+  /* ── Footer ─────────────────────────────────────── */
+
+  .sb__footer {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: clamp(3px, 0.6vmin, 6px);
+    padding: clamp(3px, 0.6vmin, 8px) clamp(10px, 2vmin, 24px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: clamp(6px, 0.9vmin, 9px);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .sb__footer-label {
+    color: rgba(255,255,255,0.2);
+  }
+
+  .sb__footer-brand {
+    color: #87a0de;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
   .sb[data-step="pre-match"] .sb__clock { display: none; }
 
   /* Step-specific clock colours */
@@ -310,31 +347,6 @@ const CSS = `
     line-height: 1;
   }
 
-  /* ── Footer ─────────────────────────────────────── */
-
-  .sb__footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: clamp(3px, 0.6vmin, 8px) clamp(10px, 2vmin, 24px);
-    border-top: 1px solid rgba(255,255,255,0.06);
-    gap: clamp(4px, 0.8vmin, 8px);
-  }
-
-  .sb__footer-label {
-    font-size: clamp(6px, 0.9vmin, 9px);
-    font-weight: 600;
-    color: rgba(255,255,255,0.2);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .sb__footer-logo {
-    height: clamp(8px, 1.4vmin, 14px);
-    width: auto;
-    opacity: 0.35;
-  }
-
   /* ── Entry animations (child stagger) ───────────── */
 
   .sb.is-entering .sb__board  { animation: fadeScale 0.45s cubic-bezier(0.16,1,0.3,1) 0.05s backwards; }
@@ -363,289 +375,375 @@ const CSS = `
 `;
 
 export default class OGrafScoreboard extends HTMLElement {
-
-  constructor() {
-    super();
-    this._state     = { ...DEFAULT_STATE };
-    this._animState = 'hidden';
-    this._shadow    = this.attachShadow({ mode: 'open' });
-    this._clockTimer = null;
-  }
-
-  // ─── OGraf Lifecycle Methods ────────────────────────────────
-
-  async load({ data = {} } = {}) {
-    this._state = { ...DEFAULT_STATE, ...data };
-    this._buildDOM();
-    return { statusCode: 200 };
-  }
-
-  async playAction({ skipAnimation = false } = {}) {
-    const el = this._shadow.querySelector('.sb');
-    if (!el) return { statusCode: 200, currentStep: this._currentStep() };
-
-    el.classList.remove('is-exiting');
-    el.classList.add('is-visible');
-    this._animState = 'visible';
-
-    if (skipAnimation) {
-      el.style.opacity = '1';
-    } else {
-      el.classList.add('is-entering');
-      setTimeout(() => el.classList.remove('is-entering'), 600);
+    constructor() {
+        super();
+        this._state = { ...DEFAULT_STATE };
+        this._currentStep = undefined;
+        this._lifecycleState = 'start';
+        this._shadow = this.attachShadow({ mode: 'open' });
+        this._clockTimer = null;
+        this._actionRevision = 0;
+        this._pendingDelays = new Set();
     }
 
-    this._startClock();
-    return { statusCode: 200, currentStep: this._currentStep() };
-  }
-
-  async stopAction({ skipAnimation = false } = {}) {
-    const el = this._shadow.querySelector('.sb');
-    if (!el) return { statusCode: 200 };
-
-    this._stopClock();
-
-    if (skipAnimation) {
-      el.classList.remove('is-visible', 'is-entering');
-      el.style.opacity = '0';
-      this._animState = 'hidden';
-      this._resetState();
-      return { statusCode: 200 };
-    }
-
-    el.classList.remove('is-entering');
-    el.classList.add('is-exiting');
-    this._animState = 'hidden';
-
-    await Promise.race([
-      new Promise(r => el.addEventListener('animationend', r, { once: true })),
-      new Promise(r => setTimeout(r, 450)),
-    ]);
-
-    el.classList.remove('is-visible', 'is-exiting');
-    this._resetState();
-    return { statusCode: 200 };
-  }
-
-  async updateAction({ data = {}, skipAnimation = false } = {}) {
-    const oldScore = { home: this._state.homeScore, away: this._state.awayScore };
-    const oldStep  = this._state.step;
-    this._state = { ...this._state, ...data };
-
-    this._updateDOM();
-
-    if (!skipAnimation) {
-      if (this._state.homeScore !== oldScore.home) this._flashScore('home');
-      if (this._state.awayScore !== oldScore.away) this._flashScore('away');
-      if (this._state.step !== oldStep) this._animateStepChange();
-    }
-
-    return { statusCode: 200 };
-  }
-
-  /**
-   * customAction — advance to the next step
-   * id='next-step': cycle pre-match → live → half-time → full-time
-   * id='goal-home': increment home score
-   * id='goal-away': increment away score
-   */
-  async customAction({ id, skipAnimation = false } = {}) {
-    switch (id) {
-      case 'next-step': {
-        const idx = STEPS.indexOf(this._state.step);
-        const next = STEPS[Math.min(idx + 1, STEPS.length - 1)];
-        if (next === 'live')         { this._state.minute = 0;  this._state.seconds = 0; }
-        if (next === 'half-time')    { this._state.minute = 45; this._state.seconds = 0; }
-        if (next === 'second-half')  { this._state.minute = 45; this._state.seconds = 0; }
-        if (next === 'full-time')    { this._state.minute = 90; this._state.seconds = 0; }
-        this._state.step = next;
+    async load({ data = {}, renderType, renderCharacteristics } = {}) {
+        this._cancelPendingAction();
+        this._stopClock();
+        this._state = { ...DEFAULT_STATE, ...data };
+        this._currentStep = undefined;
+        this._lifecycleState = 'start';
+        this._buildDOM();
         this._updateDOM();
-        if (!skipAnimation) this._animateStepChange();
-        if (next === 'live' || next === 'second-half') this._startClock();
-        else this._stopClock();
-        break;
-      }
-      case 'goal-home':
-        this._state.homeScore++;
-        this._updateDOM();
-        if (!skipAnimation) this._flashScore('home');
-        break;
-      case 'goal-away':
-        this._state.awayScore++;
-        this._updateDOM();
-        if (!skipAnimation) this._flashScore('away');
-        break;
+
+        return { statusCode: 200 };
     }
-    return { statusCode: 200, result: this.getState() };
-  }
 
-  async dispose() {
-    this._stopClock();
-    this._shadow.innerHTML = '';
-    return { statusCode: 200 };
-  }
+    async playAction(params = {}) {
+        const actionRevision = this._beginAction();
+        const targetStep = resolveTargetStep(this._currentStep, params);
 
-  _currentStep() {
-    return Math.max(0, STEPS.indexOf(this._state.step));
-  }
+        if (targetStep === undefined) {
+            await this._hideGraphic(params.skipAnimation, actionRevision);
+            if (this._isCurrentAction(actionRevision)) {
+                this._currentStep = undefined;
+                this._lifecycleState = 'end';
+            }
 
-  /** Public read-only accessor for current state (used by host page). */
-  getState() {
-    return { ...this._state };
-  }
+            return this._playResult();
+        }
 
-  // ─── DOM Helpers ────────────────────────────────────────────
+        const previousStep = this._currentStep;
+        const wasVisible = this._lifecycleState === 'step';
+        this._currentStep = targetStep;
+        this._lifecycleState = 'step';
+        this._applyMatchPhase(previousStep, targetStep);
+        this._updateDOM();
 
-  _buildDOM() {
-    const s = this._state;
-    this._shadow.innerHTML = `
-      <style>${CSS}</style>
-      <div class="sb" data-step="${s.step}" aria-live="polite">
-        <div class="sb__board">
-          <div class="sb__shimmer" aria-hidden="true"></div>
+        if (!wasVisible) {
+            await this._showGraphic(params.skipAnimation, actionRevision);
+        } else if (previousStep !== targetStep && !params.skipAnimation) {
+            await this._animateStepChange(actionRevision);
+        }
 
-          <div class="sb__header">
-            <div class="sb__status">
-              <span class="sb__status-dot" aria-hidden="true"></span>
-              <span class="sb__status-label">${this._stepLabel(s.step)}</span>
-            </div>
-          </div>
+        if (this._isCurrentAction(actionRevision)) this._syncClock();
 
-          <div class="sb__main">
-            <div class="sb__team sb__team--home">
-              <div class="sb__crest" style="background: ${this._esc(s.homeColor)}">${this._esc(s.homeShort)}</div>
-              <span class="sb__team-short sb__team-short--home">${this._esc(s.homeShort)}</span>
-            </div>
-
-            <div class="sb__center">
-              <div class="sb__scores">
-                <span class="sb__score sb__score--home">${s.homeScore}</span>
-                <span class="sb__divider">:</span>
-                <span class="sb__score sb__score--away">${s.awayScore}</span>
-              </div>
-              <div class="sb__clock">
-                <span class="sb__clock-time">${this._clockText()}</span>
-              </div>
-            </div>
-
-            <div class="sb__team sb__team--away">
-              <div class="sb__crest" style="background: ${this._esc(s.awayColor)}">${this._esc(s.awayShort)}</div>
-              <span class="sb__team-short sb__team-short--away">${this._esc(s.awayShort)}</span>
-            </div>
-          </div>
-
-          <div class="sb__footer">
-            <span class="sb__footer-label">Powered by</span>
-            <img class="sb__footer-logo" src="${OGRAF_LOGO_URL}" alt="OGraf" aria-hidden="true">
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  _updateDOM() {
-    const s  = this._state;
-    const el = this._shadow.querySelector('.sb');
-    if (!el) return;
-
-    el.dataset.step = s.step;
-
-    const q = (sel) => this._shadow.querySelector(sel);
-    q('.sb__team-short--home').textContent = s.homeShort;
-    q('.sb__team-short--away').textContent = s.awayShort;
-    q('.sb__score--home').textContent = s.homeScore;
-    q('.sb__score--away').textContent = s.awayScore;
-    q('.sb__status-label').textContent = this._stepLabel(s.step);
-    q('.sb__clock-time').innerHTML = this._clockText();
-
-    // Update crests
-    const homeC = q('.sb__team--home .sb__crest');
-    const awayC = q('.sb__team--away .sb__crest');
-    homeC.textContent = s.homeShort;
-    homeC.style.background = s.homeColor;
-    awayC.textContent = s.awayShort;
-    awayC.style.background = s.awayColor;
-  }
-
-  _flashScore(side) {
-    const el = this._shadow.querySelector(`.sb__score--${side}`);
-    if (!el) return;
-    el.classList.remove('is-flashing');
-    void el.offsetWidth;
-    el.classList.add('is-flashing');
-    setTimeout(() => el.classList.remove('is-flashing'), 600);
-  }
-
-  _animateStepChange() {
-    const center = this._shadow.querySelector('.sb__center');
-    const status = this._shadow.querySelector('.sb__status');
-    [center, status].forEach(el => {
-      if (!el) return;
-      el.classList.remove('is-step-changing');
-      void el.offsetWidth;
-      el.classList.add('is-step-changing');
-      setTimeout(() => el.classList.remove('is-step-changing'), 400);
-    });
-  }
-
-  _stepLabel(step) {
-    switch (step) {
-      case 'pre-match':   return 'Pre-Match';
-      case 'live':        return 'Live';
-      case 'half-time':   return 'Half-Time';
-      case 'second-half': return 'Live';
-      case 'full-time':   return 'Full-Time';
-      default:           return step;
+        return this._playResult();
     }
-  }
 
-  _clockText() {
-    const s = this._state;
-    if (s.step === 'pre-match') return '';
-    if (s.step === 'half-time') return '45<span class="sb__clock-sep">:</span>00';
-    if (s.step === 'full-time') return '90<span class="sb__clock-sep">:</span>00';
-    // 'live' and 'second-half' both show the running clock
-    const mm = String(s.minute).padStart(2, '0');
-    const ss = String(s.seconds).padStart(2, '0');
-    return `${mm}<span class="sb__clock-sep sb__clock-tick">:</span>${ss}`;
-  }
+    async stopAction({ skipAnimation = false } = {}) {
+        const actionRevision = this._beginAction();
+        await this._hideGraphic(skipAnimation, actionRevision);
 
-  _startClock() {
-    this._stopClock();
-    if (this._state.step !== 'live' && this._state.step !== 'second-half') return;
-    this._clockTimer = setInterval(() => {
-      if (this._state.step !== 'live' && this._state.step !== 'second-half') { this._stopClock(); return; }
-      this._state.seconds++;
-      if (this._state.seconds >= 60) {
-        this._state.seconds = 0;
-        this._state.minute = Math.min(this._state.minute + 1, 90);
-      }
-      const clockEl = this._shadow.querySelector('.sb__clock-time');
-      if (clockEl) clockEl.innerHTML = this._clockText();
-    }, 1000);
-  }
+        if (this._isCurrentAction(actionRevision)) {
+            this._currentStep = undefined;
+            this._lifecycleState = 'end';
+        }
 
-  _stopClock() {
-    if (this._clockTimer) { clearInterval(this._clockTimer); this._clockTimer = null; }
-  }
+        return { statusCode: 200 };
+    }
 
-  _resetState() {
-    this._state = {
-      ...this._state,
-      step: 'pre-match',
-      homeScore: 0,
-      awayScore: 0,
-      minute: 0,
-      seconds: 0,
-    };
-    this._updateDOM();
-  }
+    async updateAction({ data = {}, skipAnimation = false } = {}) {
+        const actionRevision = this._beginAction();
+        const previousHomeScore = this._state.homeScore;
+        const previousAwayScore = this._state.awayScore;
+        this._state = { ...this._state, ...data };
+        this._updateDOM();
 
-  _esc(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+        if (!skipAnimation && this._lifecycleState === 'step') {
+            const changedSides = [];
+            if (this._state.homeScore !== previousHomeScore) changedSides.push('home');
+            if (this._state.awayScore !== previousAwayScore) changedSides.push('away');
+            await this._animateScoreChanges(changedSides, actionRevision);
+        }
+
+        return { statusCode: 200 };
+    }
+
+    async customAction({ id, skipAnimation = false } = {}) {
+        const sideByActionId = {
+            'goal-home': 'home',
+            'goal-away': 'away'
+        };
+        const side = sideByActionId[id];
+        if (!side) {
+            return {
+                statusCode: 400,
+                statusMessage: `Unknown custom action: ${String(id)}`
+            };
+        }
+
+        const actionRevision = this._beginAction();
+        const scoreProperty = side === 'home' ? 'homeScore' : 'awayScore';
+        this._state = {
+            ...this._state,
+            [scoreProperty]: this._state[scoreProperty] + 1
+        };
+        this._updateDOM();
+
+        if (!skipAnimation && this._lifecycleState === 'step') {
+            await this._animateScoreChanges([side], actionRevision);
+        }
+
+        return {
+            statusCode: 200,
+            result: this._stateResult()
+        };
+    }
+
+    async dispose() {
+        this._cancelPendingAction();
+        this._stopClock();
+        this._shadow.innerHTML = '';
+
+        return { statusCode: 200 };
+    }
+
+    _beginAction() {
+        this._cancelPendingAction();
+        this._clearTransientClasses();
+        this._updateDOM();
+
+        return this._actionRevision;
+    }
+
+    _cancelPendingAction() {
+        this._actionRevision += 1;
+        for (const pendingDelay of this._pendingDelays) {
+            window.clearTimeout(pendingDelay.timer);
+            pendingDelay.resolve(false);
+        }
+        this._pendingDelays.clear();
+    }
+
+    _isCurrentAction(actionRevision) {
+        return actionRevision === this._actionRevision;
+    }
+
+    _wait(duration, actionRevision) {
+        return new Promise(resolve => {
+            const pendingDelay = {
+                timer: window.setTimeout(() => {
+                    this._pendingDelays.delete(pendingDelay);
+                    resolve(this._isCurrentAction(actionRevision));
+                }, duration),
+                resolve
+            };
+            this._pendingDelays.add(pendingDelay);
+        });
+    }
+
+    async _showGraphic(skipAnimation, actionRevision) {
+        const graphic = this._shadow.querySelector('.sb');
+        if (!graphic) return;
+
+        graphic.classList.add('is-visible');
+        if (skipAnimation) return;
+
+        graphic.classList.add('is-entering');
+        await this._wait(PLAY_TRANSITION_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            graphic.classList.remove('is-entering');
+        }
+    }
+
+    async _hideGraphic(skipAnimation, actionRevision) {
+        const graphic = this._shadow.querySelector('.sb');
+        this._stopClock();
+        if (!graphic) return;
+
+        if (skipAnimation || !graphic.classList.contains('is-visible')) {
+            graphic.classList.remove('is-visible', 'is-entering', 'is-exiting');
+            return;
+        }
+
+        graphic.classList.add('is-exiting');
+        await this._wait(STOP_TRANSITION_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            graphic.classList.remove('is-visible', 'is-exiting');
+        }
+    }
+
+    async _animateStepChange(actionRevision) {
+        const animatedElements = [
+            this._shadow.querySelector('.sb__center'),
+            this._shadow.querySelector('.sb__status')
+        ].filter(Boolean);
+        animatedElements.forEach(element => element.classList.add('is-step-changing'));
+        await this._wait(STEP_TRANSITION_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            animatedElements.forEach(element => element.classList.remove('is-step-changing'));
+        }
+    }
+
+    async _animateScoreChanges(sides, actionRevision) {
+        const scoreElements = sides
+            .map(side => this._shadow.querySelector(`.sb__score--${side}`))
+            .filter(Boolean);
+        if (!scoreElements.length) return;
+
+        scoreElements.forEach(element => element.classList.add('is-flashing'));
+        await this._wait(SCORE_FLASH_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            scoreElements.forEach(element => element.classList.remove('is-flashing'));
+        }
+    }
+
+    _clearTransientClasses() {
+        this._shadow.querySelector('.sb')?.classList.remove('is-entering', 'is-exiting');
+        this._shadow.querySelectorAll('.is-step-changing, .is-flashing')
+            .forEach(element => {
+                element.classList.remove('is-step-changing', 'is-flashing');
+            });
+    }
+
+    _applyMatchPhase(previousStep, targetStep) {
+        if (previousStep === targetStep) return;
+        if (previousStep !== undefined || targetStep !== 1) {
+            this._state.minute = MATCH_PHASE_START_MINUTES[targetStep];
+            this._state.seconds = 0;
+        }
+    }
+
+    _playResult() {
+        return {
+            statusCode: 200,
+            currentStep: this._currentStep,
+            result: this._stateResult()
+        };
+    }
+
+    _stateResult() {
+        return {
+            ...this._state,
+            step: this._currentStep === undefined
+                ? null
+                : MATCH_PHASES[this._currentStep]
+        };
+    }
+
+    _buildDOM() {
+        this._shadow.innerHTML = `
+            <style>${CSS}</style>
+            <div class="sb" data-step="pre-match" aria-live="polite">
+                <div class="sb__board">
+                    <div class="sb__shimmer" aria-hidden="true"></div>
+                    <div class="sb__header">
+                        <div class="sb__status">
+                            <span class="sb__status-dot" aria-hidden="true"></span>
+                            <span class="sb__status-label"></span>
+                        </div>
+                    </div>
+                    <div class="sb__main">
+                        <div class="sb__team sb__team--home">
+                            <div class="sb__crest"></div>
+                            <span class="sb__team-short sb__team-short--home"></span>
+                        </div>
+                        <div class="sb__center">
+                            <div class="sb__scores">
+                                <span class="sb__score sb__score--home"></span>
+                                <span class="sb__divider">:</span>
+                                <span class="sb__score sb__score--away"></span>
+                            </div>
+                            <div class="sb__clock">
+                                <span class="sb__clock-time">
+                                    <span class="sb__clock-minutes"></span>
+                                    <span class="sb__clock-sep">:</span>
+                                    <span class="sb__clock-seconds"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="sb__team sb__team--away">
+                            <div class="sb__crest"></div>
+                            <span class="sb__team-short sb__team-short--away"></span>
+                        </div>
+                    </div>
+                    <div class="sb__footer" aria-hidden="true">
+                        <span class="sb__footer-label">Powered by</span>
+                        <span class="sb__footer-brand">OGraf</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    _updateDOM() {
+        const graphic = this._shadow.querySelector('.sb');
+        if (!graphic) return;
+
+        const step = this._currentStep ?? 0;
+        const phase = MATCH_PHASES[step];
+        graphic.dataset.step = phase;
+
+        const setText = (selector, value) => {
+            const element = this._shadow.querySelector(selector);
+            if (element) element.textContent = String(value);
+        };
+        setText('.sb__team-short--home', this._state.homeShort);
+        setText('.sb__team-short--away', this._state.awayShort);
+        setText('.sb__score--home', this._state.homeScore);
+        setText('.sb__score--away', this._state.awayScore);
+        setText('.sb__status-label', this._stepLabel(phase));
+        setText('.sb__clock-minutes', String(this._state.minute).padStart(2, '0'));
+        setText('.sb__clock-seconds', String(this._state.seconds).padStart(2, '0'));
+
+        const separator = this._shadow.querySelector('.sb__clock-sep');
+        separator?.classList.toggle(
+            'sb__clock-tick',
+            phase === 'live' || phase === 'second-half'
+        );
+
+        this._updateTeam('.sb__team--home', this._state.homeShort, this._state.homeColor);
+        this._updateTeam('.sb__team--away', this._state.awayShort, this._state.awayColor);
+    }
+
+    _updateTeam(selector, shortName, color) {
+        const crest = this._shadow.querySelector(`${selector} .sb__crest`);
+        if (!crest) return;
+
+        crest.textContent = String(shortName);
+        crest.style.backgroundColor = /^#[0-9a-f]{6}$/i.test(color)
+            ? color
+            : '#4b5563';
+    }
+
+    _stepLabel(step) {
+        const labels = {
+            'pre-match': 'Pre-Match',
+            live: 'Live',
+            'half-time': 'Half-Time',
+            'second-half': 'Live',
+            'full-time': 'Full-Time'
+        };
+
+        return labels[step] ?? step;
+    }
+
+    _syncClock() {
+        this._stopClock();
+        const phase = MATCH_PHASES[this._currentStep];
+        const shouldRun = this._lifecycleState === 'step'
+            && (phase === 'live' || phase === 'second-half')
+            && this._state.minute < MAX_MATCH_MINUTE;
+        if (!shouldRun) return;
+
+        this._clockTimer = window.setInterval(() => {
+            this._state.seconds += 1;
+            if (this._state.seconds >= 60) {
+                this._state.seconds = 0;
+                this._state.minute += 1;
+            }
+            if (this._state.minute >= MAX_MATCH_MINUTE) {
+                this._state.minute = MAX_MATCH_MINUTE;
+                this._state.seconds = 0;
+                this._stopClock();
+            }
+            this._updateDOM();
+        }, 1000);
+    }
+
+    _stopClock() {
+        if (this._clockTimer === null) return;
+        window.clearInterval(this._clockTimer);
+        this._clockTimer = null;
+    }
 }

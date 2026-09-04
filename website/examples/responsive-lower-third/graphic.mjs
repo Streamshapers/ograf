@@ -1,14 +1,29 @@
 /**
  * OGraf Example — Responsive Lower Third
- * Compliant with OGraf Graphics Specification v1
  * https://ograf.ebu.io/v1/specification/docs/Specification.html
  */
 
-const DEFAULT_STATE = {
-  name:    'Anders Berg',
-  title:   'Senior Correspondent',
-  channel: 'OGraf News',
-};
+const PLAY_TRANSITION_DURATION_MS = 950;
+const STOP_TEXT_DURATION_MS = 240;
+const STOP_SLIDE_DURATION_MS = 400;
+const UPDATE_OUT_DURATION_MS = 180;
+const UPDATE_IN_DURATION_MS = 220;
+const COMPACT_ASPECT_RATIO = 1.25;
+const PORTRAIT_ASPECT_RATIO = 0.68;
+
+const DEFAULT_STATE = Object.freeze({
+    name: 'Anders Berg',
+    title: 'Senior Correspondent',
+    channel: 'OGraf News'
+});
+
+function resolveTargetStep(currentStep, { goto, delta } = {}) {
+    const requestedStep = Number.isInteger(goto) && goto >= 0
+        ? goto
+        : (currentStep ?? -1) + (Number.isInteger(delta) ? delta : 1);
+
+    return requestedStep >= 1 ? undefined : 0;
+}
 
 const CSS = `
   :host {
@@ -18,12 +33,13 @@ const CSS = `
     position: relative;
     overflow: hidden;
     font-family: 'Arial', 'Helvetica Neue', sans-serif;
+    container-type: size;
   }
 
   /* ── Keyframes ─────────────────────────────────── */
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(0.93cqh); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
@@ -39,41 +55,30 @@ const CSS = `
 
   @keyframes textOut {
     from { opacity: 1; transform: translateY(0); }
-    to   { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 0; transform: translateY(-0.93cqh); }
   }
 
   @keyframes textIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(0.93cqh); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
   /* ── Root wrapper ──────────────────────────────── */
 
-  /* Anchor handles positioning so the inner .l3rd is free to animate
-     transforms (slide-in/out) without fighting positional transforms.
-     The --visible-left custom property is set by the host page in
-     canvas-pixel units when the graphic is embedded inside a viewport-
-     cropped wrapper (e.g. the multi-device stage). For full-canvas
-     hosts (broadcast output, standalone TV embed) the default 0 is
-     correct. */
+  /* Keep positioning separate from the animated inner element. */
   .l3rd-anchor {
     position: absolute;
-    bottom: 88px;
-    left: var(--visible-left, 0);
+    right: 0;
+    bottom: 8%;
+    left: 0;
     will-change: transform;
   }
 
   .l3rd {
     display: flex;
     flex-direction: column;
-    /* Size to content, but never wider than the visible strip — so the
-       top accent line, the dark name-row background, and the title-row
-       all share the same width as the actual text content. Anchored
-       at the visible left edge by .l3rd-anchor's left:var(--visible-left).
-       Fallback is the full broadcast canvas (1920px) for full-canvas
-       hosts where no visible-width is provided. */
     width: fit-content;
-    max-width: var(--visible-width, 1920px);
+    max-width: 100%;
     overflow: hidden;
     will-change: transform;
     filter: drop-shadow(0 6px 28px rgba(0, 0, 0, 0.55));
@@ -91,71 +96,65 @@ const CSS = `
     min-width: 0;
   }
 
-  /* ── Layout: laptop ─────────────────────────────── */
-  /* Defaults already work for the slight 16:10 crop. */
+  /* Layout is derived from the component's own dimensions. */
+  :host([data-layout="compact"]) .l3rd-anchor {
+    bottom: 7%;
+  }
+  :host([data-layout="compact"]) .l3rd__name { font-size: 5.56cqh; }
+  :host([data-layout="compact"]) .l3rd__title { font-size: 2.96cqh; }
+  :host([data-layout="compact"]) .l3rd__name-row {
+    padding: 2.96cqh 4.07cqh 2.04cqh 2.59cqh;
+    gap: 5.19cqh;
+  }
+  :host([data-layout="compact"]) .l3rd__title-row {
+    padding: 1.85cqh 4.07cqh 2.96cqh 2.59cqh;
+    gap: 5.19cqh;
+  }
+  :host([data-layout="compact"]) .l3rd__tag-label,
+  :host([data-layout="compact"]) .l3rd__channel { font-size: 1.85cqh; }
 
-  /* ── Layout: tablet (3:4 crop of 16:9 source) ────
-     Anchor at the visible left edge — same as default, just with the
-     bottom offset tightened for the portrait crop. The default rule
-     already reads --visible-left so we only need to shift bottom. */
-  :host([layout="tablet"]) .l3rd-anchor {
-    bottom: 100px;
+  :host([data-layout="portrait"]) .l3rd-anchor {
+    bottom: 7%;
   }
-  :host([layout="tablet"]) .l3rd__name  { font-size: 60px; }
-  :host([layout="tablet"]) .l3rd__title { font-size: 32px; }
-  :host([layout="tablet"]) .l3rd__name-row {
-    padding: 32px 44px 22px 28px;
-    gap: 56px;
+  :host([data-layout="portrait"]) .l3rd__name {
+    font-size: 4.07cqh;
   }
-  :host([layout="tablet"]) .l3rd__title-row {
-    padding: 20px 44px 32px 28px;
-    gap: 56px;
+  :host([data-layout="portrait"]) .l3rd__title {
+    font-size: 2.22cqh;
   }
-  :host([layout="tablet"]) .l3rd__tag-label,
-  :host([layout="tablet"]) .l3rd__channel { font-size: 20px; }
-
-  /* ── Layout: phone (heavy 9:16 crop of 16:9 source) ───
-     Anchor at the visible left edge (inherited from the default rule
-     via --visible-left), with phone-specific bottom offset and the
-     LT's internals scaled down to fit the narrow viewport. */
-  :host([layout="phone"]) .l3rd-anchor {
-    bottom: 130px;
+  :host([data-layout="portrait"]) .l3rd__name-row {
+    padding: 2.22cqh 2.96cqh 1.67cqh 2.04cqh;
+    gap: 2.96cqh;
   }
-  :host([layout="phone"]) .l3rd__name {
-    font-size: 44px;
+  :host([data-layout="portrait"]) .l3rd__title-row {
+    padding: 1.3cqh 2.96cqh 2.22cqh 2.04cqh;
+    gap: 2.96cqh;
   }
-  :host([layout="phone"]) .l3rd__title {
-    font-size: 24px;
+  :host([data-layout="portrait"]) .l3rd__tag-label,
+  :host([data-layout="portrait"]) .l3rd__channel {
+    font-size: 1.48cqh;
   }
-  :host([layout="phone"]) .l3rd__name-row {
-    padding: 24px 32px 18px 22px;
-    gap: 32px;
+  :host([data-layout="portrait"]) .l3rd__divider {
+    margin: 0 2.04cqh;
   }
-  :host([layout="phone"]) .l3rd__title-row {
-    padding: 14px 32px 24px 22px;
-    gap: 32px;
-  }
-  :host([layout="phone"]) .l3rd__tag-label,
-  :host([layout="phone"]) .l3rd__channel {
-    font-size: 16px;
-  }
-  :host([layout="phone"]) .l3rd__divider {
-    margin: 0 22px;
-  }
-  :host([layout="phone"]) .l3rd__bar {
-    width: 8px;
+  :host([data-layout="portrait"]) .l3rd__bar {
+    width: 0.74cqh;
   }
 
   /* ── Top accent line ──────────────────────────── */
 
   .l3rd__topline {
-    height: 6px;
+    height: 0.56cqh;
     background: linear-gradient(90deg, #2352C3 0%, #87A0DE 60%, transparent 100%);
     transform-origin: left center;
     transform: scaleX(0);
   }
 
-  .l3rd.is-animating .l3rd__topline {
+  .l3rd.is-visible .l3rd__topline {
+    transform: scaleX(1);
+  }
+
+  .l3rd.is-entering .l3rd__topline {
     animation: lineGrow 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
   }
 
@@ -166,10 +165,10 @@ const CSS = `
     align-items: stretch;
   }
 
-  /* Gradient accent bar */
+  /* Accent bar */
   .l3rd__bar {
-    width: 11px;
-    background: linear-gradient(180deg, #1a3d99 0%, #1a3d99 50%, #1a3d99 100%);
+    width: 1.02cqh;
+    background: #1a3d99;
     flex-shrink: 0;
   }
 
@@ -183,15 +182,15 @@ const CSS = `
 
   .l3rd__name-row {
     background: rgba(7, 11, 24, 0.94);
-    padding: 40px 54px 30px 33px;
+    padding: 3.7cqh 5cqh 2.78cqh 3.06cqh;
     display: flex;
     align-items: center;
-    gap: 72px;
+    gap: 6.67cqh;
     justify-content: space-between;
   }
 
   .l3rd__name {
-    font-size: 70px;
+    font-size: 6.48cqh;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: 0.01em;
@@ -213,7 +212,11 @@ const CSS = `
     overflow: hidden;
   }
 
-  .l3rd.is-animating .l3rd__name {
+  .l3rd.is-visible .l3rd__name {
+    opacity: 1;
+  }
+
+  .l3rd.is-entering .l3rd__name {
     animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
   }
 
@@ -221,18 +224,22 @@ const CSS = `
   .l3rd__tag {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.11cqh;
     flex-shrink: 0;
     opacity: 0;
   }
 
-  .l3rd.is-animating .l3rd__tag {
+  .l3rd.is-visible .l3rd__tag {
+    opacity: 1;
+  }
+
+  .l3rd.is-entering .l3rd__tag {
     animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
   }
 
   .l3rd__tag-dot {
-    width: 10px;
-    height: 10px;
+    width: 0.93cqh;
+    height: 0.93cqh;
     border-radius: 50%;
     background: #ef4444;
     flex-shrink: 0;
@@ -243,7 +250,7 @@ const CSS = `
   }
 
   .l3rd__tag-label {
-    font-size: 22px;
+    font-size: 2.04cqh;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.45);
     letter-spacing: 0.1em;
@@ -254,24 +261,24 @@ const CSS = `
   /* ── Divider ──────────────────────────────────── */
 
   .l3rd__divider {
-    height: 2px;
+    height: 0.19cqh;
     background: linear-gradient(90deg, rgba(135,160,222,0.35) 0%, transparent 70%);
-    margin: 0 33px;
+    margin: 0 3.06cqh;
   }
 
   /* ── Title row ────────────────────────────────── */
 
   .l3rd__title-row {
     background: rgba(5, 8, 18, 0.88);
-    padding: 25px 54px 40px 33px;
+    padding: 2.31cqh 5cqh 3.7cqh 3.06cqh;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 72px;
+    gap: 6.67cqh;
   }
 
   .l3rd__title {
-    font-size: 36px;
+    font-size: 3.33cqh;
     font-weight: 400;
     color: #87A0DE;
     letter-spacing: 0.04em;
@@ -284,13 +291,17 @@ const CSS = `
     overflow: hidden;
   }
 
-  .l3rd.is-animating .l3rd__title {
+  .l3rd.is-visible .l3rd__title {
+    opacity: 1;
+  }
+
+  .l3rd.is-entering .l3rd__title {
     animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.48s both;
   }
 
   /* Bottom-right channel label */
   .l3rd__channel {
-    font-size: 22px;
+    font-size: 2.04cqh;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.28);
     letter-spacing: 0.12em;
@@ -300,7 +311,11 @@ const CSS = `
     flex-shrink: 0;   /* keep full width — title is the shrinker */
   }
 
-  .l3rd.is-animating .l3rd__channel {
+  .l3rd.is-visible .l3rd__channel {
+    opacity: 1;
+  }
+
+  .l3rd.is-entering .l3rd__channel {
     animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
   }
 
@@ -334,214 +349,313 @@ const CSS = `
 `;
 
 export default class OGrafLowerThird extends HTMLElement {
-
-  constructor() {
-    super();
-    this._state      = { ...DEFAULT_STATE };
-    this._animState  = 'hidden';   // hidden | visible
-    this._shadow     = this.attachShadow({ mode: 'open' });
-  }
-
-  // ─── OGraf Lifecycle Methods ────────────────────────────────
-
-  /**
-   * load() — Called by the control system before any actions.
-   * Initialises the graphic with data and renders it (hidden).
-   */
-  async load({ data = {} } = {}) {
-    this._state = { ...DEFAULT_STATE, ...data };
-    this._buildDOM();
-    return { statusCode: 200 };
-  }
-
-  /**
-   * playAction() — Animate the graphic in.
-   * Returns a Promise that resolves when the graphic is ready
-   * for the next action (resolves immediately for broadcast use).
-   */
-  async playAction({ skipAnimation = false } = {}) {
-    const el = this._shadow.querySelector('.l3rd');
-    if (!el) return { statusCode: 200, currentStep: 0 };
-
-    // Hard-reset: cancel any leftover WAAPI animations from prior
-    // play/stop cycles. Without this, a previous slide-out's
-    // `fill: forwards` effect keeps applying translateX(-150%) and
-    // re-takes the element the moment our new slide-in cancels itself
-    // on completion — looking like the LT vanishes right after sliding in.
-    el.getAnimations().forEach(a => a.cancel());
-    el.style.transform = 'translateX(-150%)';   // anchor at off-screen start
-
-    el.classList.add('is-animating');
-    this._animState = 'visible';
-
-    if (skipAnimation) {
-      el.style.transform = 'translateX(0)';
-      el.querySelectorAll('.l3rd__name, .l3rd__tag, .l3rd__title, .l3rd__channel, .l3rd__topline')
-        .forEach(n => { n.style.animation = 'none'; n.style.opacity = '1'; });
-    } else {
-      // Use WAAPI — CSS transitions are unreliable in Shadow DOM
-      const anim = el.animate(
-        [{ transform: 'translateX(-150%)' }, { transform: 'translateX(0)' }],
-        { duration: 600, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' }
-      );
-      anim.finished
-        .then(() => { el.style.transform = 'translateX(0)'; anim.cancel(); })
-        .catch(() => { /* canceled by a subsequent stop/play — nothing to do */ });
+    constructor() {
+        super();
+        this._state = { ...DEFAULT_STATE };
+        this._currentStep = undefined;
+        this._lifecycleState = 'start';
+        this._shadow = this.attachShadow({ mode: 'open' });
+        this._actionRevision = 0;
+        this._activeAnimations = new Set();
+        this._pendingDelays = new Set();
+        this._resizeObserver = null;
     }
 
-    return { statusCode: 200, currentStep: 0 };
-  }
+    async load({ data = {}, renderType, renderCharacteristics } = {}) {
+        this._cancelPendingAction();
+        this._disconnectResizeObserver();
+        this._state = { ...DEFAULT_STATE, ...data };
+        this._currentStep = undefined;
+        this._lifecycleState = 'start';
+        this._buildDOM();
+        this._updateDOM();
+        this._updateLayout(renderCharacteristics?.resolution);
+        this._observeSize();
 
-  /**
-   * stopAction() — Animate the graphic out.
-   * Phase 1: text elements fade up and out.
-   * Phase 2: container slides off to the left.
-   */
-  async stopAction({ skipAnimation = false } = {}) {
-    const el = this._shadow.querySelector('.l3rd');
-    if (!el) return { statusCode: 200 };
-
-    if (skipAnimation) {
-      el.getAnimations().forEach(a => a.cancel());
-      el.style.transition = 'none';
-      el.style.transform = 'translateX(-150%)';
-      el.classList.remove('is-animating');
-      this._animState = 'hidden';
-      return { statusCode: 200 };
+        return { statusCode: 200 };
     }
 
-    // Hard-reset prior WAAPI animations (mirrors playAction). Without
-    // this, an in-flight slide-in's forward-fill can compete with the
-    // upcoming slide-out and produce a visible jump.
-    el.getAnimations().forEach(a => a.cancel());
-    el.style.transform = 'translateX(0)';   // anchor at on-screen start
+    async playAction(params = {}) {
+        const actionRevision = this._beginAction();
+        const targetStep = resolveTargetStep(this._currentStep, params);
 
-    // Phase 1 — text out
-    const textEls = [...el.querySelectorAll('.l3rd__name, .l3rd__tag, .l3rd__title, .l3rd__channel')];
-    textEls.forEach(t => t.classList.add('is-exiting'));
+        if (targetStep === undefined) {
+            await this._hideGraphic(params.skipAnimation, actionRevision);
+            if (this._isCurrentAction(actionRevision)) {
+                this._currentStep = undefined;
+                this._lifecycleState = 'end';
+            }
 
-    await new Promise(r => setTimeout(r, 240));
+            return this._playResult();
+        }
 
-    // Phase 2 — container slides out via WAAPI (CSS transitions unreliable in Shadow DOM)
-    el.classList.remove('is-animating');
-    this._animState = 'hidden';
-    const slideOut = el.animate(
-      [{ transform: 'translateX(0)' }, { transform: 'translateX(-150%)' }],
-      { duration: 400, easing: 'cubic-bezier(0.55, 0, 1, 0.45)', fill: 'forwards' }
-    );
-    // Safety timeout: if WAAPI doesn't resolve (e.g. suspended timeline), still complete.
-    // Wrapped in try/catch so that if a subsequent playAction cancels
-    // slideOut mid-flight, we exit cleanly without rejecting.
-    try {
-      await Promise.race([ slideOut.finished, new Promise(r => setTimeout(r, 500)) ]);
-    } catch (_) {
-      // slideOut was canceled — a new play/stop has taken over. Don't
-      // touch transform here; whoever's running now is in charge.
-      return { statusCode: 200 };
-    }
-    // Lock the offscreen position with inline style AND release the
-    // animation's forward-fill effect — otherwise the fill keeps
-    // pinning the element at -150% across the next playAction's
-    // lifecycle and snaps it back the moment that animation ends.
-    el.style.transform = 'translateX(-150%)';
-    slideOut.cancel();
-    return { statusCode: 200 };
-  }
+        if (this._lifecycleState !== 'step') {
+            this._currentStep = 0;
+            this._lifecycleState = 'step';
+            await this._showGraphic(params.skipAnimation, actionRevision);
+        }
 
-  /**
-   * updateAction() — Update graphic data without reloading.
-   * Animates text out, swaps content, animates back in.
-   */
-  async updateAction({ data = {}, skipAnimation = false } = {}) {
-    this._state = { ...this._state, ...data };
-
-    if (skipAnimation) {
-      this._updateDOM();
-      return { statusCode: 200 };
+        return this._playResult();
     }
 
-    const textEls = [...this._shadow.querySelectorAll('.l3rd__name, .l3rd__tag, .l3rd__title, .l3rd__channel')];
+    async stopAction({ skipAnimation = false } = {}) {
+        const actionRevision = this._beginAction();
+        await this._hideGraphic(skipAnimation, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            this._currentStep = undefined;
+            this._lifecycleState = 'end';
+        }
 
-    // Phase 1 — text out
-    textEls.forEach(el => { el.classList.remove('is-in'); el.classList.add('is-out'); });
-    await new Promise(r => setTimeout(r, 180));
+        return { statusCode: 200 };
+    }
 
-    // Swap content
-    this._updateDOM();
+    async updateAction({ data = {}, skipAnimation = false } = {}) {
+        const actionRevision = this._beginAction();
+        this._state = { ...this._state, ...data };
 
-    // Phase 2 — text in
-    textEls.forEach(el => { el.classList.remove('is-out'); el.classList.add('is-in'); });
-    setTimeout(() => textEls.forEach(el => el.classList.remove('is-in')), 350);
+        if (skipAnimation || this._lifecycleState !== 'step') {
+            this._updateDOM();
 
-    return { statusCode: 200 };
-  }
+            return { statusCode: 200 };
+        }
 
-  /**
-   * customAction() — Handle vendor-specific actions (none defined).
-   */
-  async customAction() {
-    return { statusCode: 400, statusMessage: 'No custom actions supported' };
-  }
+        const textElements = this._textElements();
+        textElements.forEach(element => element.classList.add('is-out'));
+        const canContinue = await this._wait(UPDATE_OUT_DURATION_MS, actionRevision);
+        if (!canContinue) return { statusCode: 200 };
 
-  /**
-   * dispose() — Clean up when the graphic is removed.
-   */
-  async dispose() {
-    this._shadow.innerHTML = '';
-    return { statusCode: 200 };
-  }
+        this._updateDOM();
+        textElements.forEach(element => {
+            element.classList.remove('is-out');
+            element.classList.add('is-in');
+        });
+        await this._wait(UPDATE_IN_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            textElements.forEach(element => element.classList.remove('is-in'));
+        }
 
-  // ─── DOM Helpers ────────────────────────────────────────────
+        return { statusCode: 200 };
+    }
 
-  _buildDOM() {
-    this._shadow.innerHTML = `
-      <style>${CSS}</style>
-      <div class="l3rd-anchor">
-        <div class="l3rd" style="transform: translateX(-150%)" aria-live="polite">
+    async customAction({ id } = {}) {
+        return {
+            statusCode: 400,
+            statusMessage: `Unknown custom action: ${String(id)}`
+        };
+    }
 
-          <div class="l3rd__topline" aria-hidden="true"></div>
+    async dispose() {
+        this._cancelPendingAction();
+        this._disconnectResizeObserver();
+        this._shadow.innerHTML = '';
 
-          <div class="l3rd__body">
-            <div class="l3rd__bar" aria-hidden="true"></div>
-            <div class="l3rd__content">
+        return { statusCode: 200 };
+    }
 
-              <div class="l3rd__name-row">
-                <span class="l3rd__name">${this._esc(this._state.name)}</span>
-                <div class="l3rd__tag" aria-label="Live">
-                  <div class="l3rd__tag-dot" aria-hidden="true"></div>
-                  <span class="l3rd__tag-label">Live</span>
+    _beginAction() {
+        this._cancelPendingAction();
+        this._clearTransientClasses();
+        this._updateDOM();
+
+        return this._actionRevision;
+    }
+
+    _cancelPendingAction() {
+        this._actionRevision += 1;
+        for (const animation of this._activeAnimations) animation.cancel();
+        this._activeAnimations.clear();
+        for (const pendingDelay of this._pendingDelays) {
+            window.clearTimeout(pendingDelay.timer);
+            pendingDelay.resolve(false);
+        }
+        this._pendingDelays.clear();
+    }
+
+    _isCurrentAction(actionRevision) {
+        return actionRevision === this._actionRevision;
+    }
+
+    _wait(duration, actionRevision) {
+        return new Promise(resolve => {
+            const pendingDelay = {
+                timer: window.setTimeout(() => {
+                    this._pendingDelays.delete(pendingDelay);
+                    resolve(this._isCurrentAction(actionRevision));
+                }, duration),
+                resolve
+            };
+            this._pendingDelays.add(pendingDelay);
+        });
+    }
+
+    _animate(element, keyframes, options) {
+        const animation = element.animate(keyframes, options);
+        this._activeAnimations.add(animation);
+        animation.finished
+            .catch(() => undefined)
+            .finally(() => this._activeAnimations.delete(animation));
+
+        return animation;
+    }
+
+    async _showGraphic(skipAnimation, actionRevision) {
+        const graphic = this._shadow.querySelector('.l3rd');
+        if (!graphic) return;
+
+        graphic.style.transform = 'translateX(-150%)';
+        graphic.classList.add('is-visible');
+        if (skipAnimation) {
+            graphic.style.transform = 'translateX(0)';
+            return;
+        }
+
+        graphic.classList.add('is-entering');
+        const slideAnimation = this._animate(
+            graphic,
+            [
+                { transform: 'translateX(-150%)' },
+                { transform: 'translateX(0)' }
+            ],
+            {
+                duration: 600,
+                easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                fill: 'forwards'
+            }
+        );
+        await this._wait(PLAY_TRANSITION_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            graphic.style.transform = 'translateX(0)';
+            graphic.classList.remove('is-entering');
+            slideAnimation.cancel();
+        }
+    }
+
+    async _hideGraphic(skipAnimation, actionRevision) {
+        const graphic = this._shadow.querySelector('.l3rd');
+        if (!graphic) return;
+
+        if (skipAnimation || !graphic.classList.contains('is-visible')) {
+            graphic.style.transform = 'translateX(-150%)';
+            graphic.classList.remove('is-visible', 'is-entering');
+            return;
+        }
+
+        const textElements = this._textElements();
+        textElements.forEach(element => element.classList.add('is-exiting'));
+        const canContinue = await this._wait(STOP_TEXT_DURATION_MS, actionRevision);
+        if (!canContinue) return;
+
+        const currentTransform = getComputedStyle(graphic).transform;
+        graphic.style.transform = currentTransform === 'none'
+            ? 'translateX(0)'
+            : currentTransform;
+        graphic.classList.remove('is-visible', 'is-entering');
+        const slideAnimation = this._animate(
+            graphic,
+            [
+                { transform: graphic.style.transform },
+                { transform: 'translateX(-150%)' }
+            ],
+            {
+                duration: STOP_SLIDE_DURATION_MS,
+                easing: 'cubic-bezier(0.55, 0, 1, 0.45)',
+                fill: 'forwards'
+            }
+        );
+        await this._wait(STOP_SLIDE_DURATION_MS, actionRevision);
+        if (this._isCurrentAction(actionRevision)) {
+            graphic.style.transform = 'translateX(-150%)';
+            slideAnimation.cancel();
+            textElements.forEach(element => element.classList.remove('is-exiting'));
+        }
+    }
+
+    _clearTransientClasses() {
+        this._shadow.querySelector('.l3rd')?.classList.remove('is-entering');
+        this._textElements().forEach(element => {
+            element.classList.remove('is-exiting', 'is-out', 'is-in');
+        });
+    }
+
+    _textElements() {
+        return [
+            ...this._shadow.querySelectorAll(
+                '.l3rd__name, .l3rd__tag, .l3rd__title, .l3rd__channel'
+            )
+        ];
+    }
+
+    _playResult() {
+        return {
+            statusCode: 200,
+            currentStep: this._currentStep,
+            result: { ...this._state }
+        };
+    }
+
+    _observeSize() {
+        if (!('ResizeObserver' in window)) return;
+        this._resizeObserver = new ResizeObserver(entries => {
+            const { width, height } = entries[0]?.contentRect ?? {};
+            this._updateLayout({ width, height });
+        });
+        this._resizeObserver.observe(this);
+    }
+
+    _disconnectResizeObserver() {
+        this._resizeObserver?.disconnect();
+        this._resizeObserver = null;
+    }
+
+    _updateLayout({ width, height } = {}) {
+        if (!(width > 0) || !(height > 0)) return;
+        const aspectRatio = width / height;
+        if (aspectRatio < PORTRAIT_ASPECT_RATIO) {
+            this.dataset.layout = 'portrait';
+        } else if (aspectRatio < COMPACT_ASPECT_RATIO) {
+            this.dataset.layout = 'compact';
+        } else {
+            this.dataset.layout = 'landscape';
+        }
+    }
+
+    _buildDOM() {
+        this._shadow.innerHTML = `
+            <style>${CSS}</style>
+            <div class="l3rd-anchor">
+                <div class="l3rd" style="transform: translateX(-150%)" aria-live="polite">
+                    <div class="l3rd__topline" aria-hidden="true"></div>
+                    <div class="l3rd__body">
+                        <div class="l3rd__bar" aria-hidden="true"></div>
+                        <div class="l3rd__content">
+                            <div class="l3rd__name-row">
+                                <span class="l3rd__name"></span>
+                                <div class="l3rd__tag" aria-label="Live">
+                                    <div class="l3rd__tag-dot" aria-hidden="true"></div>
+                                    <span class="l3rd__tag-label">Live</span>
+                                </div>
+                            </div>
+                            <div class="l3rd__divider" aria-hidden="true"></div>
+                            <div class="l3rd__title-row">
+                                <span class="l3rd__title"></span>
+                                <span class="l3rd__channel"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-
-              <div class="l3rd__divider" aria-hidden="true"></div>
-
-              <div class="l3rd__title-row">
-                <span class="l3rd__title">${this._esc(this._state.title)}</span>
-                <span class="l3rd__channel">${this._esc(this._state.channel)}</span>
-              </div>
-
             </div>
-          </div>
+        `;
+    }
 
-        </div>
-      </div>
-    `;
-  }
-
-  _updateDOM() {
-    const nameEl    = this._shadow.querySelector('.l3rd__name');
-    const titleEl   = this._shadow.querySelector('.l3rd__title');
-    const channelEl = this._shadow.querySelector('.l3rd__channel');
-    if (nameEl)    nameEl.textContent    = this._state.name;
-    if (titleEl)   titleEl.textContent   = this._state.title;
-    if (channelEl) channelEl.textContent = this._state.channel;
-  }
-
-  _esc(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+    _updateDOM() {
+        const valuesBySelector = {
+            '.l3rd__name': this._state.name,
+            '.l3rd__title': this._state.title,
+            '.l3rd__channel': this._state.channel
+        };
+        for (const [selector, value] of Object.entries(valuesBySelector)) {
+            const element = this._shadow.querySelector(selector);
+            if (element) element.textContent = String(value);
+        }
+    }
 }

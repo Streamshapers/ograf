@@ -158,7 +158,7 @@
     btnNext.textContent = 'Kick-off';
   });
 
-  btnNext.addEventListener('click', () => send('custom', { id: 'next-step' }));
+  btnNext.addEventListener('click', () => send('step', { delta: 1 }));
   btnGHome.addEventListener('click', () => send('custom', { id: 'goal-home' }));
   btnGAway.addEventListener('click', () => send('custom', { id: 'goal-away' }));
 
